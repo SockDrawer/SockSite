@@ -1,0 +1,16 @@
+body {
+	padding-top: 15px;
+}
+
+#spin-button {
+	padding-top: 20px;
+}
+
+#spin-button .btn {
+	border-radius: 0 !important;
+	width: 100%;
+}
+
+.pad-top {
+	padding-top: 25px;
+}
