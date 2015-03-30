@@ -1,0 +1,12 @@
+{
+  "name": "socksite",
+  "version": "0.0.1",
+  "description": "A site to track incidents of server cooties on  http://what.thedailywtf.com.",
+  "main": "server.js",
+  "repository": "https://github.com/AccaliaDeElementia/SockSite",
+  "author": "Accalia Elementia <Accalia.de.elementia>",
+  "dependencies": {
+    "mustache": "^2.0.0"
+  },
+  "optionalDependencies": {}
+}
