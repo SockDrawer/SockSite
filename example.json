@@ -1,33 +1,68 @@
 {
     "version": "0.15.24",
     "time": "2015-03-31T00:14:29.347Z",
-    "checks": [
+    "summary": [{
+        "name": "what.thedailywtf.com/",
+        "response": "GREAT",
+        "code": 200,
+        "responseTime": 500,
+        "polledAt": "2015-03-31T00:16:13.673Z"
+    }, {
+        "name": "what.thedailywtf.com/latest",
+        "response": "OK",
+        "code": 200,
+        "responseTime": 500,
+        "polledAt": "2015-03-31T00:16:13.673Z"
+    }, {
+        "name": "what.thedailywtf.com/message-bus",
+        "response": "BAD",
+        "code": 504,
+        "responseTime": 500,
+        "polledAt": "2015-03-31T00:16:13.673Z"
+    }],
+    "checks": {
         {
             "name": "what.thedailywtf.com/",
-            "response": "OK",
-            "code": 200,
-            "length": 3141549,
-            "responseTime": 500,
-            "polledAt": "2015-03-31T00:16:13.673Z"
-        },
-        {
+            "values": [{
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            },
+            {
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            }]
+        },{
             "name": "what.thedailywtf.com/latest",
-            "response": "OK",
-            "code": 200,
-            "length": 141549,
-            "responseTime": 500,
-            "polledAt": "2015-03-31T00:16:13.673Z"
+            "values": [{
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            },
+            {
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            }]
         },
         {
             "name": "what.thedailywtf.com/message-bus",
-            "response": "OK",
-            "code": 200,
-            "length": 41549,
-            "responseTime": 500,
-            "polledAt": "2015-03-31T00:16:13.673Z"
+            "values": [{
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            },
+            {
+                "code": 200,
+                "responseTime": 500,
+                "polledAt": "2015-03-31T00:16:13.673Z"
+            }]
         }
-    ],
+    }
     "up": true,
+    "percentage": 200.0,
+    "opercentage": 0310,
     "status": "The site seems to be working fine.",
     "flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
     "footer": "Brought to you today by the number `A`"
