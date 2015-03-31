@@ -11,13 +11,16 @@
 		<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-		<!-- Latest compiled and minified CSS -->
+		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
-		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+		<!-- Custom scripts -->
+		<script type="text/javascript" src="./scripts/spin.js"></script>
+
+		<!-- Custom styles -->
 		<link type="text/css" rel="stylesheet" media="screen" href="./styles/main.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="./styles/animations.css">
 
 	</head>
 
@@ -53,7 +56,7 @@
 							{{#summary}}
 							<tr class="{{response}}">
 								<td><code>{{name}}</code></td>
-								<td style="font-family: monospace;">{{responseTime}} ms</td>
+								<td><code>{{responseTime}} ms</code></td>
 
 							</tr>
 							{{/summary}}
