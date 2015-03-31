@@ -1,13 +1,14 @@
+/*jslint indent: 4 */
+/* eslint-disable no-console */
+'use strict';
 $(function(){
-    
     $('.btn').on('click', function(evt) {
-       
         evt.preventDefault();
-       
-        $('div').each(function(index){
-            
+
+        $('div').each(function(){
+
             var spinTime = Math.floor((Math.random() * 4000) + 1000);
-           
+
             $(this).css({
                 '-webkit-animation-name': 'spin',
                 '-webkit-animation-duration': spinTime + 'ms',
