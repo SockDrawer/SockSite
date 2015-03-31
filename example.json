@@ -20,7 +20,7 @@
         "responseTime": 500,
         "polledAt": "2015-03-31T00:16:13.673Z"
     }],
-    "checks": {
+    "checks": [
         {
             "name": "what.thedailywtf.com/",
             "values": [{
@@ -59,7 +59,7 @@
                 "polledAt": "2015-03-31T00:16:13.673Z"
             }]
         }
-    }
+    ],
     "up": true,
     "percentage": 200.0,
     "opercentage": 0310,
