@@ -3,7 +3,7 @@
     "time": "2015-03-31T00:14:29.347Z",
     "checks": [
         {
-            "name": "what.thedailywtf.com/"
+            "name": "what.thedailywtf.com/",
             "response": "OK",
             "code": 200,
             "length": 3141549,
@@ -11,7 +11,7 @@
             "polledAt": "2015-03-31T00:16:13.673Z"
         },
         {
-            "name": "what.thedailywtf.com/latest"
+            "name": "what.thedailywtf.com/latest",
             "response": "OK",
             "code": 200,
             "length": 141549,
@@ -19,7 +19,7 @@
             "polledAt": "2015-03-31T00:16:13.673Z"
         },
         {
-            "name": "what.thedailywtf.com/message-bus"
+            "name": "what.thedailywtf.com/message-bus",
             "response": "OK",
             "code": 200,
             "length": 41549,
@@ -27,7 +27,7 @@
             "polledAt": "2015-03-31T00:16:13.673Z"
         }
     ],
-    "up": true
+    "up": true,
     "status": "The site seems to be working fine.",
     "flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
     "footer": "Brought to you today by the number `A`"
