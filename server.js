@@ -111,10 +111,12 @@ function serveStatic(filename, response) {
 
 http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
-        filename = path.join(process.cwd(), 'static', uri);
+        filename = path.join(process.cwd(), uri);
 
     console.log(uri);
-    if (uri === '/' || uri === '/index.json') {
+    if (/^\/static/.test(uri)) {
+        serveStatic(filename, response);
+    } else if (uri === '/' || uri === '/index.json') {
         getData(function (err, data) {
             if (err) {
                 response.writeHead(500, {
@@ -130,7 +132,7 @@ http.createServer(function (request, response) {
                 response.write(JSON.stringify(data), 'binary');
                 response.end();
             } else {
-                fs.readFile(path.join(process.cwd(), 'static', 'index.html'),
+                fs.readFile(path.join(process.cwd(), 'templates', 'index.html'),
                     'binary',
                     function (err2, file) {
                         if (err2) {
@@ -145,9 +147,12 @@ http.createServer(function (request, response) {
                         response.end();
                     });
             }
-
         });
     } else {
-        serveStatic(filename, response);
+        response.writeHead(404, {
+            'Content-Type': 'text/plain'
+        });
+        response.write('404 Not Found\n');
+        response.end();
     }
 }).listen(port, ip);
