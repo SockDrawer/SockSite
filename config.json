@@ -1,7 +1,7 @@
 {
     "database": "servercooties.sql",
     "pollDelay": 15,
-    "version":"0.0.5",
+    "version":"0.0.6",
     "status": {
         "0": "Status could not be reliably determined. Try again later.",
         "200": "The site seems to be working fine.",
