@@ -69,6 +69,13 @@ function getData(callback) {
             result.checks.push(check);
         });
         sum /= keys.length;
+        Object.keys(config.flavor).forEach(function (key) {
+            key = parseInt(key, 10);
+            if (key <= sum) {
+                result.status = config.status[key];
+                result.flavor = config.flavor[key];
+            }
+        });
         result.up = sum < 300;
         result.percentage = sum;
         callback(null, result);

@@ -1,5 +1,19 @@
 {
     "database": "servercooties.sql",
     "pollDelay": 15,
-    "version":"0.0.5"
+    "version":"0.0.5",
+    "status": {
+        "0": "Status could not be reliably determined. Try again later.",
+        "200": "The site seems to be working fine.",
+        "300": "The site seems to be working...",
+        "400": "The site seems to be offline.",
+        "500": "The site seems to be very offline."
+    },
+    "flavor": {
+        "0": "+++Divide By Cucumber Error. Please Reinstall Universe And Reboot +++",
+        "200": "No problems detected. Since you can't troll you might as well go do some real work.",
+        "300": "We've seen some blips recently. Nothing to get too alarmed at yet.",
+        "400": "Well, Looks like you're gonna have to fill out that TPS report after all.",
+        "500": "Well, It's buggered. Looks like it's time to be productive or something"
+    }
 }
