@@ -1,0 +1,5 @@
+{
+    "database": "servercooties.sql",
+    "pollDelay": 15,
+    "version":"0.0.5"
+}
