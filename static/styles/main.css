@@ -15,14 +15,14 @@ body {
 	padding-top: 25px;
 }
 
-.GREAT, .GREAT code {
+.GREAT code {
 	color: #4f9fcf;
 }
 
-.OK, .OK code {
+.OK code {
 	color: #2f6f9f;
 }
 
-.BAD, .BAD code {
+.BAD code {
 	color: #c7254e;
 }
