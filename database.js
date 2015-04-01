@@ -12,6 +12,7 @@ db.serialize(function () {
 });
 
 exports.addCheck = function addCheck(key, status, length, time, callback) {
+    key = key.replace(/^https?:\/\//i, '');
     db.run('INSERT INTO checks (key, status, length, responseTime, checkedAt)' +
         'VALUES (?, ?, ?, ?, ?)', [key, status, length, time, new Date()],
         callback);
