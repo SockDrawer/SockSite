@@ -66,6 +66,13 @@
     "status": "The site seems to be working fine.",
     "flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
     "footer": "Brought to you today by the number `A`",
-    "discodefinition": "some definition",
-    "quote": "Some quote"
+    "discodefinition": {
+        "title": "definition title",
+        "body": "some definition"
+    },
+    "quote": {
+        "author": "author's username",
+        "body": "Some quote",
+        "url": "http://what.thedailywtf.com/t/topic_id/p/post_id"
+    }
 }
