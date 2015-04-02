@@ -1,87 +1,18 @@
 /*jslint node: true, indent: 4 */
 /* eslint-disable no-console */
 'use strict';
-var db = require('./database'),
-    config = require('./config.json'),
+var database = require('./data'),
     checks = require('./check'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
     fs = require('fs'),
-    mustache = require('mustache');
+    mustache = require('mustache'),
+    yaml = require('js-yaml');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined;
 
 checks.start();
-
-function getData(callback) {
-    db.getRecentChecks(10 * 60 * 1000, function (err, data) {
-        if (err || !data) {
-            return callback(err || 'NO DATA');
-        }
-        var keys,
-            sum = 0,
-            result = {
-                version: config.version,
-                time: new Date().toISOString(),
-                checks: [],
-                summary: []
-            };
-        keys = Object.keys(data);
-        keys.sort();
-        keys.forEach(function (key) {
-            var time = [],
-                status = [],
-                polled = 0,
-                type = 'BAD',
-                check = {
-                    name: key,
-                    values: data[key].map(function (row) {
-                        polled = Math.max(0, row.checkedAt);
-                        time.push(row.responseTime);
-                        status.push(row.status);
-                        return {
-                            code: row.status,
-                            responseTime: row.responseTime,
-                            polledAt: row.checkedAt
-                        };
-                    })
-                };
-            time = time.reduce(function (a, b) {
-                return a + b;
-            }, 0) / time.length;
-            status = status.reduce(function (a, b) {
-                return a + b;
-            }, 0) / status.length;
-            if (status === 200) {
-                type = 'GREAT';
-            } else if (status < 300) {
-                type = 'OK';
-            }
-            sum += status;
-            result.summary.push({
-                name: key,
-                code: status,
-                response: type,
-                responseTime: time,
-                polledAt: polled
-            });
-            result.checks.push(check);
-        });
-        sum /= keys.length;
-        Object.keys(config.flavor).forEach(function (key) {
-            key = parseInt(key, 10);
-            if (key <= sum) {
-                result.status = config.status[key];
-                result.flavor = config.flavor[key];
-            }
-        });
-        result.up = sum < 300;
-        result.percentage = sum;
-        callback(null, result);
-    });
-}
-
 
 function serveStatic(filename, response) {
     fs.exists(filename, function (exists) {
@@ -108,12 +39,43 @@ function serveStatic(filename, response) {
                 return;
             }
 
-
             response.writeHead(200);
             response.write(file, 'binary');
             response.end();
         });
     });
+}
+
+function formatJSON(data, callback) {
+    try {
+        data = JSON.stringify(data);
+    } catch (e) {
+        return callback(e);
+    }
+    callback(null, data);
+}
+function formatYAML(data, callback) {
+    try {
+        data = yaml.safeDump(data);
+    } catch (e) {
+        return callback(e);
+    }
+    callback(null, data);
+}
+
+function formatHTML(data, callback) {
+    fs.readFile(path.join(process.cwd(), 'templates', 'index.html'),
+        'binary',
+        function (err, file) {
+            if (err) {
+                return callback(err);
+            }
+            try {
+                callback(null, mustache.render(file, data));
+            } catch (e) {
+                callback(e);
+            }
+        });
 }
 
 http.createServer(function (request, response) {
@@ -123,8 +85,19 @@ http.createServer(function (request, response) {
     console.log(uri);
     if (/^\/static/.test(uri)) {
         serveStatic(filename, response);
-    } else if (uri === '/' || uri === '/index.json') {
-        getData(function (err, data) {
+    } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
+        var formatter = formatHTML,
+        accept = request.headers.accept;
+        uri = uri.toLowerCase();
+        if (uri === '/index.json' || accept === 'application/json') {
+            formatter = formatJSON;
+        }else if (uri === '/index.yml' || accept === 'application/yaml') {
+            formatter = formatYAML;
+        }
+        database.getData({
+            dataPeriod: 5 * 60,
+            host: request.headers.host
+        }, function (err, data) {
             if (err) {
                 response.writeHead(500, {
                     'Content-Type': 'text/plain'
@@ -133,27 +106,18 @@ http.createServer(function (request, response) {
                 response.end();
                 return;
             }
-            data.host = request.headers.host;
-            response.writeHead(200);
-            if (uri === '/index.json') {
-                response.write(JSON.stringify(data), 'binary');
-                response.end();
-            } else {
-                fs.readFile(path.join(process.cwd(), 'templates', 'index.html'),
-                    'binary',
-                    function (err2, file) {
-                        if (err2) {
-                            response.writeHead(500, {
-                                'Content-Type': 'text/plain'
-                            });
-                            response.write(err2 + '\n');
-                            response.end();
-                            return;
-                        }
-                        response.write(mustache.render(file, data), 'binary');
-                        response.end();
+            formatter(data, function (err2, data2) {
+                if (err2) {
+                    response.writeHead(500, {
+                        'Content-Type': 'text/plain'
                     });
-            }
+                    response.write(err2 + '\n');
+                    return response.end();
+                }
+                response.writeHead(200);
+                response.write(data2, 'binary');
+                response.end();
+            });
         });
     } else {
         response.writeHead(404, {
