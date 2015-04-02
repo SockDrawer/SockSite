@@ -24,16 +24,5 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
     }
     var date = new Date() - (offset * 1000);
     db.all('SELECT * FROM checks WHERE checkedAt > ?' +
-        ' ORDER BY checkedAt DESC', [date],
-        function (err, result) {
-            if (!err) {
-                var res = {};
-                result.forEach(function (row) {
-                    res[row.key] = res[row.key] || [];
-                    res[row.key].push(row);
-                });
-                result = res;
-            }
-            callback(err, result);
-        });
+        ' ORDER BY checkedAt DESC', [date], callback);
 };

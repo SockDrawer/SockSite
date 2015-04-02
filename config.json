@@ -2,6 +2,13 @@
     "database": "servercooties.sql",
     "pollDelay": 15,
     "version":"0.0.6",
+    "statusType":{
+      "0": "UNKNOWN",
+      "200": "GREAT",
+      "201": "OK",
+      "300": "BAD",
+      "400": "OFFLINE"
+    },
     "status": {
         "0": "Status could not be reliably determined. Try again later.",
         "200": "The site seems to be working fine.",
