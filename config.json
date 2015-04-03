@@ -20,7 +20,7 @@
       "201": "OK",
       "250": "BAD",
       "300": "OFFLINE"
-    }
+    },
     "status": {
         "0": "Status could not be reliably determined. Try again later.",
         "200": "The site seems to be working fine.",
