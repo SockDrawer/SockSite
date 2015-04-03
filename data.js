@@ -33,15 +33,20 @@ exports.getData = function getData(cfg, callback) {
         var percentage = average(data, function (a) {
                 return a.status;
             }),
+            time = average(data, function (a) {
+                return a.responseTime;
+            }),
             result = {
                 version: config.version,
                 time: new Date().toISOString(),
                 up: percentage < 300,
                 percentage: percentage,
+                average: time,
+                code: getFlavor(time, config.statusTime),
                 status: getFlavor(percentage, config.status),
                 flavor: getFlavor(percentage, config.flavor)
             },
-            checks = {};
+            checks = {}, keys;
         Object.keys(cfg).map(function (key) {
             result[key] = cfg[key];
         });
@@ -58,7 +63,9 @@ exports.getData = function getData(cfg, callback) {
                 polledAt: a.checkedAt
             });
         });
-        result.summary = Object.keys(checks).map(function (key) {
+        keys = Object.keys(checks);
+        keys.sort();
+        result.summary = keys.map(function (key) {
             var avg = average(checks[key], function (a) {
                 return a.code;
             });

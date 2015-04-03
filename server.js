@@ -44,6 +44,7 @@ function formatJSON(data, callback) {
     }
     callback(null, data);
 }
+
 function formatYAML(data, callback) {
     try {
         data = yaml.safeDump(data);
@@ -126,7 +127,7 @@ function render404Error(response) {
 
 function render500Error(err, response) {
     formatHTML(null, 'error500.html', function (err2, data) {
-        if (err) {
+        if (err || err2) {
             response.writeHead(500, {
                 'Content-Type': 'text/plain'
             });
