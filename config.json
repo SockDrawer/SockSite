@@ -1,26 +1,38 @@
 {
     "database": "servercooties.sql",
     "pollDelay": 15,
-    "version":"0.0.6",
+    "version":"0.0.8",
+    "message-bus": false,
+    "checks": [
+        "http://what.thedailywtf.com/",
+        "http://what.thedailywtf.com/latest.json"
+        ],
+    "statusTime":{
+      "0": "GREAT",
+      "500": "GOOD",
+      "2000": "OK",
+      "5000": "BAD",
+      "10000": "OFFLINE"
+    },
     "statusType":{
       "0": "UNKNOWN",
       "200": "GREAT",
       "201": "OK",
-      "300": "BAD",
-      "400": "OFFLINE"
-    },
+      "250": "BAD",
+      "300": "OFFLINE"
+    }
     "status": {
         "0": "Status could not be reliably determined. Try again later.",
         "200": "The site seems to be working fine.",
-        "300": "The site seems to be working...",
-        "400": "The site seems to be offline.",
-        "500": "The site seems to be very offline."
+        "250": "The site seems to be working...",
+        "300": "The site seems to be offline.",
+        "350": "The site seems to be very offline."
     },
     "flavor": {
         "0": "+++Divide By Cucumber Error. Please Reinstall Universe And Reboot +++",
         "200": "No problems detected. Since you can't troll you might as well go do some real work.",
-        "300": "We've seen some blips recently. Nothing to get too alarmed at yet.",
-        "400": "Well, Looks like you're gonna have to fill out that TPS report after all.",
-        "500": "Well, It's buggered. Looks like it's time to be productive or something"
+        "250": "We've seen some blips recently. Nothing to get too alarmed at yet.",
+        "300": "Well, Looks like you're gonna have to fill out that TPS report after all.",
+        "350": "Well, It's buggered. Looks like it's time to be productive or something"
     }
 }
