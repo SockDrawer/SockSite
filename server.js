@@ -38,7 +38,7 @@ function serveStatic(filename, response) {
 
 function formatJSON(data, callback) {
     try {
-        data = JSON.stringify(data);
+        data = JSON.stringify(data, undefined, '\t');
     } catch (e) {
         return callback(e);
     }
