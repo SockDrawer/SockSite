@@ -2,6 +2,14 @@
 var config = require('./config'),
     db = require('./database');
 
+function round(num, places){
+    if (!places){
+        places = 0;
+    }
+    places = Math.pow(10, places);
+    return Math.round(num * places) / places;
+}
+
 function average(arr, map) {
     return sum(arr, map) / arr.length;
 }
@@ -40,8 +48,10 @@ exports.getData = function getData(cfg, callback) {
                 version: config.version,
                 time: new Date().toISOString(),
                 up: percentage < 300,
-                percentage: percentage,
-                average: time,
+                percentage: round(percentage,2),
+                precisionPercentage: percentage,
+                average: round(time, 2),
+                precisionAverage: time,
                 code: getFlavor(time, config.statusTime),
                 status: getFlavor(percentage, config.status),
                 flavor: getFlavor(percentage, config.flavor)

@@ -1,70 +1,114 @@
 {
-    "version": "0.15.24",
-    "time": "2015-03-31T00:14:29.347Z",
-    "summary": [{
-        "name": "what.thedailywtf.com/",
-        "response": "GREAT",
-        "code": 200,
-        "responseTime": 500,
-        "polledAt": "2015-03-31T00:16:13.673Z"
-    }, {
-        "name": "what.thedailywtf.com/latest",
-        "response": "OK",
-        "code": 200,
-        "responseTime": 500,
-        "polledAt": "2015-03-31T00:16:13.673Z"
-    }, {
-        "name": "what.thedailywtf.com/message-bus",
-        "response": "BAD",
-        "code": 504,
-        "responseTime": 500,
-        "polledAt": "2015-03-31T00:16:13.673Z"
-    }],
-    "checks": [
-        {
-            "name": "what.thedailywtf.com/",
-            "values": [{
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            },
-            {
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            }]
-        },{
-            "name": "what.thedailywtf.com/latest",
-            "values": [{
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            },
-            {
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            }]
-        },
-        {
-            "name": "what.thedailywtf.com/message-bus",
-            "values": [{
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            },
-            {
-                "code": 200,
-                "responseTime": 500,
-                "polledAt": "2015-03-31T00:16:13.673Z"
-            }]
-        }
-    ],
-    "up": true,
-    "percentage": 200.0,
-    "opercentage": 310,
-    "status": "The site seems to be working fine.",
-    "flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
+	"version": "0.0.8",
+	"time": "2015-04-03T17:12:34.789Z",
+	"up": true,
+	"percentage": 200,
+	"precisionPercentage": 200,
+	"average": 3023.79,
+	"precisionAverage": 3023.785714285714,
+	"code": "OK",
+	"status": "The site seems to be working fine.",
+	"flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
+	"dataPeriod": 300,
+	"host": "sockdev-accalia-de-elementia.c9.io",
+	"checks": [
+		{
+			"name": "what.thedailywtf.com/",
+			"values": [
+				{
+					"code": 200,
+					"responseTime": 3153,
+					"polledAt": "2015-04-03T17:12:32.207Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 1493,
+					"polledAt": "2015-04-03T17:11:44.827Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 185,
+					"polledAt": "2015-04-03T17:11:13.503Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 2029,
+					"polledAt": "2015-04-03T17:10:45.320Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 3529,
+					"polledAt": "2015-04-03T17:10:16.793Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 7049,
+					"polledAt": "2015-04-03T17:09:50.301Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 3958,
+					"polledAt": "2015-04-03T17:09:17.192Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 3392,
+					"polledAt": "2015-04-03T17:08:46.602Z"
+				}
+			]
+		},
+		{
+			"name": "what.thedailywtf.com/latest.json",
+			"values": [
+				{
+					"code": 200,
+					"responseTime": 3771,
+					"polledAt": "2015-04-03T17:11:32.104Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 102,
+					"polledAt": "2015-04-03T17:10:58.406Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 1871,
+					"polledAt": "2015-04-03T17:10:30.149Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 9183,
+					"polledAt": "2015-04-03T17:10:07.442Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 2408,
+					"polledAt": "2015-04-03T17:09:30.656Z"
+				},
+				{
+					"code": 200,
+					"responseTime": 210,
+					"polledAt": "2015-04-03T17:08:58.423Z"
+				}
+			]
+		}
+	],
+	"summary": [
+		{
+			"name": "what.thedailywtf.com/",
+			"response": "GREAT",
+			"code": 200,
+			"responseTime": 3098.5,
+			"polledAt": "2015-04-03T17:12:32.207Z"
+		},
+		{
+			"name": "what.thedailywtf.com/latest.json",
+			"response": "GREAT",
+			"code": 200,
+			"responseTime": 2924.1666666666665,
+			"polledAt": "2015-04-03T17:11:32.104Z"
+		}
+	],
     "footer": "Brought to you today by the number `A`",
     "discodefinition": {
         "title": "definition title",
