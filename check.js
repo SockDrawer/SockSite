@@ -3,11 +3,9 @@ var db = require('./database'),
     config = require('./config.json'),
     async = require('async'),
     request = require('request');
-var toCheck = [
-        'http://what.thedailywtf.com/',
-        'http://what.thedailywtf.com/latest.json'
-    ],
-    checkers,
+var checkers = config.checks.map(function (url) {
+        return createCheck(url);
+    }),
     delay = (config.pollDelay || 15) * 1000;
 
 function createCheck(url) {
@@ -26,10 +24,6 @@ function createCheck(url) {
         });
     };
 }
-
-checkers = toCheck.map(function (url) {
-    return createCheck(url);
-});
 
 exports.start = function () {
     async.forever(function (next) {
