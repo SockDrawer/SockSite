@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 'use strict';
 $(function(){
-    $('.btn').on('click', function(evt) {
+    $('#spin-button').on('click', function(evt) {
         evt.preventDefault();
 
         $('div').each(function(){
