@@ -42,6 +42,15 @@ body {
 	text-align: center;
 }
 
+.navbar-right {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.navbar-right .dropdown {
+	margin-right: 5px;
+}
+
 .navbar-right > .dropdown > a {
 	color: #666;
 	padding: 5px 15px;
