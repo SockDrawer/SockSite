@@ -44,6 +44,7 @@ exports.getData = function getData(cfg, callback) {
             time = average(data, function (a) {
                 return a.responseTime;
             }),
+            score = (percentage + (time / 10)) / 2,
             result = {
                 ok: function () {
                     return percentage < 250 && time < 3000;
@@ -55,9 +56,11 @@ exports.getData = function getData(cfg, callback) {
                 precisionPercentage: percentage,
                 average: round(time, 2),
                 precisionAverage: time,
-                code: getFlavor(time, config.statusTime),
-                status: getFlavor(percentage, config.status),
-                flavor: getFlavor(percentage, config.flavor)
+                score: round(score, 2),
+                precisionScore: score,
+                code: getFlavor(score, config.statusTime),
+                status: getFlavor(score, config.status),
+                flavor: getFlavor(score, config.flavor)
             },
             checks = {},
             keys;

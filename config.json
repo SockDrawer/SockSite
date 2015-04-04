@@ -23,15 +23,14 @@
       "300": "OFFLINE"
     },
     "status": {
-        "0": "Status could not be reliably determined. Try again later.",
-        "200": "The site seems to be working fine.",
+        "0": "The site seems to be working fine.",
         "250": "The site seems to be working...",
         "300": "The site seems to be offline.",
         "350": "The site seems to be very offline."
     },
     "flavor": {
         "0": "+++Divide By Cucumber Error. Please Reinstall Universe And Reboot +++",
-        "200": "No problems detected. Since you can't troll you might as well go do some real work.",
+        "1": "No problems detected. Since you can't troll you might as well go do some real work.",
         "250": "We've seen some blips recently. Nothing to get too alarmed at yet.",
         "300": "Well, Looks like you're gonna have to fill out that TPS report after all.",
         "350": "Well, It's buggered. Looks like it's time to be productive or something"
