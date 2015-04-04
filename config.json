@@ -1,6 +1,7 @@
 {
     "database": "servercooties.sql",
-    "pollDelay": 15,
+    "pollDelay": 3,
+    "dataPeriod": 60,
     "version":"0.0.8",
     "message-bus": false,
     "checks": [
