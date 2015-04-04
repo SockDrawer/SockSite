@@ -47,7 +47,7 @@ function formatJSON(data, callback) {
 
 function formatYAML(data, callback) {
     try {
-        data = yaml.safeDump(data);
+        data = yaml.safeDump(data,{skipInvalid:true});
     } catch (e) {
         return callback(e);
     }

@@ -2,8 +2,8 @@
 var config = require('./config'),
     db = require('./database');
 
-function round(num, places){
-    if (!places){
+function round(num, places) {
+    if (!places) {
         places = 0;
     }
     places = Math.pow(10, places);
@@ -45,10 +45,13 @@ exports.getData = function getData(cfg, callback) {
                 return a.responseTime;
             }),
             result = {
+                ok: function () {
+                    return percentage < 250 && time < 3000;
+                },
                 version: config.version,
                 time: new Date().toISOString(),
                 up: percentage < 300,
-                percentage: round(percentage,2),
+                percentage: round(percentage, 2),
                 precisionPercentage: percentage,
                 average: round(time, 2),
                 precisionAverage: time,
@@ -56,7 +59,8 @@ exports.getData = function getData(cfg, callback) {
                 status: getFlavor(percentage, config.status),
                 flavor: getFlavor(percentage, config.flavor)
             },
-            checks = {}, keys;
+            checks = {},
+            keys;
         Object.keys(cfg).map(function (key) {
             result[key] = cfg[key];
         });
