@@ -3,6 +3,7 @@
 'use strict';
 var database = require('./data'),
     checks = require('./check'),
+    config = require('./config.json'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -90,7 +91,7 @@ http.createServer(function (request, response) {
             formatter = formatYAML;
         }
         database.getData({
-            dataPeriod: 5 * 60,
+            dataPeriod: config.dataPeriod,
             host: request.headers.host
         }, function (err, data) {
             if (err) {
