@@ -67,7 +67,6 @@ exports.getData = function getData(cfg, callback) {
         Object.keys(cfg).map(function (key) {
             result[key] = cfg[key];
         });
-        result.checks = [];
         data = data.map(function (a) {
             a.checkedAt = new Date(a.checkedAt);
             return a;
@@ -75,7 +74,7 @@ exports.getData = function getData(cfg, callback) {
         data.map(function (a) {
             checks[a.key] = checks[a.key] || [];
             checks[a.key].push({
-                code: a.status,
+                responseCode: a.status,
                 responseTime: a.responseTime,
                 polledAt: a.checkedAt
             });
@@ -84,20 +83,17 @@ exports.getData = function getData(cfg, callback) {
         keys.sort();
         result.summary = keys.map(function (key) {
             var avg = average(checks[key], function (a) {
-                return a.code;
-            });
-            result.checks.push({
-                name: key,
-                values: checks[key]
+                return a.responseCode;
             });
             return {
                 name: key,
                 response: getFlavor(avg, config.statusType),
-                code: avg,
+                responseCode: avg,
                 responseTime: average(checks[key], function (a) {
                     return a.responseTime;
                 }),
-                polledAt: checks[key][0].polledAt
+                polledAt: checks[key][0].polledAt,
+                values: checks[key]
             };
         });
         callback(null, result);
