@@ -12,6 +12,7 @@ var database = require('./data'),
     yaml = require('js-yaml');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined;
+var cache = {};
 
 checks.start();
 
@@ -48,7 +49,9 @@ function formatJSON(data, callback) {
 
 function formatYAML(data, callback) {
     try {
-        data = yaml.safeDump(data,{skipInvalid:true});
+        data = yaml.safeDump(data, {
+            skipInvalid: true
+        });
     } catch (e) {
         return callback(e);
     }
@@ -90,6 +93,18 @@ http.createServer(function (request, response) {
         } else if (uri === '/index.yml' || accept === 'application/yaml') {
             formatter = formatYAML;
         }
+
+        if (!checks.updated) {
+            if (cache.hasOwnProperty(uri)) {
+                response.writeHead(200);
+                response.write(cache[uri], 'binary');
+                response.end();
+                return;
+            }
+        } else {
+            cache = {}; //clear any previous cache
+        }
+
         database.getData({
             dataPeriod: config.dataPeriod,
             host: request.headers.host
@@ -100,6 +115,11 @@ http.createServer(function (request, response) {
             formatter(data, function (err2, data2) {
                 if (err2) {
                     return render500Error(err2, response);
+                }
+
+                if (checks.updated) { //update cache with new data.
+                    cache[uri] = data2;
+                    checks.updated = false;
                 }
                 response.writeHead(200);
                 response.write(data2, 'binary');
