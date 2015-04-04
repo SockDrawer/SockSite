@@ -26,3 +26,8 @@ body {
 .BAD code {
 	color: #c7254e;
 }
+
+.headerbar {
+	background: #d9e6f0; 
+	margin-top: 5px;
+}
