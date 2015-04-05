@@ -24,10 +24,12 @@ function createCheck(url) {
         });
     };
 }
+exports.updated = false;
 
 exports.start = function () {
     async.forever(function (next) {
         async.eachSeries(checkers, function (check, callback) {
+                exports.updated = true;
                 check(function () {});
                 setTimeout(callback, delay);
             },

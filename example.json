@@ -1,112 +1,136 @@
 {
 	"version": "0.0.8",
-	"time": "2015-04-03T17:12:34.789Z",
+	"time": "2015-04-04T17:29:55.364Z",
 	"up": true,
 	"percentage": 200,
 	"precisionPercentage": 200,
-	"average": 3023.79,
-	"precisionAverage": 3023.785714285714,
-	"code": "OK",
+	"average": 568.9,
+	"precisionAverage": 568.9,
+	"score": 128.45,
+	"precisionScore": 128.445,
+	"code": "GREAT",
 	"status": "The site seems to be working fine.",
 	"flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
-	"dataPeriod": 300,
+	"dataPeriod": 60,
 	"host": "sockdev-accalia-de-elementia.c9.io",
-	"checks": [
-		{
-			"name": "what.thedailywtf.com/",
-			"values": [
-				{
-					"code": 200,
-					"responseTime": 3153,
-					"polledAt": "2015-04-03T17:12:32.207Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 1493,
-					"polledAt": "2015-04-03T17:11:44.827Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 185,
-					"polledAt": "2015-04-03T17:11:13.503Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 2029,
-					"polledAt": "2015-04-03T17:10:45.320Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 3529,
-					"polledAt": "2015-04-03T17:10:16.793Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 7049,
-					"polledAt": "2015-04-03T17:09:50.301Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 3958,
-					"polledAt": "2015-04-03T17:09:17.192Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 3392,
-					"polledAt": "2015-04-03T17:08:46.602Z"
-				}
-			]
-		},
-		{
-			"name": "what.thedailywtf.com/latest.json",
-			"values": [
-				{
-					"code": 200,
-					"responseTime": 3771,
-					"polledAt": "2015-04-03T17:11:32.104Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 102,
-					"polledAt": "2015-04-03T17:10:58.406Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 1871,
-					"polledAt": "2015-04-03T17:10:30.149Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 9183,
-					"polledAt": "2015-04-03T17:10:07.442Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 2408,
-					"polledAt": "2015-04-03T17:09:30.656Z"
-				},
-				{
-					"code": 200,
-					"responseTime": 210,
-					"polledAt": "2015-04-03T17:08:58.423Z"
-				}
-			]
-		}
-	],
 	"summary": [
 		{
 			"name": "what.thedailywtf.com/",
 			"response": "GREAT",
-			"code": 200,
-			"responseTime": 3098.5,
-			"polledAt": "2015-04-03T17:12:32.207Z"
+			"responseCode": 200,
+			"responseTime": 631.2,
+			"polledAt": "2015-04-04T17:29:50.151Z",
+			"values": [
+				{
+					"responseCode": 200,
+					"responseTime": 250,
+					"polledAt": "2015-04-04T17:29:50.151Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 259,
+					"polledAt": "2015-04-04T17:29:44.156Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 1105,
+					"polledAt": "2015-04-04T17:29:38.997Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 1419,
+					"polledAt": "2015-04-04T17:29:33.306Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 1013,
+					"polledAt": "2015-04-04T17:29:26.897Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 1108,
+					"polledAt": "2015-04-04T17:29:20.987Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 262,
+					"polledAt": "2015-04-04T17:29:14.137Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 266,
+					"polledAt": "2015-04-04T17:29:08.137Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 374,
+					"polledAt": "2015-04-04T17:29:02.240Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 256,
+					"polledAt": "2015-04-04T17:28:56.117Z"
+				}
+			]
 		},
 		{
 			"name": "what.thedailywtf.com/latest.json",
 			"response": "GREAT",
-			"code": 200,
-			"responseTime": 2924.1666666666665,
-			"polledAt": "2015-04-03T17:11:32.104Z"
+			"responseCode": 200,
+			"responseTime": 506.6,
+			"polledAt": "2015-04-04T17:29:53.023Z",
+			"values": [
+				{
+					"responseCode": 200,
+					"responseTime": 119,
+					"polledAt": "2015-04-04T17:29:53.023Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 120,
+					"polledAt": "2015-04-04T17:29:47.019Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 210,
+					"polledAt": "2015-04-04T17:29:41.104Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 905,
+					"polledAt": "2015-04-04T17:29:35.794Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 2038,
+					"polledAt": "2015-04-04T17:29:30.922Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 820,
+					"polledAt": "2015-04-04T17:29:23.702Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 121,
+					"polledAt": "2015-04-04T17:29:16.997Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 121,
+					"polledAt": "2015-04-04T17:29:10.995Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 491,
+					"polledAt": "2015-04-04T17:29:05.358Z"
+				},
+				{
+					"responseCode": 200,
+					"responseTime": 121,
+					"polledAt": "2015-04-04T17:28:58.984Z"
+				}
+			]
 		}
 	],
     "footer": "Brought to you today by the number `A`",

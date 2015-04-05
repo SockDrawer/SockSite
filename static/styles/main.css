@@ -26,3 +26,92 @@ body {
 .BAD code {
 	color: #c7254e;
 }
+
+.headerbar {
+	background: #d9e6f0; 
+	margin-top: 5px;
+	text-align: center;
+}
+
+.hamburger {
+	font-size: 1.3em;
+	background: transparent;
+}
+
+.header-image {
+	text-align: center;
+}
+
+.navbar-right {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.navbar-right .dropdown {
+	margin-right: 5px;
+}
+
+.navbar-right > .dropdown > a {
+	color: #666;
+	padding: 5px 15px;
+	
+	width: 48px;
+	float: right;
+}
+
+@media screen and (max-width: 768px) {
+	
+	.header-image {
+    	text-align: left;
+    }
+    
+    .headerbar {
+    	text-align: left;
+    }
+    
+    .headerbar .container-fluid {
+		padding-right: 0;
+	}
+	
+	#header-image-wrapper {
+		text-align: left;
+		padding-left: 15px;
+	}
+
+}
+
+.dropdown-menu li {
+	background: transparent;
+}
+
+.dropdown-menu li a {
+	background: #eee;
+	color: #666;
+}
+
+#header-image-wrapper {
+	position: absolute;
+	width: 100%;
+}
+
+#main-title {
+	margin-bottom: 0;
+	text-align: center;
+}
+
+.navbar {
+	min-height: 0;
+}
+
+.navbar-right .dropdown-menu
+{
+	padding: 0;
+}
+
+.dropdown {
+	text-align: right;
+}
+
+.dropdown a {
+	background: transparent;
+}

@@ -18,6 +18,7 @@
 		<!-- Custom scripts -->
 		<script type="text/javascript" src="/static/scripts/spin.js"></script>
 		<script type="text/javascript" src="/static/scripts/round.js"></script>
+		<script type="text/javascript" src="/static/scripts/colors.js"></script>
 
 		<!-- Custom styles -->
 		<link type="text/css" rel="stylesheet" media="screen" href="/static/styles/main.css">
@@ -26,28 +27,39 @@
 	</head>
 
 	<body>
-
+		
 		<div class="container-fluid">
-
+			
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header-image">
 					<img src="/static/images/trwtf.png">
 				</div>
-				<div class="dropdown navbar-right">
-				  <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default glyphicon glyphicon-cog dropdown-toggle">
-					<span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu" role="menu">
-					<li><a href="#" id="roundingbutton">DiscoRound</a></li>
-				  </ul>
-				</div>
 			</div>
+			
+		</div>
+		
+		<nav class="navbar headerbar" id="main-title">
+			<div id="header-image-wrapper">
+				<img src="/static/images/isyou.png">
+			</div>
+			
+			<div class="container-fluid">
 
-			<div class="row" style="background: #d9e6f0; margin-top: 5px;">
-				<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-					<img src="/static/images/{{#up}}isyou{{/up}}{{^up}}isdiscourse{{/up}}.png">
-				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon glyphicon-menu-hamburger dropdown-toggle hamburger"></a>
+					  	<ul class="dropdown-menu" role="menu">
+							<li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a></li>
+							<li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a></li>
+						</ul>
+					</li>
+
+				</ul>
+			
 			</div>
+		</nav>
+		
+		<div class="container-fluid">
 
 			<div class="row">
 				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
@@ -56,7 +68,7 @@
 						<thead>
 							<tr>
 								<th colspan="2">	
-									Response timings
+									<span class="glyphicon glyphicon-time"></span>&nbsp;Response timings
 								</th>
 							</tr>
 						</thead>
@@ -66,7 +78,6 @@
 							<tr class="{{response}}">
 								<td><code class="itemName">{{name}}</code></td>
 								<td><code class="responseTime">{{responseTime}} ms</code></td>
-
 							</tr>
 							{{/summary}}
 						</tbody>
