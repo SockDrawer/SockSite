@@ -1,9 +1,7 @@
 /*jslint node: true, indent: 4 */
-/* eslint-disable no-console */
 'use strict';
 var database = require('./data'),
     checks = require('./check'),
-    config = require('./config.json'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -12,7 +10,6 @@ var database = require('./data'),
     yaml = require('js-yaml');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined;
-var cache = {};
 
 checks.start();
 
@@ -81,7 +78,9 @@ http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
 
+/* eslint-disable no-console */
     console.log(uri);
+    /* eslint-enable no-console */
     if (/^\/static/.test(uri)) {
         serveStatic(filename, response);
     } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
@@ -94,19 +93,7 @@ http.createServer(function (request, response) {
             formatter = formatYAML;
         }
 
-        if (!checks.updated) {
-            if (cache.hasOwnProperty(uri)) {
-                response.writeHead(200);
-                response.write(cache[uri], 'binary');
-                response.end();
-                return;
-            }
-        } else {
-            cache = {}; //clear any previous cache
-        }
-
-        database.getData({
-            dataPeriod: config.dataPeriod,
+        database.getSummaryData({
             host: request.headers.host
         }, function (err, data) {
             if (err) {
@@ -118,7 +105,6 @@ http.createServer(function (request, response) {
                 }
 
                 if (checks.updated) { //update cache with new data.
-                    cache[uri] = data2;
                     checks.updated = false;
                 }
                 response.writeHead(200);
