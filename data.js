@@ -94,7 +94,7 @@ function summarize(data) {
             });
         return {
             name: key,
-            response: getFlavor(score, config.statusType),
+            response: getFlavor(score, config.statusTime),
             responseCode: avg,
             responseTime: stime,
             responseScore: average([avg, stime / 10]),
