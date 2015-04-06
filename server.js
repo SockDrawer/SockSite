@@ -1,18 +1,27 @@
 /*jslint node: true, indent: 4 */
-/* eslint-disable no-console */
 'use strict';
+
+process.on('uncaughtException', function (err) {
+    /*eslint-disable no-process-exit, no-console*/
+    console.error(err);
+    process.exit(1);
+    /*eslint-enable no-process-exit, no-console*/
+});
+
 var database = require('./data'),
     checks = require('./check'),
-    config = require('./config.json'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
     fs = require('fs'),
     mustache = require('mustache'),
-    yaml = require('js-yaml');
+    yaml = require('js-yaml'),
+    async = require('async');
 var port = parseInt(process.env.PORT || 8888, 10),
-    ip = process.env.IP || undefined;
-var cache = {};
+    ip = process.env.IP || undefined,
+    templates;
+
+
 
 checks.start();
 
@@ -63,25 +72,25 @@ function formatHTML(data, template, callback) {
         callback = template;
         template = 'index.html';
     }
-    fs.readFile(path.join(process.cwd(), 'templates', template),
-        'binary',
-        function (err, file) {
-            if (err) {
-                return callback(err);
-            }
-            try {
-                callback(null, mustache.render(file, data));
-            } catch (e) {
-                callback(e);
-            }
-        });
+    if (!templates[template]) {
+        return callback('Template `' + template + '` Not Loaded!');
+    }
+
+    try {
+        callback(null, mustache.render(templates[template], data, templates));
+    } catch (e) {
+        callback(e);
+    }
+
 }
 
 http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
 
+    /* eslint-disable no-console */
     console.log(uri);
+    /* eslint-enable no-console */
     if (/^\/static/.test(uri)) {
         serveStatic(filename, response);
     } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
@@ -94,19 +103,7 @@ http.createServer(function (request, response) {
             formatter = formatYAML;
         }
 
-        if (!checks.updated) {
-            if (cache.hasOwnProperty(uri)) {
-                response.writeHead(200);
-                response.write(cache[uri], 'binary');
-                response.end();
-                return;
-            }
-        } else {
-            cache = {}; //clear any previous cache
-        }
-
-        database.getData({
-            dataPeriod: config.dataPeriod,
+        database.getSummaryData({
             host: request.headers.host
         }, function (err, data) {
             if (err) {
@@ -118,7 +115,6 @@ http.createServer(function (request, response) {
                 }
 
                 if (checks.updated) { //update cache with new data.
-                    cache[uri] = data2;
                     checks.updated = false;
                 }
                 response.writeHead(200);
@@ -160,3 +156,29 @@ function render500Error(err, response) {
         response.end();
     });
 }
+
+
+fs.readdir('templates', function (err, files) {
+    if (err) {
+        throw err;
+    }
+    var suffix = /[.]html$/;
+    var tpl = files.filter(function (file) {
+        return suffix.test(file);
+    }).map(function (file) {
+        return 'templates/' + file;
+    });
+    async.map(tpl, function (f, callback) {
+        fs.readFile(f, 'binary', callback);
+    }, function (err2, data) {
+        if (err2) {
+            throw err2;
+        }
+        var x = {};
+        files.forEach(function (file, idx) {
+            x[file] = data[idx];
+            x[file.replace(suffix, '')] = data[idx];
+        });
+        templates = x;
+    });
+});
