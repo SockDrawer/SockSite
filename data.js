@@ -59,12 +59,10 @@ function summarize(data) {
         }),
         score = average([percentage, time / 10]),
         result = {
-            ok: function () {
-                return percentage < 250 && time < 3000;
-            },
+            ok: score < 300,
             version: config.version,
             time: new Date().toISOString(),
-            up: percentage < 300,
+            up: score < 300,
             percentage: round(percentage, 2),
             precisionPercentage: percentage,
             average: round(time, 2),
@@ -96,7 +94,7 @@ function summarize(data) {
             });
         return {
             name: key,
-            response: getFlavor(avg, config.statusType),
+            response: getFlavor(score, config.statusType),
             responseCode: avg,
             responseTime: stime,
             responseScore: average([avg, stime / 10]),
