@@ -1,5 +1,13 @@
 /*jslint node: true, indent: 4 */
 'use strict';
+
+process.on('uncaughtException', function (err) {
+    /*eslint-disable no-process-exit, no-console*/
+    console.error(err);
+    process.exit(1);
+    /*eslint-enable no-process-exit, no-console*/
+});
+
 var database = require('./data'),
     checks = require('./check'),
     http = require('http'),
@@ -7,9 +15,13 @@ var database = require('./data'),
     path = require('path'),
     fs = require('fs'),
     mustache = require('mustache'),
-    yaml = require('js-yaml');
+    yaml = require('js-yaml'),
+    async = require('async');
 var port = parseInt(process.env.PORT || 8888, 10),
-    ip = process.env.IP || undefined;
+    ip = process.env.IP || undefined,
+    templates;
+
+
 
 checks.start();
 
@@ -60,25 +72,23 @@ function formatHTML(data, template, callback) {
         callback = template;
         template = 'index.html';
     }
-    fs.readFile(path.join(process.cwd(), 'templates', template),
-        'binary',
-        function (err, file) {
-            if (err) {
-                return callback(err);
-            }
-            try {
-                callback(null, mustache.render(file, data));
-            } catch (e) {
-                callback(e);
-            }
-        });
+    if (!templates[template]) {
+        return callback('Template `' + template + '` Not Loaded!');
+    }
+
+    try {
+        callback(null, mustache.render(templates[template], data, templates));
+    } catch (e) {
+        callback(e);
+    }
+
 }
 
 http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
 
-/* eslint-disable no-console */
+    /* eslint-disable no-console */
     console.log(uri);
     /* eslint-enable no-console */
     if (/^\/static/.test(uri)) {
@@ -146,3 +156,29 @@ function render500Error(err, response) {
         response.end();
     });
 }
+
+
+fs.readdir('templates', function (err, files) {
+    if (err) {
+        throw err;
+    }
+    var suffix = /[.]html$/;
+    var tpl = files.filter(function (file) {
+        return suffix.test(file);
+    }).map(function (file) {
+        return 'templates/' + file;
+    });
+    async.map(tpl, function (f, callback) {
+        fs.readFile(f, 'binary', callback);
+    }, function (err2, data) {
+        if (err2) {
+            throw err2;
+        }
+        var x = {};
+        files.forEach(function (file, idx) {
+            x[file] = data[idx];
+            x[file.replace(suffix, '')] = data[idx];
+        });
+        templates = x;
+    });
+});
