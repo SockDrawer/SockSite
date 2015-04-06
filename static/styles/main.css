@@ -80,6 +80,16 @@ body {
 
 }
 
+@media screen and (max-width: 460px) {
+  .header-image img {
+  	width: 300px;
+  }
+    
+    #header-image-wrapper img {
+      width: 300px;
+    }
+}
+
 .dropdown-menu li {
 	background: transparent;
 }
