@@ -95,12 +95,15 @@ http.createServer(function (request, response) {
         serveStatic(filename, response);
     } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
         var formatter = formatHTML,
+            contentType = 'text/html',
             accept = request.headers.accept;
         uri = uri.toLowerCase();
         if (uri === '/index.json' || accept === 'application/json') {
             formatter = formatJSON;
+            contentType = 'application/json';
         } else if (uri === '/index.yml' || accept === 'application/yaml') {
             formatter = formatYAML;
+            contentType = 'application/yaml';
         }
 
         database.getSummaryData({
@@ -117,7 +120,9 @@ http.createServer(function (request, response) {
                 if (checks.updated) { //update cache with new data.
                     checks.updated = false;
                 }
-                response.writeHead(200);
+                response.writeHead(200, {
+                    'Content-Type': contentType
+                });
                 response.write(data2, 'binary');
                 response.end();
             });
