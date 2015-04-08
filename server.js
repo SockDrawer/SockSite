@@ -92,6 +92,39 @@ function formatHTML(data, template, callback) {
 }
 formatHTML.contentType = 'text/html';
 
+function renderIndex(uri, request, response) {
+    var formatter = formatHTML,
+        accept = request.headers.accept;
+    uri = uri.toLowerCase();
+    if (uri === '/index.json' || accept === 'application/json') {
+        formatter = formatJSON;
+    } else if (uri === '/index.yml' || accept === 'application/yaml') {
+        formatter = formatYAML;
+    }
+
+    if (!cache.summary) {
+        return render500Error('E_NO_DATA', response);
+    }
+    cache.summary.host = request.headers.host;
+    formatter(cache.summary, function (err2, data2) {
+        if (err2) {
+            return render500Error(err2, response);
+        }
+        respond(data2, 200, formatter.contentType, response);
+    });
+}
+
+function renderMinified(data, mime, response) {
+    var text = [];
+    text.push(['/*', data.map(function (d) {
+        return d.name;
+    }), '*/'].join(' '));
+    text = text.concat(data.map(function (d) {
+        return d.data;
+    }));
+    respond(text.join('\n'), 200, mime, response);
+}
+
 server = http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
@@ -102,25 +135,11 @@ server = http.createServer(function (request, response) {
     if (/^\/static/.test(uri)) {
         serveStatic(filename, response);
     } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
-        var formatter = formatHTML,
-            accept = request.headers.accept;
-        uri = uri.toLowerCase();
-        if (uri === '/index.json' || accept === 'application/json') {
-            formatter = formatJSON;
-        } else if (uri === '/index.yml' || accept === 'application/yaml') {
-            formatter = formatYAML;
-        }
-
-        if (!cache.summary) {
-            return render500Error('E_NO_DATA', response);
-        }
-        cache.summary.host = request.headers.host;
-        formatter(cache.summary, function (err2, data2) {
-            if (err2) {
-                return render500Error(err2, response);
-            }
-            respond(data2, 200, formatter.contentType, response);
-        });
+        renderIndex(uri, request, response);
+    } else if (/^\/scripts[.]js/i.test(uri)) {
+        renderMinified(cache.scripts, 'application/javascript', response);
+    } else if (/^\/styles[.]js/i.test(uri)) {
+        renderMinified(cache.styles, 'text/css', response);
     } else {
         render404Error(response);
     }

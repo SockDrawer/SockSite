@@ -56,11 +56,10 @@ function readScripts(callback) {
         if (err) {
             return callback(err);
         }
-        var scripts = {};
         files.forEach(function (file) {
-            scripts[file.name] = jsmin(file.data);
+            file.data = jsmin(file.data);
         });
-        callback(null, scripts);
+        callback(null, files);
     });
 }
 
@@ -69,11 +68,10 @@ function readStyles(callback) {
         if (err) {
             return callback(err);
         }
-        var styles = {};
         files.forEach(function (file) {
-            styles[file.name] = cssmin(file.data);
+            file.data = cssmin(file.data);
         });
-        callback(null, styles);
+        callback(null, files);
     });
 }
 
