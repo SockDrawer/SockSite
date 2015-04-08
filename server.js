@@ -138,7 +138,7 @@ server = http.createServer(function (request, response) {
         renderIndex(uri, request, response);
     } else if (/^\/scripts[.]js/i.test(uri)) {
         renderMinified(cache.scripts, 'application/javascript', response);
-    } else if (/^\/styles[.]js/i.test(uri)) {
+    } else if (/^\/styles[.]css/i.test(uri)) {
         renderMinified(cache.styles, 'text/css', response);
     } else {
         render404Error(response);
