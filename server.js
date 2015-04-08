@@ -140,6 +140,10 @@ server = http.createServer(function (request, response) {
         renderMinified(cache.scripts, 'application/javascript', response);
     } else if (/^\/styles[.]css/i.test(uri)) {
         renderMinified(cache.styles, 'text/css', response);
+    } else if (process.env.SOCKDEV && /^\/reset[.]html/i.test(uri)) {
+        cache.buildCache(function () {
+            renderIndex(uri, request, response);
+        });
     } else {
         render404Error(response);
     }
