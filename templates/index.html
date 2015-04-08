@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<title>Is it just me or server cooties?</title>
+		<!-- Bootstrap CSS-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+		<!-- Custom styles -->
+		<link type="text/css" rel="stylesheet" media="screen" href="/static/styles/main.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="/static/styles/animations.css">
 
 		<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<!-- Bootstrap JS-->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 		<!-- Custom scripts -->
 		<script type="text/javascript" src="/static/scripts/spin.js"></script>
 		<script type="text/javascript" src="/static/scripts/round.js"></script>
 		<script type="text/javascript" src="/static/scripts/colors.js"></script>
-
-		<!-- Custom styles -->
-		<link type="text/css" rel="stylesheet" media="screen" href="/static/styles/main.css">
-		<link type="text/css" rel="stylesheet" media="screen" href="/static/styles/animations.css">
-
 	</head>
 
 	<body>
-		
+
 		<div class="container-fluid">
-			
+
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header-image">
 					<img src="/static/images/trwtf.png">
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 		<nav class="navbar headerbar" id="main-title">
 			<div id="header-image-wrapper">
-				<img src="/static/images/isyou.png">
+				<img src="/static/images/{{#up}}isyou{{/up}}{{^up}}isdiscourse{{/up}}.png">
 			</div>
-			
+
 			<div class="container-fluid">
 
 				<ul class="nav navbar-nav navbar-right">
@@ -55,10 +54,10 @@
 					</li>
 
 				</ul>
-			
+
 			</div>
 		</nav>
-		
+
 		<div class="container-fluid">
 
 			<div class="row">
@@ -67,7 +66,7 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th colspan="2">	
+								<th colspan="2">
 									<span class="glyphicon glyphicon-time"></span>&nbsp;Response timings
 								</th>
 							</tr>
@@ -87,7 +86,7 @@
 								<td colspan="2">{{status}}</td>
 							</tr>
 						</tfoot>
-						
+
 					</table>
 
 				</div>

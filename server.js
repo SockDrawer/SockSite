@@ -8,18 +8,17 @@ process.on('uncaughtException', function (err) {
     /*eslint-enable no-process-exit, no-console*/
 });
 
-var database = require('./data'),
+var cache = require('./cache'),
     checks = require('./check'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
     fs = require('fs'),
     mustache = require('mustache'),
-    yaml = require('js-yaml'),
-    async = require('async');
+    yaml = require('js-yaml');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined,
-    templates;
+    server;
 
 
 
@@ -39,12 +38,17 @@ function serveStatic(filename, response) {
             if (err) {
                 return render500Error(err, response);
             }
-
-            response.writeHead(200);
-            response.write(file, 'binary');
-            response.end();
+            respond(file, 200, 'application/octet-stream', response);
         });
     });
+}
+
+function respond(data, code, contentType, response) {
+    response.writeHead(code, {
+        'Content-Type': contentType
+    });
+    response.write(data, 'binary');
+    response.end();
 }
 
 function formatJSON(data, callback) {
@@ -55,6 +59,7 @@ function formatJSON(data, callback) {
     }
     callback(null, data);
 }
+formatJSON.contentType = 'application/json';
 
 function formatYAML(data, callback) {
     try {
@@ -66,25 +71,61 @@ function formatYAML(data, callback) {
     }
     callback(null, data);
 }
+formatYAML.contentType = 'text/yaml';
 
 function formatHTML(data, template, callback) {
     if (typeof (template) === 'function') {
         callback = template;
         template = 'index.html';
     }
-    if (!templates[template]) {
+    if (!cache.templates[template]) {
         return callback('Template `' + template + '` Not Loaded!');
     }
 
     try {
-        callback(null, mustache.render(templates[template], data, templates));
+        callback(null, mustache.render(cache.templates[template], data,
+            cache.templates));
     } catch (e) {
         callback(e);
     }
 
 }
+formatHTML.contentType = 'text/html';
 
-http.createServer(function (request, response) {
+function renderIndex(uri, request, response) {
+    var formatter = formatHTML,
+        accept = request.headers.accept;
+    uri = uri.toLowerCase();
+    if (uri === '/index.json' || accept === 'application/json') {
+        formatter = formatJSON;
+    } else if (uri === '/index.yml' || accept === 'application/yaml') {
+        formatter = formatYAML;
+    }
+
+    if (!cache.summary) {
+        return render500Error('E_NO_DATA', response);
+    }
+    cache.summary.host = request.headers.host;
+    formatter(cache.summary, function (err2, data2) {
+        if (err2) {
+            return render500Error(err2, response);
+        }
+        respond(data2, 200, formatter.contentType, response);
+    });
+}
+
+function renderMinified(data, mime, response) {
+    var text = [];
+    text.push(['/*', data.map(function (d) {
+        return d.name;
+    }), '*/'].join(' '));
+    text = text.concat(data.map(function (d) {
+        return d.data;
+    }));
+    respond(text.join('\n'), 200, mime, response);
+}
+
+server = http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
 
@@ -94,91 +135,47 @@ http.createServer(function (request, response) {
     if (/^\/static/.test(uri)) {
         serveStatic(filename, response);
     } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
-        var formatter = formatHTML,
-            accept = request.headers.accept;
-        uri = uri.toLowerCase();
-        if (uri === '/index.json' || accept === 'application/json') {
-            formatter = formatJSON;
-        } else if (uri === '/index.yml' || accept === 'application/yaml') {
-            formatter = formatYAML;
-        }
-
-        database.getSummaryData({
-            host: request.headers.host
-        }, function (err, data) {
-            if (err) {
-                return render500Error(err, response);
-            }
-            formatter(data, function (err2, data2) {
-                if (err2) {
-                    return render500Error(err2, response);
-                }
-
-                if (checks.updated) { //update cache with new data.
-                    checks.updated = false;
-                }
-                response.writeHead(200);
-                response.write(data2, 'binary');
-                response.end();
-            });
+        renderIndex(uri, request, response);
+    } else if (/^\/scripts[.]js/i.test(uri)) {
+        renderMinified(cache.scripts, 'application/javascript', response);
+    } else if (/^\/styles[.]css/i.test(uri)) {
+        renderMinified(cache.styles, 'text/css', response);
+    } else if (process.env.SOCKDEV && /^\/reset[.]html/i.test(uri)) {
+        cache.buildCache(function () {
+            renderIndex(uri, request, response);
         });
     } else {
         render404Error(response);
     }
-}).listen(port, ip);
+});
+cache.buildCache(function (err) {
+    /*eslint-disable no-console */
+    if (err) {
+        return console.error(err);
+    }
+    console.log('server started');
+    server.listen(port, ip);
+    /*eslint-neable no-console */
+});
 
 function render404Error(response) {
     formatHTML(null, 'error404.html', function (err, data) {
+        var mime = 'text/html';
         if (err) {
-            response.writeHead(404, {
-                'Content-Type': 'text/plain'
-            });
-            response.write('404 Not Found\n');
-            return response.end();
+            data = '404 Not Found';
+            mime = 'text/plain';
         }
-        response.writeHead(404);
-        response.write(data, 'binary');
-        response.end();
+        return respond(data, 404, mime, response);
     });
 }
 
 function render500Error(err, response) {
     formatHTML(null, 'error500.html', function (err2, data) {
-        if (err || err2) {
-            response.writeHead(500, {
-                'Content-Type': 'text/plain'
-            });
-            response.write(err + '\n');
-            return response.end();
+        var mime = 'text/html';
+        if (err) {
+            data = err || err2;
+            mime = 'text/plain';
         }
-        response.writeHead(500);
-        response.write(data, 'binary');
-        response.end();
+        return respond(data, 500, mime, response);
     });
 }
-
-
-fs.readdir('templates', function (err, files) {
-    if (err) {
-        throw err;
-    }
-    var suffix = /[.]html$/;
-    var tpl = files.filter(function (file) {
-        return suffix.test(file);
-    }).map(function (file) {
-        return 'templates/' + file;
-    });
-    async.map(tpl, function (f, callback) {
-        fs.readFile(f, 'binary', callback);
-    }, function (err2, data) {
-        if (err2) {
-            throw err2;
-        }
-        var x = {};
-        files.forEach(function (file, idx) {
-            x[file] = data[idx];
-            x[file.replace(suffix, '')] = data[idx];
-        });
-        templates = x;
-    });
-});
