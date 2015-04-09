@@ -3,14 +3,18 @@ var sqlite = require('sqlite3'),
     async = require('async');
 var config = require('./config.json');
 var db = new sqlite.Database('servercooties.sql'),
-    notify = [];
+    notify = [],
+    pages = {};
 db.serialize(function () {
-    db.run('CREATE TABLE IF NOT EXISTS checks (' +
-        'key VARCHAR(100) NOT NULL,' +
-        'status INT NOT NULL,' +
-        'length INT NOT NULL,' +
-        'responseTime INT NOT NULL,' +
-        'checkedAt DATETIME NOT NULL' +
+    db.run('CREATE TABLE IF NOT EXISTS pages (' +
+        '    key VARCHAR(255) NOT NULL' +
+        ');');
+    db.run('CREATE TABLE IF NOT EXISTS checks2 (' +
+        '    page INT NOT NULL,' +
+        '    status INT NOT NULL,' +
+        '    responseTime INT NOT NULL,' +
+        '    checkedAt DATETIME NOT NULL,' +
+        '    FOREIGN KEY (page) REFERENCES pages(OID)' +
         ')');
 });
 
@@ -18,21 +22,44 @@ exports.registerListener = function registerListener(fn) {
     notify.push(fn);
 };
 
+function getPageId(page, callback) {
+    if (pages[page]) {
+        var res = pages[page];
+        return process.nextTick(function () {
+            callback(null, res);
+        });
+    }
+    db.run('INSERT INTO pages (key) VALUES (?)', [page], function (err) {
+        if (err) {
+            return callback(err);
+        }
+        db.all('SELECT OID FROM pages WHERE key = ? LIMIT 1', [page],
+            function (err2, ids) {
+                if (err) {
+                    return callback(err2);
+                }
+                pages[page] = ids[0].rowid;
+                callback(null, ids[0].rowid);
+            });
+    });
+}
+
 exports.addCheck = function addCheck(key, status, length, time, callback) {
     key = key.replace(/^https?:\/\//i, '');
-    var now = new Date();
-    db.run('INSERT INTO checks (key, status, length, responseTime, checkedAt)' +
-        'VALUES (?, ?, ?, ?, ?)', [key, status, length, time, now],
-        callback);
-    async.each(notify, function (n, next) {
-        n({
-            key: key,
-            status: status,
-            length: length,
-            responseTime: time,
-            checkedAt: now.getTime()
+    getPageId(key, function (err, id) {
+        var now = new Date();
+        db.run('INSERT INTO checks2 (page, status, responseTime, checkedAt)' +
+            'VALUES (?, ?, ?, ?, ?)', [key, status, time, now],
+            callback);
+        async.each(notify, function (n, next) {
+            n({
+                key: key,
+                status: status,
+                responseTime: time,
+                checkedAt: now.getTime()
+            });
+            next();
         });
-        next();
     });
 };
 
@@ -41,10 +68,15 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
         offset = 10 * 60;
     }
     var date = new Date() - (offset * 1000);
-    db.all('SELECT * FROM checks WHERE checkedAt > ?' +
+    db.all('SELECT p.key, c.status, c.responseTime, c.checkedAt FROM checks2 c JOIN pages p ON c.page = p.OID WHERE checkedAt > ?' +
         ' ORDER BY checkedAt DESC', [date], callback);
 };
 
+function range(num) {
+    return Array.apply(null, Array(num)).map(function (_, i) {
+        return i;
+    });
+}
 
 function round(num, places) {
     if (!places) {
@@ -76,6 +108,20 @@ function getFlavor(value, arr) {
     key = key[key.length - 1];
     return arr[key];
 }
+
+
+exports.getSampleData = function getSampleData(responseTime, responseCode) {
+    var now = Date.now();
+    return range(10).map(function () {
+        return {
+            key: 'Sample Data',
+            status: responseCode,
+            length: 0,
+            responseTime: responseTime + Math.round(Math.random() * 500) - 250,
+            checkedAt: now + Math.round(Math.random() * 60000) - 30000
+        };
+    });
+};
 
 exports.summarizeData = function summarizeData(data, cfg) {
     cfg = cfg || {};
