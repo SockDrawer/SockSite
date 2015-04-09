@@ -9,6 +9,7 @@ process.on('uncaughtException', function (err) {
 });
 
 var cache = require('./cache'),
+    database = require('./database'),
     checks = require('./check'),
     http = require('http'),
     url = require('url'),
@@ -125,6 +126,10 @@ function renderMinified(data, mime, response) {
     respond(text.join('\n'), 200, mime, response);
 }
 
+function renderSample(time, response){
+    
+}
+
 server = http.createServer(function (request, response) {
     var uri = url.parse(request.url).pathname,
         filename = path.join(process.cwd(), uri);
@@ -143,6 +148,14 @@ server = http.createServer(function (request, response) {
     } else if (process.env.SOCKDEV && /^\/reset[.]html/i.test(uri)) {
         cache.buildCache(function () {
             renderIndex(uri, request, response);
+        });
+    } else if (process.env.SOCKDEV && /^\/good([.]html)?/i.test(uri)) {
+        var data = database.summarizeData(database.getSampleData(2100, 200), {});
+        formatHTML(data, function (err2, data2) {
+            if (err2) {
+                return render500Error(err2, response);
+            }
+            respond(data2, 200, 'text/html', response);
         });
     } else {
         render404Error(response);
