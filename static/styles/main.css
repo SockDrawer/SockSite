@@ -181,6 +181,10 @@ code {
 	text-align: center;
 }
 
+#accordion {
+	margin-top: 5px;
+}
+
 .navbar {
 	min-height: 0;
 }
