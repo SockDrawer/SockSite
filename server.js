@@ -40,7 +40,7 @@ var port = parseInt(process.env.PORT || 8888, 10),
 
 if (process.env.SOCKDEV) {
     paths = paths.concat([{
-        path: /^\/reset[.]html/i,
+        path: /^\/reset([.]html)?/i,
         renderer: function (uri, request, response) {
             cache.buildCache(function () {
                 renderIndex(uri, request, response);
