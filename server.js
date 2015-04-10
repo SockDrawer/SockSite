@@ -39,15 +39,19 @@ function serveStatic(filename, response) {
             if (err) {
                 return render500Error(err, response);
             }
-            respond(file, 200, 'application/octet-stream', response);
+            respond(file, 200, undefined, response);
         });
     });
 }
 
 function respond(data, code, contentType, response) {
-    response.writeHead(code, {
-        'Content-Type': contentType
-    });
+    if (contentType) {
+        response.writeHead(code, {
+            'Content-Type': contentType
+        });
+    } else {
+        response.writeHead(code);
+    }
     response.write(data, 'binary');
     response.end();
 }
@@ -126,8 +130,8 @@ function renderMinified(data, mime, response) {
     respond(text.join('\n'), 200, mime, response);
 }
 
-function renderSample(time, response){
-    
+function renderSample(time, response) {
+
 }
 
 server = http.createServer(function (request, response) {
