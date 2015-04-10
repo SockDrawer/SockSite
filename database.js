@@ -44,12 +44,15 @@ function getPageId(page, callback) {
     });
 }
 
-exports.addCheck = function addCheck(key, status, length, time, callback) {
+exports.addCheck = function addCheck(key, status, _, time, callback) {
     key = key.replace(/^https?:\/\//i, '');
     getPageId(key, function (err, id) {
+        if (err) {
+            return callback(err);
+        }
         var now = new Date();
         db.run('INSERT INTO checks2 (page, status, responseTime, checkedAt)' +
-            'VALUES (?, ?, ?, ?, ?)', [key, status, time, now],
+            'VALUES (?, ?, ?, ?, ?)', [id, status, time, now],
             callback);
         async.each(notify, function (n, next) {
             n({
@@ -68,7 +71,8 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
         offset = 10 * 60;
     }
     var date = new Date() - (offset * 1000);
-    db.all('SELECT p.key, c.status, c.responseTime, c.checkedAt FROM checks2 c JOIN pages p ON c.page = p.OID WHERE checkedAt > ?' +
+    db.all('SELECT p.key, c.status, c.responseTime, c.checkedAt FROM ' +
+        'checks2 c JOIN pages p ON c.page = p.OID WHERE checkedAt > ?' +
         ' ORDER BY checkedAt DESC', [date], callback);
 };
 
@@ -174,8 +178,8 @@ exports.summarizeData = function summarizeData(data, cfg) {
         return {
             name: key,
             response: getFlavor(score, config.statusCode),
-            responseCode: avg,
-            responseTime: stime,
+            responseCode: round(avg, 2),
+            responseTime: round(stime, 2),
             responseScore: average([avg, stime / 10]),
             polledAt: checks[key][0].polledAt,
             values: checks[key]
