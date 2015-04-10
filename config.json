@@ -11,6 +11,7 @@
     "statusCode": {
         "0": "UNKNOWN",
         "1": "GREAT",
+        "160": "GOOD",
         "201": "OK",
         "250": "BAD",
         "300": "OFFLINE"

@@ -19,6 +19,10 @@ body {
 	color: #4f9fcf;
 }
 
+.GOOD code {
+	color: #3f8fbf;
+}
+
 .OK code {
 	color: #2f6f9f;
 }

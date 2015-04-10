@@ -19,13 +19,65 @@ var cache = require('./cache'),
     yaml = require('js-yaml');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined,
-    server;
+    server,
+    paths = [{
+        path: /^\/static/,
+        renderer: serveStatic
+    }, {
+        path: /^\/(index[.](html?|json|yml))?$/i,
+        renderer: renderIndex
+    }, {
+        path: /^\/scripts[.]js/i,
+        renderer: function (_, __, response) {
+            renderMinified(cache.scripts, 'application/javascript', response);
+        }
+    }, {
+        path: /^\/styles[.]css/i,
+        renderer: function (_, __, response) {
+            renderMinified(cache.styles, 'text/css', response);
+        }
+    }];
 
-
+if (process.env.SOCKDEV) {
+    paths = paths.concat([{
+        path: /^\/reset[.]html/i,
+        renderer: function (uri, request, response) {
+            cache.buildCache(function () {
+                renderIndex(uri, request, response);
+            });
+        }
+    }, {
+        path: /^\/great([.]html)?/i,
+        renderer: function (_, __, response) {
+            renderSample(100, response);
+        }
+    }, {
+        path: /^\/good([.]html)?/i,
+        renderer: function (_, __, response) {
+            renderSample(1500, response);
+        }
+    }, {
+        path: /^\/ok([.]html)?/i,
+        renderer: function (_, __, response) {
+            renderSample(2100, response);
+        }
+    }, {
+        path: /^\/bad([.]html)?/i,
+        renderer: function (_, __, response) {
+            renderSample(3100, response);
+        }
+    }, {
+        path: /^\/offline([.]html)?/i,
+        renderer: function (_, __, response) {
+            renderSample(21000, response);
+        }
+    }]);
+}
 
 checks.start();
 
-function serveStatic(filename, response) {
+function serveStatic(uri, _, response) {
+    var filename = path.join(process.cwd(), uri);
     fs.exists(filename, function (exists) {
         if (!exists) {
             return render404Error(response);
@@ -131,39 +183,35 @@ function renderMinified(data, mime, response) {
 }
 
 function renderSample(time, response) {
+    var data = database.summarizeData(database.getSampleData(time, 200), {});
+    formatHTML(data, function (err2, data2) {
+        if (err2) {
+            return render500Error(err2, response);
+        }
+        respond(data2, 200, 'text/html', response);
+    });
 
 }
 
+
 server = http.createServer(function (request, response) {
-    var uri = url.parse(request.url).pathname,
-        filename = path.join(process.cwd(), uri);
+    var uri = url.parse(request.url).pathname;
 
     /* eslint-disable no-console */
     console.log(uri);
     /* eslint-enable no-console */
-    if (/^\/static/.test(uri)) {
-        serveStatic(filename, response);
-    } else if (/^\/(index[.](html?|json|yml))?$/i.test(uri)) {
-        renderIndex(uri, request, response);
-    } else if (/^\/scripts[.]js/i.test(uri)) {
-        renderMinified(cache.scripts, 'application/javascript', response);
-    } else if (/^\/styles[.]css/i.test(uri)) {
-        renderMinified(cache.styles, 'text/css', response);
-    } else if (process.env.SOCKDEV && /^\/reset[.]html/i.test(uri)) {
-        cache.buildCache(function () {
-            renderIndex(uri, request, response);
-        });
-    } else if (process.env.SOCKDEV && /^\/good([.]html)?/i.test(uri)) {
-        var data = database.summarizeData(database.getSampleData(2100, 200), {});
-        formatHTML(data, function (err2, data2) {
-            if (err2) {
-                return render500Error(err2, response);
-            }
-            respond(data2, 200, 'text/html', response);
-        });
-    } else {
+    var rendered = paths.some(function (point) {
+        var res = point.path.test(uri);
+        if (res) {
+            point.renderer(uri, request, response);
+        }
+        return res;
+    });
+    if (!rendered) {
         render404Error(response);
     }
+    return;
+
 });
 cache.buildCache(function (err) {
     /*eslint-disable no-console */
@@ -189,8 +237,8 @@ function render404Error(response) {
 function render500Error(err, response) {
     formatHTML(null, 'error500.html', function (err2, data) {
         var mime = 'text/html';
-        if (err) {
-            data = err || err2;
+        if (err2) {
+            data = err;
             mime = 'text/plain';
         }
         return respond(data, 500, mime, response);
