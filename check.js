@@ -20,7 +20,9 @@ function createCheck(url) {
             }
             db.addCheck(url, resp.statusCode, (resp.body || '').length,
                 complete,
-                next);
+                function () {
+                    next();
+                });
         });
     };
 }
