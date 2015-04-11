@@ -163,12 +163,12 @@ exports.summarizeData = function summarizeData(data, cfg) {
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
-            polledAt: new Date(a.checkedAt)
+            polledAt: new Date(a.checkedAt),
         });
     });
     keys = Object.keys(checks);
     keys.sort();
-    result.summary = keys.map(function (key) {
+    result.summary = keys.map(function (key, index) {
         var avg = average(checks[key], function (a) {
                 return a.responseCode;
             }),
@@ -182,6 +182,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
             responseTime: round(stime, 2),
             responseScore: average([avg, stime / 10]),
             polledAt: checks[key][0].polledAt,
+            checkIndex: index,
             values: checks[key]
         };
     });

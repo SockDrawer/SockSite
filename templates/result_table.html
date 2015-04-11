@@ -1,14 +1,14 @@
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   {{#summary}}
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="heading{{name}}">
+    <div class="panel-heading" role="tab" id="heading{{checkIndex}}">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{name}}" aria-expanded="false" aria-controls="collapse{{name}}">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{checkIndex}}" aria-expanded="false" aria-controls="collapse{{checkIndex}}">
           {{name}}
         </a>
       </h4>
     </div>
-    <div id="collapse{{name}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading{{name}}">
+    <div id="collapse{{checkIndex}}" class="panel-collapse collapse {{^checkIndex}}in{{/checkIndex}}" role="tabpanel" aria-labelledby="heading{{checkIndex}}">
       <div class="panel-body">
         <table class="table table-condensed history">
           <thead>
