@@ -9,32 +9,30 @@
       </h4>
     </div>
     <div id="collapse{{checkIndex}}" class="panel-collapse collapse {{^checkIndex}}in{{/checkIndex}}" role="tabpanel" aria-labelledby="heading{{checkIndex}}">
-      <div class="panel-body">
-        <table class="table table-condensed history">
-          <thead>
-            <tr>
-              <th>
-                Response code
-              </th>
-              <th>
-                Response time
-              </th>
-              <th>
-                Polled at
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#values}}
-            <tr>
-              <td class="historyCode"><code>{{responseCode}}</code></td>
-              <td class="historyTime"><code>{{responseTime}} ms</code></td>
-              <td class="historyDate"><code>{{polledAt}}</code></td>
-            </tr>
-            {{/values}}
-          </tbody>
-        </table>
-      </div>
+      <table class="table table-condensed history">
+        <thead>
+          <tr>
+            <th>
+              Response code
+            </th>
+            <th>
+              Response time
+            </th>
+            <th>
+              Polled at
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#values}}
+          <tr>
+            <td class="historyCode"><code>{{responseCode}}</code></td>
+            <td class="historyTime"><code>{{responseTime}} ms</code></td>
+            <td class="historyDate"><code>{{polledAt}}</code></td>
+          </tr>
+          {{/values}}
+        </tbody>
+      </table>
     </div>
   </div>
   {{/summary}}
