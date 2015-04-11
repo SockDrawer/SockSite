@@ -160,15 +160,18 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     data.map(function (a) {
         checks[a.key] = checks[a.key] || [];
+        var score = average([a.status, a.responseTime/10]);
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
+            responseScore: score,
+            response: getFlavor(score, config.statusCode),
             polledAt: new Date(a.checkedAt)
         });
     });
     keys = Object.keys(checks);
     keys.sort();
-    result.summary = keys.map(function (key) {
+    result.summary = keys.map(function (key, index) {
         var avg = average(checks[key], function (a) {
                 return a.responseCode;
             }),
@@ -182,6 +185,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
             responseTime: round(stime, 2),
             responseScore: average([avg, stime / 10]),
             polledAt: checks[key][0].polledAt,
+            checkIndex: index,
             values: checks[key]
         };
     });
