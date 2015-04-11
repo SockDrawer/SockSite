@@ -90,35 +90,10 @@
 						<!-- Tab panes -->
 						<div class="tab-content">
 							<div role="tabpanel" class="tab-pane active" id="status">
-								<table class="table">
-									<thead>
-										<tr>
-											<th>URL</th>
-											<th>Response time</th>
-											<th>Status</th>
-										</tr>
-									</thead>
-			
-									<tbody>
-										{{#summary}}
-										<tr class="{{response}}">
-											<td><code class="itemName">{{name}}</code></td>
-											<td><code class="responseTime">{{responseTime}} ms</code></td>
-											<td><span class="label label-default {{code}}">{{code}}</span></td>
-										</tr>
-										{{/summary}}
-									</tbody>
-			
-									<tfoot>
-										<tr>
-											<td colspan="3">{{status}}</td>
-										</tr>
-									</tfoot>
-			
-								</table>
+								{{>status_table}}
 							</div>
 							<div role="tabpanel" class="tab-pane" id="history">
-								{{>result_table}}
+								{{>history_table}}
 							</div>
 							<div role="tabpanel" class="tab-pane" id="graph">
 								<img src="https://plot.ly/~shadowmod/481.svg" height="500" width="700" />
