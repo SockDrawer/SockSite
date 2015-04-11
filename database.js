@@ -163,7 +163,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
-            polledAt: new Date(a.checkedAt),
+            polledAt: new Date(a.checkedAt)
         });
     });
     keys = Object.keys(checks);
