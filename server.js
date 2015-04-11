@@ -7,10 +7,11 @@ process.on('uncaughtException', function (err) {
     process.exit(1);
     /*eslint-enable no-process-exit, no-console*/
 });
-
+ 
 var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
+  //  graph = require('./graph'),
     http = require('http'),
     url = require('url'),
     path = require('path'),

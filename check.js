@@ -20,7 +20,10 @@ function createCheck(url) {
             }
             db.addCheck(url, resp.statusCode, (resp.body || '').length,
                 complete,
-                function () {
+                function (e) {
+                    if (e){
+                        console.log(e)
+                    }
                     next();
                 });
         });
