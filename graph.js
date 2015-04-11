@@ -1,6 +1,7 @@
 'use strict';
 
 var plotly = require('plotly'),
+async = require('async'),
     database = require('./database');
 
 var data = {},
@@ -24,37 +25,39 @@ var data = {},
             name: '/latest.json',
             type: 'scatter'
         }],
-        
+
     };
 plotly = plotly('servercooties', 'ismuxlxups');
 
-function makePlot(){
-    var lines = Object.keys(data).map(function(key){
+function makePlot(callback) {
+    var lines = Object.keys(data).map(function (key) {
         return {
             name: key,
             type: 'scatter',
-            x: data[key].map(function(check){return new Date(check.checkedAt).toISOString();}),
-            y: data[key].map(function(check){return check.responseTime/1000;}),
+            x: data[key].map(function (check) {
+                return new Date(check.checkedAt).toISOString().replace('T', ' ').replace('Z','');
+            }),
+            y: data[key].map(function (check) {
+                return check.responseTime / 1000;
+            }),
         };
     });
-    console.log (data, lines, layout);
-    //plotly.plot(lines, layout, function(err, msg){
-    //    console.log(arguments);
-    //});
+    console.log(data, lines, layout);
+    plotly.plot(lines, layout, function () {
+        callback();
+    });
 }
 
 function sortData(checks) {
-    var cutoff = Date.now() - 60*60*1000;
-    console.log(checks);
+    var cutoff = Date.now() - 60 * 60 * 1000;
     checks.forEach(function (check) {
-        var key = /\/.*$/.exec(check.key),
+        var key = /\/.*$/.exec(check.key)[0],
             d = data[key] || [];
-        console.log(key);
         d.push(check);
         data[key] = d;
     });
-    Object.keys(data).forEach(function(key){
-        data[key] = data[key].filter(function(check){
+    Object.keys(data).forEach(function (key) {
+        data[key] = data[key].filter(function (check) {
             return check.checkedAt >= cutoff;
         });
     });
@@ -71,6 +74,10 @@ database.getRecentChecks(15 * 60 * 60, function (err, checks) {
     }
     database.registerListener(setData);
     sortData(checks);
-    makePlot();
-    process.exit();
+    
+    async.forever(function(next){
+    makePlot(function(){
+        setTimeout(next, 60*1000);
+    });
+    });
 });

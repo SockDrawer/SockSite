@@ -11,7 +11,7 @@ process.on('uncaughtException', function (err) {
 var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
-  //  graph = require('./graph'),
+    graph = require('./graph'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
