@@ -1,5 +1,6 @@
 tr.GREAT{ 
 	background-color: green !important;
+	color: white;
 }
 
 tr.OK {
@@ -8,6 +9,7 @@ tr.OK {
 
 tr.BAD {
 	background-color: red;
+	color: white;
 }
 
 tfoot td {
@@ -15,6 +17,21 @@ tfoot td {
 	color: white;
 }
 
-div.headerbar {
+#header-image-wrapper{
 	background-color: red;
+	color: white;
+}
+
+.panel-default>div.panel-heading {
+	background-color: green;
+	color: white;
+}
+table.history thead {
+   background-color: red;
+   color: white;
+}
+
+table.history tbody {
+   background-color: purple;
+   color: white;
 }

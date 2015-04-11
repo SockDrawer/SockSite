@@ -15,13 +15,16 @@
 
 		<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		
+		<!-- Moment (required for DiscoRound) -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
 
 		<!-- Bootstrap JS-->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 		<!-- Custom scripts -->
 		<script type="text/javascript" src="/static/scripts/spin.js"></script>
-		<script type="text/javascript" src="/static/scripts/round.js"></script>
+		<script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
 		<script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
 	</head>
 
@@ -62,38 +65,47 @@
 
 			<div class="row">
 				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+					
+					<div role="tabpanel">
 
-					<table class="table">
-						<thead>
-							<tr>
-								<th colspan="2">
-									<span class="glyphicon glyphicon-time"></span>&nbsp;Response timings
-								</th>
-							</tr>
-						</thead>
-
-						<tbody>
-							{{#summary}}
-							<tr class="{{response}}">
-								<td><code class="itemName">{{name}}</code></td>
-								<td><code class="responseTime">{{responseTime}} ms</code></td>
-							</tr>
-							{{/summary}}
-						</tbody>
-
-						<tfoot>
-							<tr>
-								<td colspan="2">{{status}}</td>
-							</tr>
-						</tfoot>
-
-					</table>
-
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs nav-justified" role="tablist">
+							<li role="presentation" class="active">
+								<a href="#status" aria-controls="status" role="tab" data-toggle="tab">
+									<span class="glyphicon glyphicon-ok"></span>&nbsp;Status
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#history" aria-controls="history" role="tab" data-toggle="tab">
+									<span class="glyphicon glyphicon-hourglass"></span>&nbsp;History
+								</a>
+							</li>
+							<li role="presentation">
+								<a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
+									<span class="glyphicon glyphicon-stats"></span>&nbsp;Graph
+								</a>
+							</li>
+						</ul>
+						
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="status">
+								{{>status_table}}
+							</div>
+							<div role="tabpanel" class="tab-pane" id="history">
+								{{>history_table}}
+							</div>
+							<div role="tabpanel" class="tab-pane" id="graph">
+								<img src="https://plot.ly/~shadowmod/481.svg" height="500" width="700" />
+								<br/><a href="https://plot.ly/~shadowmod/481">Click for interactive graph.</a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText">
 					{{flavor}}
 				</div>
 			</div>

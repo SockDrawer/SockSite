@@ -52,8 +52,13 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
         }
         var now = new Date();
         db.run('INSERT INTO checks2 (page, status, responseTime, checkedAt)' +
-            'VALUES (?, ?, ?, ?, ?)', [id, status, time, now],
-            callback);
+            'VALUES (?, ?, ?, ?)', [id, status, time, now],
+            function (e) {
+                if (e) {
+                    console.warn(e); //eslint-disable-line, no-console
+                }
+                callback();
+            });
         async.each(notify, function (n, next) {
             n({
                 key: key,
@@ -160,7 +165,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     data.map(function (a) {
         checks[a.key] = checks[a.key] || [];
-        var score = average([a.status, a.responseTime/10]);
+        var score = average([a.status, a.responseTime / 10]);
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,

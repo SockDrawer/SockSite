@@ -1,0 +1,39 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  {{#summary}}
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="heading{{checkIndex}}">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{checkIndex}}" aria-expanded="false" aria-controls="collapse{{checkIndex}}">
+          {{name}}
+        </a>
+      </h4>
+    </div>
+    <div id="collapse{{checkIndex}}" class="panel-collapse collapse {{^checkIndex}}in{{/checkIndex}}" role="tabpanel" aria-labelledby="heading{{checkIndex}}">
+      <table class="table table-condensed history">
+        <thead>
+          <tr>
+            <th>
+              Code
+            </th>
+            <th>
+              Time
+            </th>
+            <th>
+              Polled at
+            </th>
+          </tr>
+        </thead>
+          <tbody>
+            {{#values}}
+            <tr class="{{response}}">
+              <td class="historyCode"><span class="label label-default {{response}}">{{responseCode}}</label></td>
+              <td class="historyTime"><code>{{responseTime}}&nbsp;ms</code></td>
+              <td class="historyDate"><code>{{polledAt}}</code></td>
+            </tr>
+            {{/values}}
+          </tbody>
+      </table>
+    </div>
+  </div>
+  {{/summary}}
+</div>
