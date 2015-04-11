@@ -160,9 +160,12 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     data.map(function (a) {
         checks[a.key] = checks[a.key] || [];
+        var score = average([a.status, a.responseTime/10]);
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
+            responseScore: score,
+            response: getFlavor(score, config.statusCode),
             polledAt: new Date(a.checkedAt)
         });
     });
