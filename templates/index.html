@@ -15,13 +15,16 @@
 
 		<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		
+		<!-- Moment (required for DiscoRound) -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
 
 		<!-- Bootstrap JS-->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 		<!-- Custom scripts -->
 		<script type="text/javascript" src="/static/scripts/spin.js"></script>
-		<script type="text/javascript" src="/static/scripts/round.js"></script>
+		<script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
 		<script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
 	</head>
 
@@ -127,7 +130,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText">
 					{{flavor}}
 				</div>
 			</div>
