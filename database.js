@@ -55,7 +55,7 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
             'VALUES (?, ?, ?, ?)', [id, status, time, now],
             function (e) {
                 if (e) {
-                    console.warn(e); //eslint-disable-line, no-console
+                    console.warn(e); //eslint-disable-line no-console
                 }
                 callback();
             });
@@ -165,11 +165,11 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     data.map(function (a) {
         checks[a.key] = checks[a.key] || [];
-        var score = average([a.status, a.responseTime / 10]);
+        var score2 = average([a.status, a.responseTime / 10]);
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
-            responseScore: score,
+            responseScore: score2,
             response: getFlavor(score, config.statusCode),
             polledAt: new Date(a.checkedAt)
         });
