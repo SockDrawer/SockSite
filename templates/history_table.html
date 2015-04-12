@@ -13,22 +13,22 @@
         <thead>
           <tr>
             <th>
-              Code
+              Polled at
             </th>
             <th>
               Time
             </th>
             <th>
-              Polled at
+              Code
             </th>
           </tr>
         </thead>
           <tbody>
             {{#values}}
             <tr class="{{response}}">
-              <td class="historyCode"><span class="label label-default {{response}}">{{responseCode}}</label></td>
-              <td class="historyTime"><code>{{responseTime}}&nbsp;ms</code></td>
               <td class="historyDate"><code>{{polledAt}}</code></td>
+              <td class="historyTime"><code>{{responseTime}}&nbsp;ms</code></td>
+              <td class="historyCode"><span class="label label-default {{response}}">{{responseCode}}</label></td>
             </tr>
             {{/values}}
           </tbody>
