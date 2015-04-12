@@ -7,7 +7,7 @@ var plotly = require('plotly'),
 var data = {},
     layout = {
         fileopt: 'overwrite',
-        filename: 'Latest Response Times',
+        filename: 'Latest Response Times testing',
         layout: {
             showlegend: true,
             title: 'Latest Response Times'
