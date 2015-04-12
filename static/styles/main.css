@@ -185,6 +185,14 @@ code {
 	margin-top: 5px;
 }
 
+#graph {
+	text-align: center;
+}
+
+#graph .btn {
+	border-radius: 0;
+}
+
 .navbar {
 	min-height: 0;
 }
@@ -200,4 +208,8 @@ code {
 
 .dropdown a {
 	background: transparent;
+}
+
+.tab-pane {
+	min-height: 534px;
 }
