@@ -129,6 +129,7 @@ code {
 
 .panel-heading {
 	border-radius: 0px;
+	background-color: #d9e6f0!important;
 }
 
 @media screen and (max-width: 768px) {
@@ -212,4 +213,10 @@ code {
 
 .tab-pane {
 	min-height: 534px;
+}
+
+blockquote {
+	font-size: 1em;
+	background: #E9E9E9;
+	border-left-color: #CFCFCF;
 }
