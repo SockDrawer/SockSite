@@ -10,7 +10,20 @@ var data = {},
         filename: 'Latest Response Times',
         layout: {
             showlegend: true,
-            title: 'Latest Response Times'
+            title: 'Latest Response Times',
+            autosize: true,
+            width: 1368,
+            height: 781,
+            xaxis: {
+                tickformat: '%H:%M',
+                title: 'Time of Check',
+                type: 'date',
+                hoverformat: '%H:%M:%S'
+            },
+            yaxis: {
+                title: 'Response Time',
+                ticksuffix: 's'
+            }
         }
     };
 plotly = plotly('servercooties', 'ismuxlxups');
@@ -45,6 +58,9 @@ function sortData(checks) {
     Object.keys(data).forEach(function (key) {
         data[key] = data[key].filter(function (check) {
             return check.checkedAt >= cutoff;
+        });
+        data[key].sort(function (a, b) {
+            return a.checkedAt - b.checkedAt;
         });
     });
 }

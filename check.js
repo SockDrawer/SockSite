@@ -32,8 +32,9 @@ exports.start = function () {
     async.forever(function (next) {
         async.eachSeries(checkers, function (check, callback) {
                 exports.updated = true;
-                check(function () {});
+                check(function () {
                 setTimeout(callback, delay);
+                });
             },
             next);
     });
