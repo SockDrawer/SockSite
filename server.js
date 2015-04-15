@@ -3,7 +3,7 @@
 
 process.on('uncaughtException', function (err) {
     /*eslint-disable no-process-exit, no-console*/
-    console.error(err);
+    console.error(err, err.stack);
     process.exit(1);
     /*eslint-enable no-process-exit, no-console*/
 });
@@ -12,6 +12,7 @@ var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
     graph = require('./graph'),
+    quotes = require('./quotes'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -40,6 +41,9 @@ var port = parseInt(process.env.PORT || 8888, 10),
         renderer: function (_, __, response) {
             renderMinified(cache.styles, 'text/css', response);
         }
+    }, {
+        path: /^\/avatar\//i,
+        renderer: quotes.serveAvatar
     }];
 
 if (process.env.SOCKDEV) {
@@ -74,6 +78,13 @@ if (process.env.SOCKDEV) {
         path: /^\/offline([.]html)?/i,
         renderer: function (_, __, response) {
             renderSample(21000, response);
+        }
+    }, {
+        path: /^\/quote/i,
+        renderer: function (_, __, response) {
+            formatJSON(quotes.getQuote(), function(___, data){
+                respond(data, 200, 'text/json', response);
+            });
         }
     }]);
 }
@@ -167,6 +178,7 @@ function renderIndex(uri, request, response) {
         return render500Error('E_NO_DATA', response);
     }
     cache.summary.host = request.headers.host;
+    cache.summary.discodefinition = quotes.getQuote;
     formatter(cache.summary, function (err2, data2) {
         if (err2) {
             return render500Error(err2, response);
