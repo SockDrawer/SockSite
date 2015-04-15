@@ -76,6 +76,13 @@ if (process.env.SOCKDEV) {
         renderer: function (_, __, response) {
             renderSample(21000, response);
         }
+    }, {
+        path: /^\/quote/i,
+        renderer: function (_, __, response) {
+            formatJSON(quotes.getQuote(), function(___, data){
+                respond(data, 200, 'text/json', response);
+            });
+        }
     }]);
 }
 
@@ -168,6 +175,7 @@ function renderIndex(uri, request, response) {
         return render500Error('E_NO_DATA', response);
     }
     cache.summary.host = request.headers.host;
+    cache.summary.discodefinition = quotes.getQuote;
     formatter(cache.summary, function (err2, data2) {
         if (err2) {
             return render500Error(err2, response);

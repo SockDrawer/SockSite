@@ -124,8 +124,11 @@
 		"body": "some definition"
 	},
 	"quote": {
-		"author": "author's username",
-		"body": "Some quote",
-		"url": "http://what.thedailywtf.com/t/topic_id/p/post_id"
+		"url": "http://what.thedailywtf.com/p/195080",
+		"avatar": "/avatar/PJH",
+		"author": "PJH",
+		"body": "<p><strong>Discologging</strong><br><em>Verb</em></p>\n\n<p>The inability of Discourse to log important changes or errors. </p>\n\n<p>[<a href=\"//what.thedailywtf.com/t/the-official-status-ideas-thread-blakeyrat-thinks-gunshow-is-funny-well-agree-with-him/1673/7600?u=pjh\">Example</a>]</p>\n\n<p>c.f. <a href=\"//what.thedailywtf.com/t/teh-o-cial-discopaedia-abarker-creator-and-prophet-of-the-discopaedia/3866/284?u=pjh\">Discolog</a>, where useless stuff is logged.</p>",
+		"name": "(HD",
+		"authorTitle": "2^11 Posts"
 	}
 }
