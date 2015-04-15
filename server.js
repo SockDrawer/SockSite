@@ -25,6 +25,9 @@ var port = parseInt(process.env.PORT || 8888, 10),
         path: /^\/static/,
         renderer: serveStatic
     }, {
+        path: /^\/templates/,
+        renderer: serveStatic
+    }, {
         path: /^\/(index[.](html?|json|yml))?$/i,
         renderer: renderIndex
     }, {
