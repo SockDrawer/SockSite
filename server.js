@@ -3,7 +3,7 @@
 
 process.on('uncaughtException', function (err) {
     /*eslint-disable no-process-exit, no-console*/
-    console.error(err);
+    console.error(err, err.stack);
     process.exit(1);
     /*eslint-enable no-process-exit, no-console*/
 });
@@ -12,6 +12,7 @@ var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
     graph = require('./graph'),
+    quotes = require('./quotes'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -37,6 +38,9 @@ var port = parseInt(process.env.PORT || 8888, 10),
         renderer: function (_, __, response) {
             renderMinified(cache.styles, 'text/css', response);
         }
+    }, {
+        path: /^\/avatar\//i,
+        renderer: quotes.serveAvatar
     }];
 
 if (process.env.SOCKDEV) {
