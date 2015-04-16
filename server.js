@@ -79,8 +79,8 @@ if (process.env.SOCKDEV) {
     }, {
         path: /^\/quote/i,
         renderer: function (_, __, response) {
-            formatJSON(quotes.getQuote(), function(___, data){
-                respond(data, 200, 'text/json', response);
+            formatJSON(quotes.getQuote(), function (___, data) {
+                respond(data, 200, 'text/json; charset=utf-8', response);
             });
         }
     }]);
@@ -116,8 +116,7 @@ function respond(data, code, contentType, response) {
     } else {
         response.writeHead(code);
     }
-    console.log(data);
-    response.write(data, 'binary');
+    response.write(data, /utf-8/.test(contentType || '') ? 'utf8' : 'binary');
     response.end();
 }
 
@@ -129,7 +128,7 @@ function formatJSON(data, callback) {
     }
     callback(null, data);
 }
-formatJSON.contentType = 'application/json';
+formatJSON.contentType = 'application/json; charset=utf-8';
 
 function formatYAML(data, callback) {
     try {
@@ -141,7 +140,7 @@ function formatYAML(data, callback) {
     }
     callback(null, data);
 }
-formatYAML.contentType = 'text/yaml';
+formatYAML.contentType = 'text/yaml; charset=utf-8';
 
 function formatHTML(data, template, callback) {
     if (typeof (template) === 'function') {
@@ -160,7 +159,7 @@ function formatHTML(data, template, callback) {
     }
 
 }
-formatHTML.contentType = 'text/html';
+formatHTML.contentType = 'text/html; charset=utf-8';
 
 function renderIndex(uri, request, response) {
     var formatter = formatHTML,

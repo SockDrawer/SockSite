@@ -1,7 +1,6 @@
 'use strict';
 var request = require('request'),
-    async = require('async'),
-    punycode = require('punycode');
+    async = require('async');
 var error = {
         url: '',
         avatar: '/avatar/ServerCooties',
@@ -65,7 +64,7 @@ function serve(avatar, response) {
         'Content-Type': avatar.contentType,
         'Last-Modified': avatar.lastModified
     });
-    response.write(avatar.data, "binary");
+    response.write(avatar.data, 'binary');
     response.end();
 }
 
@@ -112,8 +111,7 @@ function getPosts(id, complete) {
                         return next();
                     }
                     try {
-                        console.log(JSON.parse(decodeURIComponent(escape(defs))));
-                        defs = JSON.parse(decodeURIComponent(escape(defs))).post_stream.posts;
+                        defs = JSON.parse(defs).post_stream.posts;
                     } catch (e) {
                         return next(e);
                     }
@@ -160,6 +158,7 @@ exports.getQuote = function getQuote() {
 async.forever(function (next) {
     var refresh = 5 * 60 * 60 * 1000;
     loadDefinitions(function () {
+        console.log('quotes loaded'); //eslint-disable-line no-console
         var now = Date.now() - refresh;
         async.each(Object.keys(users), function (user, innerNext) {
             if (!avatars[user] || avatars[user].retrievedAt < now) {
@@ -174,8 +173,8 @@ async.forever(function (next) {
         });
         setTimeout(next, refresh);
     });
-
 });
+
 async.forever(function (next) {
     var cutoff = Date.now() - 10 * 60 * 1000;
     Object.keys(avatars).forEach(function (key) {
