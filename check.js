@@ -20,7 +20,9 @@ function createCheck(url) {
             }
             db.addCheck(url, resp.statusCode, (resp.body || '').length,
                 complete,
-                next);
+                function () {
+                    next();
+                });
         });
     };
 }
@@ -30,8 +32,9 @@ exports.start = function () {
     async.forever(function (next) {
         async.eachSeries(checkers, function (check, callback) {
                 exports.updated = true;
-                check(function () {});
+                check(function () {
                 setTimeout(callback, delay);
+                });
             },
             next);
     });

@@ -15,16 +15,76 @@ body {
 	padding-top: 25px;
 }
 
+code {
+	background: #ffffff;
+}
+
 .GREAT code {
-	color: #4f9fcf;
+	color: #3AB54A;
+}
+
+.GOOD code {
+	color: #2db8c2;
 }
 
 .OK code {
-	color: #2f6f9f;
+	color: #0E76BD;
 }
 
 .BAD code {
-	color: #c7254e;
+	color: #c1103b;
+}
+
+.OFFLINE code {
+	color: #92278F;
+}
+
+.label {
+	border-radius: 0px;
+}
+
+.GREAT .label {
+	background: #3AB54A;
+}
+
+.GOOD .label {
+	background: #2db8c2;
+}
+
+.OK .label {
+	background: #0E76BD;
+}
+
+.BAD .label {
+	background: #c1103b;
+}
+
+.OFFLINE .label {
+	background-color: #92278F;
+}
+
+@media (min-width: 1200px) {
+	.visible-lg-inline {
+		display: inline!important;
+	}
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+	.visible-md-inline {
+		display: inline!important;
+	}
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+	.visible-sm-inline {
+		display: inline!important;
+	}
+}
+
+@media (max-width: 767px) {
+	.visible-xs-inline {
+		display: inline!important;
+	}
 }
 
 .headerbar {
@@ -57,6 +117,19 @@ body {
 	
 	width: 48px;
 	float: right;
+}
+
+.nav-tabs.nav-justified li a {
+	border-radius: 0px;
+}
+
+.panel.panel-default {
+	border-radius: 0px;
+}
+
+.panel-heading {
+	border-radius: 0px;
+	background-color: #d9e6f0!important;
 }
 
 @media screen and (max-width: 768px) {
@@ -109,6 +182,18 @@ body {
 	text-align: center;
 }
 
+#accordion {
+	margin-top: 5px;
+}
+
+#graph {
+	text-align: center;
+}
+
+#graph .btn {
+	border-radius: 0;
+}
+
 .navbar {
 	min-height: 0;
 }
@@ -124,4 +209,23 @@ body {
 
 .dropdown a {
 	background: transparent;
+}
+
+.tab-pane {
+	min-height: 534px;
+}
+
+blockquote {
+	font-size: 1em;
+	background: #E9E9E9;
+	border-left-color: #CFCFCF;
+}
+
+h4.panel-title a:before{
+    content: "▼";
+}
+
+h4.panel-title a.collapsed:before{
+    content: "▶";
+    font-size: 0.8em;
 }

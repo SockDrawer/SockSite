@@ -11,6 +11,7 @@
     "statusCode": {
         "0": "UNKNOWN",
         "1": "GREAT",
+        "160": "GOOD",
         "201": "OK",
         "250": "BAD",
         "300": "OFFLINE"
@@ -23,7 +24,7 @@
     },
     "flavor": {
         "0": "+++Divide By Cucumber Error. Please Reinstall Universe And Reboot +++",
-        "1": "No problems detected. Since you can't troll you might as well go do some real work.",
+        "1": "The forums work, so if you can't post then TRWTF is user cooties.",
         "250": "We've seen some blips recently. Nothing to get too alarmed at yet.",
         "300": "Well, Looks like you're gonna have to fill out that TPS report after all.",
         "350": "Well, It's buggered. Looks like it's time to be productive or something"

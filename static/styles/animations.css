@@ -10,3 +10,15 @@
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
 }
+
+.spinning {
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name: spin;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    -moz-animation-name: spin;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: linear;
+    -ms-animation-name: spin;
+}

@@ -1,12 +1,12 @@
 {
 	"scripts": [{
-			"name": "filename",
-			"data": "Raw Minified JS"
-		}	],
+		"name": "filename",
+		"data": "Raw Minified JS"
+	}],
 	"styles": [{
-			"name": "filename",
-			"data": "Raw Minified CSS"
-		}	],
+		"name": "filename",
+		"data": "Raw Minified CSS"
+	}],
 	"ok": true,
 	"version": "0.0.8",
 	"time": "2015-04-08T02:14:15.218Z",
