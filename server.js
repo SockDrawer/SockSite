@@ -116,6 +116,7 @@ function respond(data, code, contentType, response) {
     } else {
         response.writeHead(code);
     }
+    console.log(data);
     response.write(data, 'binary');
     response.end();
 }

@@ -1,6 +1,7 @@
 'use strict';
 var request = require('request'),
-    async = require('async');
+    async = require('async'),
+    punycode = require('punycode');
 var error = {
         url: '',
         avatar: '/avatar/ServerCooties',
@@ -64,7 +65,7 @@ function serve(avatar, response) {
         'Content-Type': avatar.contentType,
         'Last-Modified': avatar.lastModified
     });
-    response.write(avatar.data);
+    response.write(avatar.data, "binary");
     response.end();
 }
 
@@ -111,7 +112,8 @@ function getPosts(id, complete) {
                         return next();
                     }
                     try {
-                        defs = JSON.parse(defs).post_stream.posts;
+                        console.log(JSON.parse(decodeURIComponent(escape(defs))));
+                        defs = JSON.parse(decodeURIComponent(escape(defs))).post_stream.posts;
                     } catch (e) {
                         return next(e);
                     }
@@ -153,6 +155,7 @@ function loadDefinitions(callback) {
 exports.getQuote = function getQuote() {
     return definitions[Math.floor(Math.random() * definitions.length)];
 };
+
 
 async.forever(function (next) {
     var refresh = 5 * 60 * 60 * 1000;
