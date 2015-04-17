@@ -14,16 +14,10 @@ var error = {
     avatars = {},
     definitions = [error],
     users = {},
-    host = 'http://what.thedailywtf.com',
-    browser = request.defaults({
-        rejectUnauthorized: false,
-        headers: {
-            'User-Agent': 'SockSite'
-        }
-    });
+    host = 'http://what.thedailywtf.com';
 
 function getAvatarPath(username, callback) {
-    browser(host + '/users/' + username + '.json', function (err, _, body) {
+    request(host + '/users/' + username + '.json', function (err, _, body) {
         var letter = '/letter_avatar/' + username +
             '/45/3_af0dc75e546be11ab6c09c8b9d61c787.png';
         if (err) {
@@ -44,7 +38,7 @@ function getAvatarPath(username, callback) {
 
 function getAvatar(username, callback) {
     getAvatarPath(username, function (_, path) {
-        var req = browser('http://what.thedailywtf.com' + path),
+        var req = request(host + path),
             parts = [],
             res;
         req.on('error', callback);
@@ -70,7 +64,7 @@ function serve(avatar, response) {
         'Content-Type': avatar.contentType,
         'Last-Modified': avatar.lastModified
     });
-    response.write(avatar.data);
+    response.write(avatar.data, 'binary');
     response.end();
 }
 
@@ -93,7 +87,7 @@ exports.serveAvatar = function serveAvatar(uri, _, response) {
 
 function getPosts(id, complete) {
     var base = '/t/' + id + '/posts.json?include_raw=1';
-    browser(host + base + '&post_ids=0', function (err, _, topic) {
+    request(host + base + '&post_ids=0', function (err, _, topic) {
         var posts, results = [];
         try {
             posts = JSON.parse(topic).post_stream.stream;
@@ -111,7 +105,7 @@ function getPosts(id, complete) {
                 part.push(posts.shift());
             }
             part = part.join('&post_ids[]=');
-            browser(host + base + '&post_ids[]=' + part,
+            request(host + base + '&post_ids[]=' + part,
                 function (err2, resp, defs) {
                     if (err2 || resp.statusCode !== 200) {
                         return next();
@@ -157,15 +151,28 @@ function loadDefinitions(callback) {
 }
 
 exports.getQuote = function getQuote() {
-    return definitions[Math.floor(Math.random() * definitions.length)];
+    var def = definitions[Math.floor(Math.random() * definitions.length)];
+    def.body = def.body.replace(/(src|href)="([^"]+)"/,
+        function (_, prefix, value) {
+            if (value.substr(0, 2) === '//') {
+                value = 'http:' + value;
+            }
+            if (value[0] === '/') {
+                value = host + value;
+            }
+            return prefix + '="' + value + '"';
+        });
+    return def;
 };
+
 
 async.forever(function (next) {
     var refresh = 5 * 60 * 60 * 1000;
     loadDefinitions(function () {
-        var now = Date.now();
+        console.log('quotes loaded'); //eslint-disable-line no-console
+        var now = Date.now() - refresh;
         async.each(Object.keys(users), function (user, innerNext) {
-            if (!avatars[user] || avatars[user].retrievedAt < now - refresh) {
+            if (!avatars[user] || avatars[user].retrievedAt < now) {
                 return getAvatar(user, function (err, avatar) {
                     if (!err) {
                         avatars[user] = avatar;
@@ -177,8 +184,8 @@ async.forever(function (next) {
         });
         setTimeout(next, refresh);
     });
-
 });
+
 async.forever(function (next) {
     var cutoff = Date.now() - 10 * 60 * 1000;
     Object.keys(avatars).forEach(function (key) {
