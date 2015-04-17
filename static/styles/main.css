@@ -221,6 +221,15 @@ blockquote {
 	border-left-color: #CFCFCF;
 }
 
+.quote-sidebar {
+	float: left;
+	width: 60px;
+}
+
+.quote {
+	margin-left: 60px;
+}
+
 h4.panel-title a:before{
     content: "▼";
 }
