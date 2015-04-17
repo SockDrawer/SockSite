@@ -38,7 +38,7 @@ function getAvatarPath(username, callback) {
 
 function getAvatar(username, callback) {
     getAvatarPath(username, function (_, path) {
-        var req = request('http://what.thedailywtf.com' + path),
+        var req = request(host + path),
             parts = [],
             res;
         req.on('error', callback);
@@ -151,7 +151,18 @@ function loadDefinitions(callback) {
 }
 
 exports.getQuote = function getQuote() {
-    return definitions[Math.floor(Math.random() * definitions.length)];
+    var def = definitions[Math.floor(Math.random() * definitions.length)];
+    def.body = def.body.replace(/(src|href)="([^"]+)"/,
+        function (_, prefix, value) {
+            if (value.substr(0, 2) === '//') {
+                value = 'http:' + value;
+            }
+            if (value[0] === '/') {
+                value = host + value;
+            }
+            return prefix + '="' + value + '"';
+        });
+    return def;
 };
 
 

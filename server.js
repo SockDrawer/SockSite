@@ -26,58 +26,58 @@ var port = parseInt(process.env.PORT || 8888, 10),
         path: /^\/static/,
         renderer: serveStatic
     }, {
-        path: /^\/(index[.](html?|json|yml))?$/i,
+        path: /^\/(index[.](html?|json|yml))?$/,
         renderer: renderIndex
     }, {
-        path: /^\/scripts[.]js/i,
+        path: /^\/scripts[.]js$/,
         renderer: function (_, __, response) {
             renderMinified(cache.scripts, 'application/javascript', response);
         }
     }, {
-        path: /^\/styles[.]css/i,
+        path: /^\/styles[.]css$/,
         renderer: function (_, __, response) {
             renderMinified(cache.styles, 'text/css', response);
         }
     }, {
-        path: /^\/avatar\//i,
+        path: /^\/avatar\//,
         renderer: quotes.serveAvatar
     }];
 
 if (process.env.SOCKDEV) {
     paths = paths.concat([{
-        path: /^\/reset([.]html)?/i,
+        path: /^\/reset([.]html)?$/i,
         renderer: function (uri, request, response) {
             cache.buildCache(function () {
                 renderIndex(uri, request, response);
             });
         }
     }, {
-        path: /^\/great([.]html)?/i,
+        path: /^\/great([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(100, response);
         }
     }, {
-        path: /^\/good([.]html)?/i,
+        path: /^\/good([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(1500, response);
         }
     }, {
-        path: /^\/ok([.]html)?/i,
+        path: /^\/ok([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(2100, response);
         }
     }, {
-        path: /^\/bad([.]html)?/i,
+        path: /^\/bad([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(3100, response);
         }
     }, {
-        path: /^\/offline([.]html)?/i,
+        path: /^\/offline([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(21000, response);
         }
     }, {
-        path: /^\/quote/i,
+        path: /^\/quote$/i,
         renderer: function (_, __, response) {
             formatJSON(quotes.getQuote(), function (___, data) {
                 respond(data, 200, 'text/json;charset=utf-8', response);
