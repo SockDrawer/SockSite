@@ -159,7 +159,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
             },
             version: config.version,
             time: new Date().toISOString(),
-            up: score < 300,
+            up: score < 250,
             percentage: round(percentage, 2),
             precisionPercentage: percentage,
             average: round(time, 2),

@@ -27,7 +27,7 @@
     },
     "status": {
         "0": "The site seems to be working fine.",
-        "250": "The site seems to be working...",
+        "250": "The site seems to be working, barely...",
         "300": "The site seems to be offline.",
         "350": "The site seems to be very offline."
     },
