@@ -221,6 +221,20 @@ blockquote {
 	border-left-color: #CFCFCF;
 }
 
+blockquote img {
+	max-width: 500px;
+	height: auto;
+}
+
+blockquote blockquote {
+	margin-left: -60px;
+}
+
+blockquote .title {
+	margin-left: -60px;
+	margin-bottom: 5px;
+}
+
 .quote-sidebar {
 	float: left;
 	width: 60px;
