@@ -7,8 +7,7 @@
     "message-bus": false,
     "checks": [
         "http://what.thedailywtf.com/",
-        "http://what.thedailywtf.com/latest.json",
-        "http://what.thedailywtf.com/t/1000/last"
+        "http://what.thedailywtf.com/latest.json"
     ],
     "statusCode": {
         "0": "UNKNOWN",
