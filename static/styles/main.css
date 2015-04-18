@@ -226,7 +226,11 @@ blockquote img {
 	height: auto;
 }
 
-blockquote blockquote {
+blockquote .avatar {
+	margin-right: 5px;
+}
+
+.quote .quote blockquote {
 	margin-left: -60px;
 }
 
