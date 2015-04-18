@@ -152,7 +152,7 @@ function loadDefinitions(callback) {
 
 exports.getQuote = function getQuote() {
     var def = definitions[Math.floor(Math.random() * definitions.length)];
-    def.body = def.body.replace(/(src|href)="([^"]+)"/,
+    def.body = def.body.replace(/(src|href)="([^"]+)"/g,
         function (_, prefix, value) {
             if (value.substr(0, 2) === '//') {
                 value = 'http:' + value;
