@@ -1,6 +1,5 @@
 var statusTemplate;
 var historyTemplate;
-var graphTemplate;
 
 function pollForData() {
     $.get('/index.json', {}, function(data) {
@@ -23,10 +22,6 @@ $(function() {
     
     $.get('/templates/history_table.html', {}, function(data) {
         historyTemplate = data;
-    }, 'html');
-    
-    $.get('/templates/graph.html', {}, function(data) {
-        graphTemplate = data;
     }, 'html');
     
     setInterval(pollForData, 5000);
