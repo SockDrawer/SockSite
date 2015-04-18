@@ -44,6 +44,9 @@ var port = parseInt(process.env.PORT || 8888, 10),
     }, {
         path: /^\/avatar\//,
         renderer: quotes.serveAvatar
+    }, {
+        path: /^\/raw$/,
+        renderer: database.getRawData
     }];
 
 if (process.env.SOCKDEV) {
