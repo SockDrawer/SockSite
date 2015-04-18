@@ -18,6 +18,13 @@
         "250": "BAD",
         "300": "OFFLINE"
     },
+    "scoreCode": {
+        "0": "OFFLINE",
+        "25": "BAD",
+        "50": "OK",
+        "75": "GOOD",
+        "95": "GREAT"
+    },
     "status": {
         "0": "The site seems to be working fine.",
         "250": "The site seems to be working...",
