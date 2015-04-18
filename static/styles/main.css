@@ -4,6 +4,7 @@ body {
 
 #spin {
 	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 #spin-button {
@@ -219,6 +220,33 @@ blockquote {
 	font-size: 1em;
 	background: #E9E9E9;
 	border-left-color: #CFCFCF;
+}
+
+blockquote img {
+	max-width: 500px;
+	height: auto;
+}
+
+blockquote .avatar {
+	margin-right: 5px;
+}
+
+.quote .quote blockquote {
+	margin-left: -60px;
+}
+
+blockquote .title {
+	margin-left: -60px;
+	margin-bottom: 5px;
+}
+
+.quote-sidebar {
+	float: left;
+	width: 60px;
+}
+
+.quote {
+	margin-left: 60px;
 }
 
 h4.panel-title a:before{

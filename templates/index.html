@@ -22,10 +22,11 @@
 
 		<!-- Bootstrap JS-->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		
+		<!-- Mustache template engine -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
 
 		<!-- Custom scripts -->
-		<!--<script type="text/javascript" src="/static/scripts/spin.js"></script>-->
-		<!--<script type="text/javascript" src="/static/scripts/discodefinitions.js"></script>-->
 		<script type="text/javascript" src="/scripts.js"></script>
 		<script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
 		<script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
@@ -94,7 +95,7 @@
 						<div class="tab-content">
 							<div role="tabpanel" class="tab-pane active" id="status">
 								{{>status_table}}
-								
+								{{>discodefinition}}
 							</div>
 							<div role="tabpanel" class="tab-pane" id="history">
 								{{>history_table}}

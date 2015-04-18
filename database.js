@@ -170,8 +170,8 @@ exports.summarizeData = function summarizeData(data, cfg) {
             responseCode: a.status,
             responseTime: a.responseTime,
             responseScore: score2,
-            response: getFlavor(score, config.statusCode),
-            polledAt: new Date(a.checkedAt)
+            response: getFlavor(score2, config.statusCode),
+            polledAt: new Date(a.checkedAt).toUTCString()
         });
     });
     keys = Object.keys(checks);

@@ -105,10 +105,15 @@ function getStyles() {
 
 function setData(data) {
     cache.push(data);
-    var limit = Date.now() - (config.dataPeriod * 1000);
+    var limit = Date.now() - (config.dataPeriod * 1000),
+        minimum = config.minimumEntries || 10,
+        old = cache;
     cache = cache.filter(function (d) {
         return d.checkedAt > limit;
     });
+    if (cache.length < minimum) {
+        cache = old.slice(Math.max(old.length - minimum, 0));
+    }
     cache.dataPeriod = config.dataPeriod;
     exports.summary = database.summarizeData(cache);
     exports.summary.styles = getStyles;

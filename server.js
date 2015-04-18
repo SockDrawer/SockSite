@@ -3,7 +3,7 @@
 
 process.on('uncaughtException', function (err) {
     /*eslint-disable no-process-exit, no-console*/
-    console.error(err);
+    console.error(err, err.stack);
     process.exit(1);
     /*eslint-enable no-process-exit, no-console*/
 });
@@ -12,6 +12,7 @@ var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
     graph = require('./graph'),
+    quotes = require('./quotes'),
     http = require('http'),
     url = require('url'),
     path = require('path'),
@@ -25,52 +26,65 @@ var port = parseInt(process.env.PORT || 8888, 10),
         path: /^\/static/,
         renderer: serveStatic
     }, {
+        path: /^\/templates/,
+        renderer: serveStatic
+    }, {
         path: /^\/(index[.](html?|json|yml))?$/i,
         renderer: renderIndex
     }, {
-        path: /^\/scripts[.]js/i,
+        path: /^\/scripts[.]js$/,
         renderer: function (_, __, response) {
             renderMinified(cache.scripts, 'application/javascript', response);
         }
     }, {
-        path: /^\/styles[.]css/i,
+        path: /^\/styles[.]css$/,
         renderer: function (_, __, response) {
             renderMinified(cache.styles, 'text/css', response);
         }
+    }, {
+        path: /^\/avatar\//,
+        renderer: quotes.serveAvatar
     }];
 
 if (process.env.SOCKDEV) {
     paths = paths.concat([{
-        path: /^\/reset([.]html)?/i,
+        path: /^\/reset([.]html)?$/i,
         renderer: function (uri, request, response) {
             cache.buildCache(function () {
                 renderIndex(uri, request, response);
             });
         }
     }, {
-        path: /^\/great([.]html)?/i,
+        path: /^\/great([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(100, response);
         }
     }, {
-        path: /^\/good([.]html)?/i,
+        path: /^\/good([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(1500, response);
         }
     }, {
-        path: /^\/ok([.]html)?/i,
+        path: /^\/ok([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(2100, response);
         }
     }, {
-        path: /^\/bad([.]html)?/i,
+        path: /^\/bad([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(3100, response);
         }
     }, {
-        path: /^\/offline([.]html)?/i,
+        path: /^\/offline([.]html)?$/i,
         renderer: function (_, __, response) {
             renderSample(21000, response);
+        }
+    }, {
+        path: /^\/quote$/i,
+        renderer: function (_, __, response) {
+            formatJSON(quotes.getQuote(), function (___, data) {
+                respond(data, 200, 'text/json;charset=utf-8', response);
+            });
         }
     }]);
 }
@@ -105,7 +119,7 @@ function respond(data, code, contentType, response) {
     } else {
         response.writeHead(code);
     }
-    response.write(data, 'binary');
+    response.write(data, /utf-8/.test(contentType || '') ? 'utf8' : 'binary');
     response.end();
 }
 
@@ -117,7 +131,7 @@ function formatJSON(data, callback) {
     }
     callback(null, data);
 }
-formatJSON.contentType = 'application/json';
+formatJSON.contentType = 'application/json;charset=utf-8';
 
 function formatYAML(data, callback) {
     try {
@@ -129,7 +143,7 @@ function formatYAML(data, callback) {
     }
     callback(null, data);
 }
-formatYAML.contentType = 'text/yaml';
+formatYAML.contentType = 'text/yaml;charset=utf-8';
 
 function formatHTML(data, template, callback) {
     if (typeof (template) === 'function') {
@@ -148,7 +162,7 @@ function formatHTML(data, template, callback) {
     }
 
 }
-formatHTML.contentType = 'text/html';
+formatHTML.contentType = 'text/html;charset=utf-8';
 
 function renderIndex(uri, request, response) {
     var formatter = formatHTML,
@@ -164,6 +178,7 @@ function renderIndex(uri, request, response) {
         return render500Error('E_NO_DATA', response);
     }
     cache.summary.host = request.headers.host;
+    cache.summary.discodefinition = quotes.getQuote;
     formatter(cache.summary, function (err2, data2) {
         if (err2) {
             return render500Error(err2, response);

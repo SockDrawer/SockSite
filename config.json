@@ -2,6 +2,7 @@
     "database": "servercooties.sql",
     "pollDelay": 3,
     "dataPeriod": 60,
+    "minimumEntries":10,
     "version": "0.1.0",
     "message-bus": false,
     "checks": [
