@@ -8,7 +8,7 @@
     "checks": [
         "http://what.thedailywtf.com/",
         "http://what.thedailywtf.com/latest.json",
-        "http://what.thedailywtf.com/t/1000/last"
+        "http://what.thedailywtf.com/t/2/last"
     ],
     "statusCode": {
         "0": "UNKNOWN",
