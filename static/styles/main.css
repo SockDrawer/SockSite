@@ -249,11 +249,12 @@ blockquote .title {
 	margin-left: 60px;
 }
 
-h4.panel-title a:before{
-    content: "▼";
+h4.panel-title a.collapsed:before {
+  content: "▼";
+  display: inline-block;
 }
 
-h4.panel-title a.collapsed:before{
-    content: "▶";
-    font-size: 0.8em;
+h4.panel-title a:before {
+  content: "▼";
+  transform: rotate(-90deg);
 }
