@@ -57,5 +57,9 @@ $(function(){
             $(this).css(roundCSS);
         });
 		
+		$('div.panel-heading').each(function() {
+			$(this).css(roundCSS);
+		})
+		
     });
 });
