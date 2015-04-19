@@ -1,124 +1,130 @@
 {
-	"scripts": [{
-		"name": "filename",
-		"data": "Raw Minified JS"
-	}],
-	"styles": [{
-		"name": "filename",
-		"data": "Raw Minified CSS"
-	}],
-	"ok": true,
-	"version": "0.0.8",
-	"time": "2015-04-08T02:14:15.218Z",
+	"version": "0.1.0",
+	"time": "2015-04-19T00:56:23.222Z",
 	"up": true,
-	"percentage": 200,
-	"precisionPercentage": 200,
-	"average": 771.3,
-	"precisionAverage": 771.3,
-	"score": 138.57,
-	"precisionScore": 138.565,
+	"score": 100,
 	"code": "GREAT",
 	"status": "The site seems to be working fine.",
-	"flavor": "No problems detected. Since you can't troll you might as well go do some real work.",
+	"flavor": "The forums work, so if you can't post then TRWTF is user cooties.",
 	"summary": [{
 		"name": "what.thedailywtf.com/",
 		"response": "GREAT",
 		"responseCode": 200,
-		"responseTime": 955.1,
-		"responseScore": 147.755,
-		"polledAt": "2015-04-08T02:13:18.560Z",
+		"responseTime": 936.4,
+		"responseScore": 100,
+		"polledAt": "Sun, 19 Apr 2015 00:55:26 GMT",
+		"checkIndex": 0,
 		"values": [{
 			"responseCode": 200,
-			"responseTime": 980,
-			"polledAt": "2015-04-08T02:13:18.560Z"
+			"responseTime": 917,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:26 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 960,
-			"polledAt": "2015-04-08T02:13:24.548Z"
+			"responseTime": 970,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:38 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 968,
-			"polledAt": "2015-04-08T02:13:30.562Z"
+			"responseTime": 915,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:50 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 938,
-			"polledAt": "2015-04-08T02:13:36.539Z"
+			"responseTime": 956,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:02 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 913,
-			"polledAt": "2015-04-08T02:13:42.520Z"
-		}, {
-			"responseCode": 200,
-			"responseTime": 966,
-			"polledAt": "2015-04-08T02:13:48.579Z"
-		}, {
-			"responseCode": 200,
-			"responseTime": 978,
-			"polledAt": "2015-04-08T02:13:54.597Z"
-		}, {
-			"responseCode": 200,
-			"responseTime": 1006,
-			"polledAt": "2015-04-08T02:14:00.631Z"
-		}, {
-			"responseCode": 200,
-			"responseTime": 913,
-			"polledAt": "2015-04-08T02:14:06.545Z"
-		}, {
-			"responseCode": 200,
-			"responseTime": 929,
-			"polledAt": "2015-04-08T02:14:12.565Z"
+			"responseTime": 924,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:15 GMT"
 		}]
 	}, {
 		"name": "what.thedailywtf.com/latest.json",
 		"response": "GREAT",
 		"responseCode": 200,
-		"responseTime": 587.5,
-		"responseScore": 129.375,
-		"polledAt": "2015-04-08T02:13:21.173Z",
+		"responseTime": 597.4,
+		"responseScore": 100,
+		"polledAt": "Sun, 19 Apr 2015 00:55:30 GMT",
+		"checkIndex": 1,
 		"values": [{
 			"responseCode": 200,
-			"responseTime": 586,
-			"polledAt": "2015-04-08T02:13:21.173Z"
-		}, {
-			"responseCode": 200,
 			"responseTime": 562,
-			"polledAt": "2015-04-08T02:13:27.152Z"
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:30 GMT"
 		}, {
 			"responseCode": 200,
 			"responseTime": 585,
-			"polledAt": "2015-04-08T02:13:33.183Z"
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:42 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 556,
-			"polledAt": "2015-04-08T02:13:39.159Z"
+			"responseTime": 695,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:54 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 592,
-			"polledAt": "2015-04-08T02:13:45.201Z"
+			"responseTime": 563,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:06 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 574,
-			"polledAt": "2015-04-08T02:13:51.190Z"
+			"responseTime": 582,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:18 GMT"
+		}]
+	}, {
+		"name": "what.thedailywtf.com/t/2/last",
+		"response": "GREAT",
+		"responseCode": 200,
+		"responseTime": 1479.4,
+		"responseScore": 100,
+		"polledAt": "Sun, 19 Apr 2015 00:55:34 GMT",
+		"checkIndex": 2,
+		"values": [{
+			"responseCode": 200,
+			"responseTime": 1318,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:34 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 677,
-			"polledAt": "2015-04-08T02:13:57.300Z"
+			"responseTime": 1555,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:46 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 566,
-			"polledAt": "2015-04-08T02:14:03.195Z"
+			"responseTime": 1419,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:55:59 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 597,
-			"polledAt": "2015-04-08T02:14:09.230Z"
+			"responseTime": 1522,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:11 GMT"
 		}, {
 			"responseCode": 200,
-			"responseTime": 580,
-			"polledAt": "2015-04-08T02:14:15.218Z"
+			"responseTime": 1583,
+			"responseScore": 100,
+			"response": "GREAT",
+			"polledAt": "Sun, 19 Apr 2015 00:56:23 GMT"
 		}]
 	}],
-	"host": "sockdev-accalia-de-elementia.c9.io",
-	"footer": "Brought to you today by the number `A`",
+	"host": "sockdev-accalia-de-elementia.c9.io"
 	"discodefinition": {
 		"url": "http://what.thedailywtf.com/p/195080",
 		"avatar": "/avatar/PJH",

@@ -146,26 +146,16 @@ exports.getSampleData = function getSampleData(responseTime, responseCode) {
 
 exports.summarizeData = function summarizeData(data, cfg) {
     cfg = cfg || {};
-    var percentage = average(data, function (a) {
-            return a.status;
-        }),
-        time = average(data, function (a) {
-            return a.responseTime;
-        }),
-        score = average([percentage, time / 10]),
+    var score = average(data.map(function (row) {
+            var s = getScore(row.status, row.responseTime);
+            row.score = s;
+            return s;
+        })),
         result = {
-            ok: function () {
-                return score < 300;
-            },
             version: config.version,
             time: new Date().toISOString(),
-            up: score < 250,
-            percentage: round(percentage, 2),
-            precisionPercentage: percentage,
-            average: round(time, 2),
-            precisionAverage: time,
+            up: score > 50,
             score: round(score, 2),
-            precisionScore: score,
             code: getFlavor(score, config.statusCode),
             status: getFlavor(score, config.status),
             flavor: getFlavor(score, config.flavor)
@@ -177,30 +167,30 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     data.map(function (a) {
         checks[a.key] = checks[a.key] || [];
-        var score2 = average([a.status, a.responseTime / 10]);
         checks[a.key].push({
             responseCode: a.status,
             responseTime: a.responseTime,
-            responseScore: score2,
-            response: getFlavor(score2, config.statusCode),
+            responseScore: a.score,
+            response: getFlavor(a.score, config.scoreCode),
             polledAt: new Date(a.checkedAt).toUTCString()
         });
     });
     keys = Object.keys(checks);
     keys.sort();
     result.summary = keys.map(function (key, index) {
-        var avg = average(checks[key], function (a) {
-                return a.responseCode;
-            }),
-            stime = average(checks[key], function (a) {
-                return a.responseTime;
-            });
+        var checkScore = round(average(checks[key], function (a) {
+            return a.responseScore;
+        }), 2);
         return {
             name: key,
-            response: getFlavor(score, config.statusCode),
-            responseCode: round(avg, 2),
-            responseTime: round(stime, 2),
-            responseScore: average([avg, stime / 10]),
+            response: getFlavor(checkScore, config.scoreCode),
+            responseCode: round(average(checks[key], function (a) {
+                return a.responseCode;
+            }), 2),
+            responseTime: round(average(checks[key], function (a) {
+                return a.responseTime;
+            }), 2),
+            responseScore: checkScore,
             polledAt: checks[key][0].polledAt,
             checkIndex: index,
             values: checks[key]

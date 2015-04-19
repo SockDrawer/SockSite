@@ -11,7 +11,6 @@ process.on('uncaughtException', function (err) {
 var cache = require('./cache'),
     database = require('./database'),
     checks = require('./check'),
-    graph = require('./graph'),
     quotes = require('./quotes'),
     http = require('http'),
     url = require('url'),
@@ -19,6 +18,7 @@ var cache = require('./cache'),
     fs = require('fs'),
     mustache = require('mustache'),
     yaml = require('js-yaml');
+require('./graph');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined,
     server,

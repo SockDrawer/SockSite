@@ -2,22 +2,14 @@
     "database": "servercooties.sql",
     "pollDelay": 3,
     "dataPeriod": 60,
-    "minimumEntries":10,
-    "version": "0.1.0",
+    "minimumEntries": 10,
+    "version": "0.2.0",
     "message-bus": false,
     "checks": [
         "http://what.thedailywtf.com/",
         "http://what.thedailywtf.com/latest.json",
         "http://what.thedailywtf.com/t/2/last"
     ],
-    "statusCode": {
-        "0": "UNKNOWN",
-        "1": "GREAT",
-        "160": "GOOD",
-        "201": "OK",
-        "250": "BAD",
-        "300": "OFFLINE"
-    },
     "scoreCode": {
         "0": "OFFLINE",
         "25": "BAD",
@@ -26,16 +18,15 @@
         "95": "GREAT"
     },
     "status": {
-        "0": "The site seems to be working fine.",
-        "250": "The site seems to be working, barely...",
-        "300": "The site seems to be offline.",
-        "350": "The site seems to be very offline."
+        "0": "The site seems to be very offline.",
+        "25": "The site seems to be offline.",
+        "50": "The site seems to be working, barely...",
+        "75": "The site seems to be working fine."
     },
     "flavor": {
-        "0": "+++Divide By Cucumber Error. Please Reinstall Universe And Reboot +++",
-        "1": "The forums work, so if you can't post then TRWTF is user cooties.",
-        "250": "We've seen some blips recently. Nothing to get too alarmed at yet.",
-        "300": "Well, Looks like you're gonna have to fill out that TPS report after all.",
-        "350": "Well, It's buggered. Looks like it's time to be productive or something"
+        "0": "Well, It's buggered. Looks like it's time to be productive or something",
+        "25": "Well, Looks like you're gonna have to fill out that TPS report after all.",
+        "50": "We've seen some blips recently. Nothing to get too alarmed at yet.",
+        "75": "The forums work, so if you can't post then TRWTF is user cooties."
     }
 }

@@ -95,14 +95,6 @@ exports.templates = {};
 exports.scripts = {};
 exports.styles = {};
 
-function getScripts() {
-    return exports.scripts;
-}
-
-function getStyles() {
-    return exports.styles;
-}
-
 function setData(data) {
     cache.push(data);
     var limit = Date.now() - (config.dataPeriod * 1000),
@@ -116,8 +108,6 @@ function setData(data) {
     }
     cache.dataPeriod = config.dataPeriod;
     exports.summary = database.summarizeData(cache);
-    exports.summary.styles = getStyles;
-    exports.summary.scripts = getScripts;
 }
 database.registerListener(setData);
 
@@ -129,8 +119,6 @@ database.getRecentChecks(config.dataPeriod, function (err, data) {
     }
     cache = data;
     exports.summary = database.summarizeData(cache);
-    exports.summary.styles = getStyles();
-    exports.summary.check = 'checked';
 });
 
 exports.summary = {};
