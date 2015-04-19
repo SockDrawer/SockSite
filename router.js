@@ -3,7 +3,8 @@
 var render = require('./render'),
     quotes = require('./quotes'),
     database = require('./database'),
-    cache = require('./cache');
+    cache = require('./cache'),
+	oembed = require('./oembed');
 
 exports.paths = [{
     path: /^\/static/,
@@ -26,7 +27,12 @@ exports.paths = [{
 }, {
     path: /^\/raw$/,
     renderer: database.getRawData
-}];
+},
+{
+    path: /^\/oembed/,
+    renderer: oembed.getEmbedCode
+}
+];
 
 if (process.env.SOCKDEV) {
     exports.paths = exports.paths.concat([{
