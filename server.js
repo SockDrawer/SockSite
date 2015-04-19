@@ -8,20 +8,25 @@ process.on('uncaughtException', function (err) {
     /*eslint-enable no-process-exit, no-console*/
 });
 
+var http = require('http'),
+    url = require('url'),
+    async = require('async'),
+    socketio = require('socket.io');
 var cache = require('./cache'),
+    database = require('./database'),
     checks = require('./check'),
     render = require('./render'),
-    router = require('./router'),
-    http = require('http'),
-    url = require('url');
-require('./graph');
+    router = require('./router');
 var port = parseInt(process.env.PORT || 8888, 10),
     ip = process.env.IP || undefined,
-    server;
+    server = http.createServer(handler),
+    io = socketio(server);
+
+require('./graph');
 
 checks.start();
 
-server = http.createServer(function (request, response) {
+function handler(request, response) {
     var uri = url.parse(request.url).pathname;
 
     /* eslint-disable no-console */
@@ -39,7 +44,7 @@ server = http.createServer(function (request, response) {
     }
     return;
 
-});
+}
 cache.buildCache(function (err) {
     /*eslint-disable no-console */
     if (err) {
@@ -48,4 +53,33 @@ cache.buildCache(function (err) {
     console.log('server started');
     server.listen(port, ip);
     /*eslint-neable no-console */
+});
+
+io.on('connection', function (socket) {
+    console.log('connected!');
+    socket.on('getdata', function (callback) {
+        if (!cache.summary) {
+            return callback('E_NO_DATA');
+        }
+        callback(null, cache.summary);
+    });
+    socket.on('render', function (template, callback) {
+        if (!cache.summary) {
+            return callback('E_NO_DATA');
+        }
+        render.formatHTML(cache.summary, template, callback);
+    });
+});
+
+
+database.registerListener(function (data) {
+    database.formatData(data, function(err, payload){
+        io.emit('data', err, payload);
+    });
+});
+
+
+async.forever(function (next) {
+    io.emit('heartbeat', Date.now());
+    setTimeout(next, 30 * 1000);
 });

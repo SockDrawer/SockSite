@@ -47,7 +47,7 @@ function formatHTML(data, template, callback) {
 
 }
 formatHTML.contentType = 'text/html;charset=utf-8';
-
+exports.formatHTML = formatHTML;
 
 function render404Error(response) {
     formatHTML(null, 'error404.html', function (err, data) {
