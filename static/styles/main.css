@@ -2,12 +2,12 @@ body {
 	padding-top: 15px;
 }
 
-#spin {
+#buttons {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
 
-#spin-button {
+button {
 	border-radius: 0;
 	width: 100%;
 }
