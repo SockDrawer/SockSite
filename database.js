@@ -150,7 +150,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
             var s = getScore(row.status, row.responseTime);
             row.score = s;
             return s;
-        })),
+        }), 2),
         result = {
             version: config.version,
             time: new Date().toISOString(),
