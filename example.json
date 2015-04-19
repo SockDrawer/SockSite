@@ -120,12 +120,19 @@
 	"host": "sockdev-accalia-de-elementia.c9.io",
 	"footer": "Brought to you today by the number `A`",
 	"discodefinition": {
-		"title": "definition title",
-		"body": "some definition"
+		"url": "http://what.thedailywtf.com/p/195080",
+		"avatar": "/avatar/PJH",
+		"author": "PJH",
+		"body": "<p><strong>Discologging</strong><br><em>Verb</em></p>\n\n<p>The inability of Discourse to log important changes or errors. </p>\n\n<p>[<a href=\"//what.thedailywtf.com/t/the-official-status-ideas-thread-blakeyrat-thinks-gunshow-is-funny-well-agree-with-him/1673/7600?u=pjh\">Example</a>]</p>\n\n<p>c.f. <a href=\"//what.thedailywtf.com/t/teh-o-cial-discopaedia-abarker-creator-and-prophet-of-the-discopaedia/3866/284?u=pjh\">Discolog</a>, where useless stuff is logged.</p>",
+		"name": "(HD",
+		"authorTitle": "2^11 Posts"
 	},
 	"quote": {
-		"author": "author's username",
-		"body": "Some quote",
-		"url": "http://what.thedailywtf.com/t/topic_id/p/post_id"
+		"url": "http://what.thedailywtf.com/p/3141592",
+		"avatar": "/avatar/ServerCooties",
+		"author": "ServerCooties",
+		"body": "Unimplementesd at this time",
+		"name": "ServerCooties",
+		"authorTitle": "ServerCooties"
 	}
 }

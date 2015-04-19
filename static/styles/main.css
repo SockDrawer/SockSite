@@ -4,6 +4,7 @@ body {
 
 #spin {
 	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 #spin-button {
@@ -212,7 +213,7 @@ code {
 }
 
 .tab-pane {
-	min-height: 534px;
+	min-height: 382px;
 }
 
 blockquote {
@@ -221,11 +222,39 @@ blockquote {
 	border-left-color: #CFCFCF;
 }
 
-h4.panel-title a:before{
-    content: "▼";
+blockquote img {
+	max-width: 500px;
+	height: auto;
 }
 
-h4.panel-title a.collapsed:before{
-    content: "▶";
-    font-size: 0.8em;
+blockquote .avatar {
+	margin-right: 5px;
+}
+
+.quote .quote blockquote {
+	margin-left: -60px;
+}
+
+blockquote .title {
+	margin-left: -60px;
+	margin-bottom: 5px;
+}
+
+.quote-sidebar {
+	float: left;
+	width: 60px;
+}
+
+.quote {
+	margin-left: 60px;
+}
+
+h4.panel-title a.collapsed:before {
+  content: "▼";
+  display: inline-block;
+}
+
+h4.panel-title a:before {
+  content: "▼";
+  transform: rotate(-90deg);
 }

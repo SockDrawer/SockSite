@@ -1,6 +1,9 @@
 'use strict';
 var sqlite = require('sqlite3'),
-    async = require('async');
+    async = require('async'),
+    url = require('url'),
+    querystring = require('querystring'),
+    stringify = require('csv-stringify');
 var config = require('./config.json');
 var db = new sqlite.Database('servercooties.sql'),
     notify = [],
@@ -80,6 +83,15 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
         'checks2 c JOIN pages p ON c.page = p.OID WHERE checkedAt > ?' +
         ' ORDER BY checkedAt DESC', [date], callback);
 };
+
+function getScore(code, time) {
+    if ((code !== 200 && code !== 204) || time > 12000) {
+        return 0;
+    } else if (time > 3000) {
+        return 50;
+    }
+    return 100;
+}
 
 function range(num) {
     return Array.apply(null, Array(num)).map(function (_, i) {
@@ -170,8 +182,8 @@ exports.summarizeData = function summarizeData(data, cfg) {
             responseCode: a.status,
             responseTime: a.responseTime,
             responseScore: score2,
-            response: getFlavor(score, config.statusCode),
-            polledAt: new Date(a.checkedAt)
+            response: getFlavor(score2, config.statusCode),
+            polledAt: new Date(a.checkedAt).toUTCString()
         });
     });
     keys = Object.keys(checks);
@@ -195,4 +207,79 @@ exports.summarizeData = function summarizeData(data, cfg) {
         };
     });
     return result;
+};
+
+var chunkSize = 100;
+
+function formatRawData(data, callback) {
+    var results = [
+        ['Endpoint', 'Response Code', 'Response Time',
+            'Response Score', 'Response Label', 'Checked At'
+        ]
+    ];
+    async.whilst(function () {
+            return data.length > 0;
+        },
+        function (next) {
+            var batch = data.slice(0, chunkSize);
+            data = data.slice(chunkSize);
+            results = results.concat(batch.map(function (row) {
+                var score = getScore(row.status, row.responseTime);
+                return [row.key, row.status, row.responseTime,
+                    score, getFlavor(score, config.scoreCode),
+                    new Date(row.checkedAt).toISOString()
+                ];
+            }));
+            process.nextTick(next);
+        },
+        function (err) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, results);
+        });
+}
+
+exports.getRawData = function getRawData(_, request, response) {
+    var query = querystring.parse(url.parse(request.url).query),
+        now = Date.now();
+    if (/^[0-9]+$/.test(query.start)) {
+        query.start = parseInt(query.start, 10);
+    } else {
+        query.start = now - 24 * 60 * 60 * 1000;
+    }
+    if (/^[0-9]+$/.test(query.end)) {
+        query.end = parseInt(query.end, 10);
+    } else {
+        query.end = now;
+    }
+    db.all('SELECT p.key, c.status, c.responseTime, c.checkedAt FROM ' +
+        'checks2 c JOIN pages p ON c.page = p.OID WHERE checkedAt > ?' +
+        'AND checkedAt <= ? ORDER BY checkedAt ASC LIMIT 100000', [
+            query.start, query.end
+        ],
+        function (err, data) {
+            if (err) {
+                response.writeHead(500);
+                response.write(err);
+                return response.end();
+            }
+            formatRawData(data, function (err2, result) {
+                if (err2) {
+                    response.writeHead(500);
+                    response.write(err2);
+                    return response.end();
+                }
+                stringify(result, function (err3, csv) {
+                    if (err3) {
+                        response.writeHead(500);
+                        response.write(err3);
+                        return response.end();
+                    }
+                    response.writeHead(200);
+                    response.write(csv);
+                    response.end();
+                });
+            });
+        });
 };

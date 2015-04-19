@@ -2,12 +2,13 @@
     "database": "servercooties.sql",
     "pollDelay": 3,
     "dataPeriod": 60,
+    "minimumEntries":10,
     "version": "0.1.0",
     "message-bus": false,
     "checks": [
         "http://what.thedailywtf.com/",
         "http://what.thedailywtf.com/latest.json",
-        "http://what.thedailywtf.com/t/1000/last"
+        "http://what.thedailywtf.com/t/2/last"
     ],
     "statusCode": {
         "0": "UNKNOWN",
@@ -16,6 +17,13 @@
         "201": "OK",
         "250": "BAD",
         "300": "OFFLINE"
+    },
+    "scoreCode": {
+        "0": "OFFLINE",
+        "25": "BAD",
+        "50": "OK",
+        "75": "GOOD",
+        "95": "GREAT"
     },
     "status": {
         "0": "The site seems to be working fine.",
