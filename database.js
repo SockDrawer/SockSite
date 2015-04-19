@@ -243,12 +243,18 @@ function formatRawData(data, callback) {
 exports.getRawData = function getRawData(_, request, response) {
     var query = querystring.parse(url.parse(request.url).query),
         now = Date.now();
-    if (/^[0-9]+$/.test(query.start)) {
+    var start = Date.parse(query.start);
+    if (!isNaN(start)) {
+        query.start = start;
+    } else if (/^[0-9]+$/.test(query.start)) {
         query.start = parseInt(query.start, 10);
     } else {
         query.start = now - 24 * 60 * 60 * 1000;
     }
-    if (/^[0-9]+$/.test(query.end)) {
+    var end = Date.parse(query.end);
+    if (!isNaN(end)) {
+        query.end = end;
+    } else if (/^[0-9]+$/.test(query.end)) {
         query.end = parseInt(query.end, 10);
     } else {
         query.end = now;
