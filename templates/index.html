@@ -35,13 +35,31 @@
 
 	<!-- Cornify -->
 	<script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
-	
+
 	<script>
 		var socket = io.connect('//');
-		socket.on('heartbeat', function(time){
-			console.log('Heartbeat at: '+time);
+		socket.on('connected', function (time) {
+			console.log('Connected at: ' + time);
 		});
-		socket.on('data', function(err,data){
+		socket.on('heartbeat', function (time) {
+			console.log('Heartbeat at: ' + time);
+		});
+		socket.on('data', function (err, data) {
+			if (err) {
+				console.warn(err);
+			}
+			console.log(data);
+		});
+		socket.emit('getdata', function (err, data) {
+			if (err) {
+				console.warn(err);
+			}
+			console.log(data);
+		});
+		socket.emit('render', 'graph', function (err, data) {
+			if (err) {
+				console.warn(err);
+			}
 			console.log(data);
 		});
 	</script>

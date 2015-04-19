@@ -56,7 +56,7 @@ cache.buildCache(function (err) {
 });
 
 io.on('connection', function (socket) {
-    console.log('connected!');
+    socket.emit('connected', Date.now());
     socket.on('getdata', function (callback) {
         if (!cache.summary) {
             return callback('E_NO_DATA');
@@ -73,7 +73,7 @@ io.on('connection', function (socket) {
 
 
 database.registerListener(function (data) {
-    database.formatData(data, function(err, payload){
+    database.formatData(data, function (err, payload) {
         io.emit('data', err, payload);
     });
 });
