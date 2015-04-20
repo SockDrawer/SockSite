@@ -85,15 +85,17 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
 };
 
 exports.formatData = function formatData(data, callback) {
-    var score = getScore(data.status, data.responseTime);
-    callback(null, {
-        checkName: data.key,
-        checkId: pages[data.key],
-        responseCode: data.status,
-        responseTime: data.responseTime,
-        responseScore: score,
-        response: getFlavor(score, config.scoreCode),
-        polledAt: new Date(data.checkedAt).toUTCString()
+    setImmediate(function () {
+        var score = getScore(data.status, data.responseTime);
+        callback(null, {
+            checkName: data.key,
+            checkId: pages[data.key],
+            responseCode: data.status,
+            responseTime: data.responseTime,
+            responseScore: score,
+            response: getFlavor(score, config.scoreCode),
+            polledAt: new Date(data.checkedAt).toUTCString()
+        });
     });
 };
 
@@ -105,6 +107,7 @@ function getScore(code, time) {
     }
     return 100;
 }
+exports.getScore = getScore;
 
 function range(num) {
     return Array.apply(null, Array(num)).map(function (_, i) {
