@@ -14,6 +14,7 @@ try {
 function createStream(line) {
     function onClose(err) {
         delete streams[line.key];
+        clearInterval(interval);
         /*eslint-disable no-console */
         if (err) {
             console.warn(err);
@@ -25,7 +26,10 @@ function createStream(line) {
             createStream(line);
         }, (err ? 60 : 3) * 1000);
     }
-    var stream = plotly.stream(line.token, onClose);
+    var stream = plotly.stream(line.token, onClose),
+        interval = setInterval(function () {
+            stream.write('\n');
+        }, 40 * 1000);
     stream.on('error', onClose);
     streams[line.key] = stream;
 }
