@@ -9,6 +9,8 @@ $(function(){
 		"border":"1px solid black"
 	}
 	
+	var rounded = false;
+	
 	function roundMs(time) {
 		time = time.slice(0, -3);
 		time = Math.round(time);
@@ -22,40 +24,61 @@ $(function(){
         evt.preventDefault();
 		
 		$("code.responseTime").each(function() {
-			var time = $(this).text();			
-			$(this).text(roundMs(time));
+			if (rounded) {
+				$(this).text($(this).data("orig_value"));
+			} else {
+				var time = $(this).text();
+				$(this).data("orig_value", time);
+				$(this).text(roundMs(time));
+			}
+			
 		});
 		
 		$("td.historyDate code").each(function() {
-			var timestamp = $(this).text();
-			$(this).text(moment(timestamp).fromNow());
+			if (rounded) {
+				$(this).text($(this).data("orig_value"));
+			} else {
+				var timestamp = $(this).text();
+				$(this).data("orig_value", timestamp);
+				$(this).text(moment(timestamp).fromNow());
+			}
 		});
 		
 		$("td.historyTime code").each(function() {
-			var time = $(this).text();			
-			$(this).text(roundMs(time));
+			if (rounded) {
+				$(this).text($(this).data("orig_value"));
+			} else {
+				var time = $(this).text();
+				$(this).data("orig_value", time);
+				$(this).text(roundMs(time));
+			}
 		});
 		
 		$("td.historyCode code").each(function() {
-			var code = $(this).text();
-			code = "." + code/100 + "k";
-			$(this).text(code);
+			if (rounded) {
+				$(this).text($(this).data("orig_value"));
+			} else {
+				var code = $(this).text();
+				$(this).data("orig_value", code);
+				code = "." + code/100 + "k";
+				$(this).text(code);
+			}
 		});
 		
-
-        $('img').each(function(){
-            $(this).css(roundCSS);
-        });
+		if (rounded) {
+			$('img').removeAttr("style");
+			$('#flavorText').removeAttr("style");
+			$('.btn').removeAttr("style");
+			$('code').removeAttr("style");
+			$('div.panel-heading').removeAttr("style");
+		} else {
+			$('img').css(roundCSS);
+			$('#flavorText').css(roundCSS);
+			$('.btn').css(roundCSS);
+			$('code').css(roundCSS);
+			$('div.panel-heading').css(roundCSS);
+		}
 		
-		$('#flavorText').css(roundCSS);
-		
-		$('.btn').each(function(){
-			$(this).css(roundCSS);
-        });
-		
-		$('code').each(function(){
-            $(this).css(roundCSS);
-        });
-		
+		rounded = !rounded;
     });
 });
