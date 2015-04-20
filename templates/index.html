@@ -2,167 +2,158 @@
 <html>
 
 <head>
-	<meta charset="utf8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<link rel="alternate" type="application/json+oembed"
-  href="http://servercooties.com/oembed?url=http%3A%2F%2Fservercooties.com&format=json"
-  title="OEmbed for ServerCooties.com" />
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Is it just me or server cooties?</title>
-	<!-- Bootstrap CSS-->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="alternate" type="application/json+oembed"
+          href="http://servercooties.com/oembed?url=http%3A%2F%2Fservercooties.com&format=json"
+          title="OEmbed for ServerCooties.com" />
 
-	<!-- Custom styles -->
-	<link type="text/css" rel="stylesheet" media="screen" href="/styles.css">
+    <title>Is it just me or server cooties?</title>
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-	<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Custom styles -->
+    <link type="text/css" rel="stylesheet" media="screen" href="/styles.css">
 
-	<!-- Moment (required for DiscoRound) -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
+    <!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-	<!-- Bootstrap JS-->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Moment (required for DiscoRound) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
 
-	<!-- Mustache template engine -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-	<!-- socket.io -->
-	<script src="/socket.io/socket.io.js"></script>
+    <!-- Mustache template engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
 
-	<!-- Custom scripts -->
-	<script type="text/javascript" src="/scripts.js"></script>
-	<script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
-	<script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
+    <!-- socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
 
-	<!-- Cornify -->
-	<script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript" src="/scripts.js"></script>
+    <script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
+    <script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
 
-	<script>
-		var socket = io.connect('//');
-		socket.on('connected', function (time) {
-			console.log('Connected at: ' + time);
-		});
-		socket.on('heartbeat', function (time) {
-			console.log('Heartbeat at: ' + time);
-		});
-		socket.on('data', function (err, data) {
-			if (err) {
-				console.warn(err);
-			}
-			console.log(data);
-		});
-		socket.emit('getdata', function (err, data) {
-			if (err) {
-				console.warn(err);
-			}
-			console.log(data);
-		});
-		socket.emit('render', 'graph', function (err, data) {
-			if (err) {
-				console.warn(err);
-			}
-			console.log(data);
-		});
-	</script>
+    <!-- Cornify -->
+    <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+
+    <script>
+        var socket = io.connect('//');
+        socket.on('connected', function (time) {
+            console.log('Connected at: ' + time);
+        });
+        socket.on('heartbeat', function (time) {
+            console.log('Heartbeat at: ' + time);
+        });
+        socket.on('data', function (err, data) {
+            if (err) {
+                console.warn(err);
+            }
+            console.log(data);
+        });
+        socket.emit('getdata', function (err, data) {
+            if (err) {
+                console.warn(err);
+            }
+            console.log(data);
+        });
+        socket.emit('render', 'graph', function (err, data) {
+            if (err) {
+                console.warn(err);
+            }
+            console.log(data);
+        });
+    </script>
 </head>
 
 <body>
 
-	<div class="container-fluid">
+    <div class="container-fluid">
 
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header-image">
-				<img id="trwtfimg" src="/static/images/trwtf.png">
-			</div>
-		</div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header-image">
+                <img id="trwtfimg" src="/static/images/trwtf.png">
+            </div>
+        </div>
 
-	</div>
+    </div>
 
-	<nav class="navbar headerbar" id="main-title">
-		<div id="header-image-wrapper">
-			{{>headerbar}}
-		</div>
+    <nav class="navbar headerbar" id="main-title">
+        <div id="header-image-wrapper">
+            {{>headerbar}}
+        </div>
 
-		<div class="container-fluid">
+        <div class="container-fluid">
 
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon glyphicon-menu-hamburger dropdown-toggle hamburger"></a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a>
-						</li>
-						<li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a>
-						</li>
-					</ul>
-				</li>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon glyphicon-menu-hamburger dropdown-toggle hamburger"></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a></li>
+                        <li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a></li>
+                        <li><a href="#" id="cornifybutton"><span class="glyphicon glyphicon-magic"></span>&nbsp;Cornify</a></li>
+                    </ul>
+                </li>
+            </ul>
 
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown">
-						<a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon glyphicon-menu-hamburger dropdown-toggle hamburger"></a>
-					  	<ul class="dropdown-menu" role="menu">
-							<li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a></li>
-							<li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a></li>
-                            <li><a href="#" id="cornifybutton"><span class="glyphicon glyphicon-magic"></span>&nbsp;Cornify</a></li>
-						</ul>
-					</li>
+        </div>
+    </nav>
 
-		</div>
-	</nav>
+    <div class="container-fluid">
 
-	<div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
 
-		<div class="row">
-			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+                <div role="tabpanel">
 
-				<div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#status" aria-controls="status" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;Status
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#history" aria-controls="history" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-hourglass"></span>&nbsp;History
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-stats"></span>&nbsp;Graph
+                            </a>
+                        </li>
+                    </ul>
 
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs nav-justified" role="tablist">
-						<li role="presentation" class="active">
-							<a href="#status" aria-controls="status" role="tab" data-toggle="tab">
-								<span class="glyphicon glyphicon-ok"></span>&nbsp;Status
-							</a>
-						</li>
-						<li role="presentation">
-							<a href="#history" aria-controls="history" role="tab" data-toggle="tab">
-								<span class="glyphicon glyphicon-hourglass"></span>&nbsp;History
-							</a>
-						</li>
-						<li role="presentation">
-							<a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
-								<span class="glyphicon glyphicon-stats"></span>&nbsp;Graph
-							</a>
-						</li>
-					</ul>
-
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="status">
-							{{>status_table}} {{>discodefinition}}
-						</div>
-						<div role="tabpanel" class="tab-pane" id="history">
-							{{>history_table}}
-						</div>
-						<div role="tabpanel" class="tab-pane" id="graph">
-							{{>graph}}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText">
-				{{flavor}}
-			</div>
-            <div class="row" id="buttons">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
-                    <button class="btn btn-primary" id="spin-button">You spin me right round baby, right round...</button>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="status">
+                            {{>status_table}} {{>discodefinition}}
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="history">
+                            {{>history_table}}
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="graph">
+                            {{>graph}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-	</body>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText">
+            {{flavor}}
+        </div>
+        <div class="row" id="buttons">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+                <button class="btn btn-primary" id="spin-button">You spin me right round baby, right round...</button>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
