@@ -220,7 +220,7 @@ function formatRawData(data, callback) {
                     new Date(row.checkedAt).toISOString()
                 ];
             }));
-            process.nextTick(next);
+            setImmediate(next);
         },
         function (err) {
             if (err) {
