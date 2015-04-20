@@ -1,95 +1,87 @@
 'use strict';
+var database = require('./database'),
+    config = require('./config.json');
+var checks = {
+        overall: []
+    },
+    avg = [],
+    length = config.checks.length,
+    cutoff = Date.now() - (config.graphPeriod || 60 * 60) * 1000;
 
-var plotly = require('plotly'),
-    database = require('./database');
-var config,
-    streams = {};
-try {
-    config = require('./graph.json');
-} catch (e) {
-    console.warn(e); //eslint-disable-line no-console
-    config = {};
+function average(arr, map) {
+    return arr.map(map).reduce(function (a, b) {
+        return a + b;
+    }, 0) / arr.length;
 }
 
-function createStream(line) {
-    function onClose(err) {
-        delete streams[line.key];
-        clearInterval(interval);
-        /*eslint-disable no-console */
-        if (err) {
-            console.warn(err);
-        } else {
-            console.log('Stream close: ' + line.label);
+function setData(data, suppress) {
+    if (data) {
+        avg.unshift(data);
+        if (avg.length === length) {
+            checks.overall.push({
+                key: 'overall',
+                status: average(avg, function (d) {
+                    return d.status;
+                }),
+                responseTime: average(avg, function (d) {
+                    return d.responseTime;
+                }),
+                checkedAt: avg[0].checkedAt,
+                score: average(avg, function (d) {
+                    return d.score;
+                })
+            });
+            avg.pop();
         }
-        /*eslint-enable no-console */
-        setTimeout(function () {
-            createStream(line);
-        }, (err ? 60 : 3) * 1000);
+        checks[data.key] = checks[data.key] || [];
+        checks[data.key].unshift(data);
     }
-    var stream = plotly.stream(line.token, onClose),
-        interval = setInterval(function () {
-            stream.write('\n');
-        }, 40 * 1000);
-    stream.on('error', onClose);
-    streams[line.key] = stream;
-}
-
-function createStreams() {
-    config.stream.lines.forEach(function (line) {
-        createStream(line);
-    });
-}
-
-function makePlot(callback) {
-    var lines = config.stream.lines.map(function (line) {
-            return {
-                name: line.label,
-                type: 'scatter',
-                x: [],
-                y: [],
-                stream: {
-                    token: line.token,
-                    maxpoints: config.stream.points
-                }
-            };
-        }),
-        layout = {
-            fileopt: 'extend',
-            filename: config.stream.filename,
-            layout: {
-                showlegend: true,
-                title: config.stream.name,
-                autosize: true,
-                width: 1368,
-                height: 781,
-                xaxis: {
-                    tickformat: '%H:%M',
-                    title: 'Time of Check',
-                    type: 'date',
-                    hoverformat: '%H:%M:%S'
-                },
-                yaxis: {
-                    title: 'Response Time',
-                    ticksuffix: 's'
-                }
+    if (!suppress) {
+        Object.keys(checks).forEach(function (key) {
+            var rows = checks[key].filter(function (r) {
+                return r.checkedAt >= cutoff;
+            });
+            if (rows.length < config.minimumEntries) {
+                rows = checks[key].slice(0, config.minimumEntries);
             }
-        };
-    plotly.plot(lines, layout, function () {
-        callback();
-    });
+            checks[key] = rows;
+        });
+    }
 }
+database.getRecentChecks(60 * 700, function (_, data) {
+    data.sort(function (a, b) {
+        return a.checkedAt - b.checkedAt;
+    });
+    data.forEach(function (d) {
+        d.score = database.getScore(d.status, d.responseTime);
+        d.responseTime = d.responseTime / 1000;
+        setData(d, true);
+    });
+    setData();
+    database.registerListener(function (newdata) {
+        newdata.score = database.getScore(newdata.status, newdata.responseTime);
+        newdata.responseTime = newdata.responseTime / 1000;
+        setData(newdata);
+    });
+});
 
-if (config.username) {
-    plotly = plotly(config.username, config.apikey);
-    createStreams();
-    makePlot(function () {});
-    database.registerListener(function (data) {
-        if (streams[data.key]) {
-            var d = new Date(data.checkedAt);
-            streams[data.key].write(JSON.stringify({
-                x: d.toISOString().replace('T', ' ').replace('Z', ''),
-                y: data.responseTime / 1000
-            }) + '\n');
-        }
-    });
-}
+exports.getTimeChart = function getTimeChart() {
+    var keys = Object.keys(checks);
+    keys.sort();
+    return JSON.stringify(keys.map(function (key) {
+        var name = key.replace('what.thedailywtf.com', '');
+        return {
+            type: 'spline',
+            xValueType: 'dateTime',
+      showInLegend: true,
+      legendText: name,
+            name: name,
+            dataPoints: checks[key].map(function (r) {
+                return {
+                    y: r.responseTime,
+                    x: r.checkedAt
+                };
+            })
+        };
+    }));
+};

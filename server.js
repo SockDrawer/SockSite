@@ -1,12 +1,14 @@
 /*jslint node: true, indent: 4 */
 'use strict';
 
-process.on('uncaughtException', function (err) {
-    /*eslint-disable no-process-exit, no-console*/
-    console.error(err.stack);
-    process.exit(1);
-    /*eslint-enable no-process-exit, no-console*/
-});
+//process.on('uncaughtException', function (err) {
+//    /*eslint-disable no-process-exit, no-console*/
+//    console.error(err);
+//    console.error(err.stack);
+//    process.exit(1);
+//    /*eslint-enable no-process-exit, no-console*/
+//});
+
 
 var http = require('http'),
     url = require('url'),
