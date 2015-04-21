@@ -25,6 +25,9 @@ jQuery(function () {
                 x: data.checkedAt
             });
             time.dataPoints.shift();
+            time.dataPoints.sort(function (a, b) {
+                return a.x - b.x;
+            });
         });
         chart.render();
     });
