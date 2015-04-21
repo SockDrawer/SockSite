@@ -16,6 +16,8 @@ $(function(){
     window.location.hash = this.hash;
   });
   
+  $('.panel-collapse:first').addClass('in');
+  
   window.onpopstate = function(evt) {
       showTab();
   }
