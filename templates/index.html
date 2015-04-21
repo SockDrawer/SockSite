@@ -41,13 +41,18 @@
     <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
 
     <script>
+        window.graphs={
+            timings: {{&getTimeChart}}
+        };
         var socket = io.connect('//');
+        window.socket = socket;
         socket.on('connected', function (time) {
             console.log('Connected at: ' + time);
         });
         socket.on('heartbeat', function (time) {
             console.log('Heartbeat at: ' + time);
         });
+        /*
         socket.on('data', function (err, data) {
             if (err) {
                 console.warn(err);
@@ -66,6 +71,7 @@
             }
             console.log(data);
         });
+        */
     </script>
 </head>
 

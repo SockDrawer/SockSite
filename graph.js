@@ -1,5 +1,6 @@
 'use strict';
-var database = require('./database'),
+var server = require('./server'),
+    database = require('./database'),
     config = require('./config.json');
 var checks = {
         overall: []
@@ -16,9 +17,10 @@ function average(arr, map) {
 
 function setData(data, suppress) {
     if (data) {
+        server.io.emit('graphData', data);
         avg.unshift(data);
         if (avg.length === length) {
-            checks.overall.push({
+            var point = {
                 key: 'overall',
                 status: average(avg, function (d) {
                     return d.status;
@@ -30,7 +32,9 @@ function setData(data, suppress) {
                 score: average(avg, function (d) {
                     return d.score;
                 })
-            });
+            };
+            checks.overall.push(point);
+            server.io.emit('graphData', point);
             avg.pop();
         }
         checks[data.key] = checks[data.key] || [];
@@ -73,9 +77,9 @@ exports.getTimeChart = function getTimeChart() {
         return {
             type: 'spline',
             xValueType: 'dateTime',
-      showInLegend: true,
-      legendText: name,
-            name: name,
+            showInLegend: true,
+            legendText: name,
+            name: key,
             dataPoints: checks[key].map(function (r) {
                 return {
                     y: r.responseTime,

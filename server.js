@@ -1,14 +1,12 @@
 /*jslint node: true, indent: 4 */
 'use strict';
 
-//process.on('uncaughtException', function (err) {
-//    /*eslint-disable no-process-exit, no-console*/
-//    console.error(err);
-//    console.error(err.stack);
-//    process.exit(1);
-//    /*eslint-enable no-process-exit, no-console*/
-//});
-
+process.on('uncaughtException', function (err) {
+    /*eslint-disable no-process-exit, no-console*/
+    console.error(err.stack);
+    process.exit(1);
+    /*eslint-enable no-process-exit, no-console*/
+});
 
 var http = require('http'),
     url = require('url'),
@@ -56,6 +54,8 @@ cache.buildCache(function (err) {
     server.listen(port, ip);
     /*eslint-neable no-console */
 });
+
+exports.io = io;
 
 io.on('connection', function (socket) {
     socket.emit('connected', Date.now());
