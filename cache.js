@@ -6,7 +6,8 @@ var async = require('async'),
     cssmin = require('cssmin');
 var config = require('./config.json'),
     database = require('./database'),
-    graph = require('./graph');
+    graph = require('./graph'),
+    server = require('./server');
 var cache;
 
 function readall(dir, filter, callback) {
@@ -122,6 +123,7 @@ function setData(data) {
     cache.dataPeriod = config.dataPeriod;
     exports.summary = database.summarizeData(cache);
     exports.summary.getTimeChart = graph.getTimeChart;
+    updateClient();
 }
 database.registerListener(setData);
 
@@ -134,6 +136,29 @@ database.getRecentChecks(config.dataPeriod, function (err, data) {
     cache = data;
     exports.summary = database.summarizeData(cache);
     exports.summary.getTimeChart = graph.getTimeChart;
+    updateClient();
 });
 
 exports.summary = {};
+
+function updateClient() {
+    var latest = {
+        up: exports.summary.up,
+        score: exports.summary.score,
+        code: exports.summary.code,
+        status: exports.summary.status,
+        flavor: exports.summary.flavor,
+        summary: exports.summary.summary.map(function (summary) {
+            return {
+                name: summary.name,
+                response: summary.response,
+                responseCode: summary.responseCode,
+                responseScore: summary.responseScore,
+                responseTime: summary.responseTime,
+                polledAt: summary.polledAt,
+                checkIndex: summary.checkIndex
+            };
+        })
+    };
+    server.io.emit('summary', latest);
+}

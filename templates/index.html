@@ -52,6 +52,9 @@
         socket.on('heartbeat', function (time) {
             console.log('Heartbeat at: ' + time);
         });
+        socket.on('summary', function (data) {
+            console.log(data);
+        });
         /*
         socket.on('data', function (err, data) {
             if (err) {

@@ -52,7 +52,7 @@ function setData(data, suppress) {
         });
     }
 }
-database.getRecentChecks(60 * 700, function (_, data) {
+database.getRecentChecks(60 * 60, function (_, data) {
     data.sort(function (a, b) {
         return a.checkedAt - b.checkedAt;
     });
