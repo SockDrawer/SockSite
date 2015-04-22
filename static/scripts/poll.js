@@ -14,6 +14,8 @@ function pollForData() {
         $($.parseHTML(historyRendered)).find('.panel-collapse').each(function(){
             $('#' + $(this).attr('id')).html($(this).html());
         });
+        
+        $('#flavorText').html(data.flavor);
 
     }, 'json');
 }
