@@ -1,14 +1,27 @@
 tr.GREAT{ 
-	background-color: green !important;
-	color: white;
+	background-color: #3AB54A !important;
+}
+
+tr.GOOD{ 
+	background-color: #2db8c2;
 }
 
 tr.OK {
-	background-color: yellow;
+	background-color: #0E76BD;
 }
 
 tr.BAD {
-	background-color: red;
+	background-color: #c1103b;
+	color: white;
+}
+
+tr.OFFLINE {
+	background-color: #92278F;
+	color: white;
+}
+
+tr.UNKNOWN {
+	background-color: #92278F;
 	color: white;
 }
 
