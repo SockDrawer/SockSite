@@ -1,6 +1,6 @@
 {
     "database": "servercooties.sql",
-    "pollDelay": 3,
+    "pollDelay": 6,
     "dataPeriod": 60,
     "minimumEntries": 10,
     "version": "0.2.0",
