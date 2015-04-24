@@ -38,9 +38,13 @@
     <script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
 
     <!-- Cornify -->
+    <script type="text/javascript">
+        //Must remain before the Cornify script include!
+        document.cookie = 'cornify=0;expires=' + new Date().toUTCString();
+    </script>
     <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
 
-    <script>
+    <script type="text/javascript">
         window.graphs = {
             timings: {{&getTimeChart}}
         };
