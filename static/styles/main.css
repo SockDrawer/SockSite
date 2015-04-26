@@ -7,7 +7,7 @@ body {
 	padding-bottom: 20px;
 }
 
-button {
+.btn {
 	border-radius: 0;
 	width: 100%;
 }
@@ -92,6 +92,7 @@ code {
 	background: #d9e6f0; 
 	margin-top: 5px;
 	text-align: center;
+	border-radius: 0px;
 }
 
 .hamburger {

@@ -5,7 +5,9 @@ var async = require('async'),
     jsmin = require('jsmin').jsmin,
     cssmin = require('cssmin');
 var config = require('./config.json'),
-    database = require('./database');
+    database = require('./database'),
+    graph = require('./graph'),
+    server = require('./server');
 var cache;
 
 function readall(dir, filter, callback) {
@@ -57,7 +59,13 @@ function readScripts(callback) {
             return callback(err);
         }
         files.forEach(function (file) {
-            file.data = jsmin(file.data);
+            try {
+                file.data = jsmin(file.data);
+            } catch (e) {
+                /*eslint-disable no-console */
+                console.warn('Error minifying ' + file.name + ': ' + e);
+                /*eslint-enable no-console */
+            }
         });
         callback(null, files);
     });
@@ -69,7 +77,13 @@ function readStyles(callback) {
             return callback(err);
         }
         files.forEach(function (file) {
-            file.data = cssmin(file.data);
+            try {
+                file.data = cssmin(file.data);
+            } catch (e) {
+                /*eslint-disable no-console */
+                console.warn('Error minifying ' + file.name + ': ' + e);
+                /*eslint-enable no-console */
+            }
         });
         callback(null, files);
     });
@@ -108,6 +122,8 @@ function setData(data) {
     }
     cache.dataPeriod = config.dataPeriod;
     exports.summary = database.summarizeData(cache);
+    exports.summary.getTimeChart = graph.getTimeChart;
+    updateClient();
 }
 database.registerListener(setData);
 
@@ -119,6 +135,30 @@ database.getRecentChecks(config.dataPeriod, function (err, data) {
     }
     cache = data;
     exports.summary = database.summarizeData(cache);
+    exports.summary.getTimeChart = graph.getTimeChart;
+    updateClient();
 });
 
 exports.summary = {};
+
+function updateClient() {
+    var latest = {
+        up: exports.summary.up,
+        score: exports.summary.score,
+        code: exports.summary.code,
+        status: exports.summary.status,
+        flavor: exports.summary.flavor,
+        summary: exports.summary.summary.map(function (summary) {
+            return {
+                name: summary.name,
+                response: summary.response,
+                responseCode: summary.responseCode,
+                responseScore: summary.responseScore,
+                responseTime: summary.responseTime,
+                polledAt: summary.polledAt,
+                checkIndex: summary.checkIndex
+            };
+        })
+    };
+    server.io.emit('summary', latest);
+}
