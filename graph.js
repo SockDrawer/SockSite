@@ -6,8 +6,9 @@ var checks = {
         overall: []
     },
     avg = [],
-    length = config.checks.length,
-    cutoff = Date.now() - (config.graphPeriod || 60 * 60) * 1000;
+    numChecks = config.checks.length,
+    graphPeriod = (config.graphPeriod || 60 * 60),
+    cutoff = Date.now() - graphPeriod * 1000;
 
 function average(arr, map) {
     return arr.map(map).reduce(function (a, b) {
@@ -19,7 +20,7 @@ function setData(data, suppress) {
     if (data) {
         server.io.emit('graphData', data);
         avg.unshift(data);
-        if (avg.length === length) {
+        if (avg.length === numChecks) {
             var point = {
                 key: 'overall',
                 status: average(avg, function (d) {
@@ -38,21 +39,22 @@ function setData(data, suppress) {
             avg.pop();
         }
         checks[data.key] = checks[data.key] || [];
-        checks[data.key].unshift(data);
+        checks[data.key].push(data);
     }
     if (!suppress) {
         Object.keys(checks).forEach(function (key) {
             var rows = checks[key].filter(function (r) {
-                return r.checkedAt >= cutoff;
-            });
+                    return r.checkedAt >= cutoff;
+                }),
+                length = rows.length;
             if (rows.length < config.minimumEntries) {
-                rows = checks[key].slice(0, config.minimumEntries);
+                rows = checks[key].slice(length - config.minimumEntries);
             }
             checks[key] = rows;
         });
     }
 }
-database.getRecentChecks(60 * 60, function (_, data) {
+database.getRecentChecks(graphPeriod, function (_, data) {
     data.sort(function (a, b) {
         return a.checkedAt - b.checkedAt;
     });
