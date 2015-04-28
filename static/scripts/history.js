@@ -1,6 +1,6 @@
 function showTab() {
     var hash = window.location.hash;
-    console.log(hash);
+
     if(hash) {
         $('ul.nav-tabs a[href="' + hash + '"]').tab('show');
     } else {
