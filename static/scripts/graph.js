@@ -43,11 +43,13 @@ jQuery(function () {
     chart.render();
     chart2.render();
     window.socket.on('graphData', function (data) {
-        rerender(window.graphs.timings, function (data) {
-            return data.responseTime;
-        }, chart, data);
-        rerender(window.graphs.scores, function (data) {
-            return data.score;
-        }, chart2, data);
+        if($('#timeChartContainer:visible').length > 0) {
+            rerender(window.graphs.timings, function (data) {
+                return data.responseTime;
+            }, chart, data);
+            rerender(window.graphs.scores, function (data) {
+                return data.score;
+            }, chart2, data);
+        }
     });
 });
