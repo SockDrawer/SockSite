@@ -16,6 +16,8 @@ function average(arr, map) {
     }, 0) / arr.length;
 }
 
+
+
 function setData(data, suppress) {
     if (data) {
         server.io.emit('graphData', data);
@@ -85,6 +87,27 @@ exports.getTimeChart = function getTimeChart() {
             dataPoints: checks[key].map(function (r) {
                 return {
                     y: r.responseTime,
+                    x: r.checkedAt
+                };
+            })
+        };
+    }));
+};
+
+exports.getScoreChart = function getTimeChart() {
+    var keys = Object.keys(checks);
+    keys.sort();
+    return JSON.stringify(keys.map(function (key) {
+        var name = key.replace('what.thedailywtf.com', '');
+        return {
+            type: 'spline',
+            xValueType: 'dateTime',
+            showInLegend: true,
+            legendText: name,
+            name: key,
+            dataPoints: checks[key].map(function (r) {
+                return {
+                    y: r.score,
                     x: r.checkedAt
                 };
             })

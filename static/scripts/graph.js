@@ -1,27 +1,31 @@
 'use strict';
 jQuery(function () {
-    var chart = new window.CanvasJS.Chart("timeChartContainer", {
-        title: {
-            text: "Latest Response Times"
-        },
-        width: $(".tab-content").width(),
-        height: 300,
-        axisX: {
-            valueFormatString: "HH:mm"
-        },
-        axisY: {
-            suffix: ' s'
-        },
-        data: window.graphs.timings
-    });
-    chart.render();
-    window.socket.on('graphData', function (data) {
-        window.graphs.timings.forEach(function (time) {
+
+    function makechart(id, title, data, suffix) {
+        return new window.CanvasJS.Chart(id, {
+            animation: false,
+            responsive: true,
+            title: {
+                text: title
+            },
+            height: 300,
+            axisX: {
+                valueFormatString: "HH:mm"
+            },
+            axisY: {
+                suffix: suffix
+            },
+            data: data
+        });
+    }
+
+    function rerender(graphdata, selector, chart, data) {
+        graphdata.forEach(function (time) {
             if (time.name !== data.key) {
                 return;
             }
             time.dataPoints.push({
-                y: data.responseTime,
+                y: selector(data),
                 x: data.checkedAt
             });
             time.dataPoints.shift();
@@ -30,5 +34,20 @@ jQuery(function () {
             });
         });
         chart.render();
+    }
+
+    var chart = makechart("timeChartContainer", "Latest Response Times",
+            window.graphs.timings, ' s'),
+        chart2 = makechart("scoreChartContainer", "Latest Discoappdex Scores",
+            window.graphs.scores, '%');
+    chart.render();
+    chart2.render();
+    window.socket.on('graphData', function (data) {
+        rerender(window.graphs.timings, function (data) {
+            return data.responseTime;
+        }, chart, data);
+        rerender(window.graphs.scores, function (data) {
+            return data.score;
+        }, chart2, data);
     });
 });

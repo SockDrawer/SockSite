@@ -123,6 +123,7 @@ function setData(data) {
     cache.dataPeriod = config.dataPeriod;
     exports.summary = database.summarizeData(cache);
     exports.summary.getTimeChart = graph.getTimeChart;
+    exports.summary.getScoreChart = graph.getScoreChart;
     updateClient();
 }
 database.registerListener(setData);
@@ -136,6 +137,7 @@ database.getRecentChecks(config.dataPeriod, function (err, data) {
     cache = data;
     exports.summary = database.summarizeData(cache);
     exports.summary.getTimeChart = graph.getTimeChart;
+    exports.summary.getScoreChart = graph.getScoreChart;
     updateClient();
 });
 
