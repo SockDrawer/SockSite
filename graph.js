@@ -7,16 +7,13 @@ var checks = {
     },
     avg = [],
     numChecks = config.checks.length,
-    graphPeriod = (config.graphPeriod || 60 * 60),
-    cutoff = Date.now() - graphPeriod * 1000;
+    graphPeriod = (config.graphPeriod || 60 * 60);
 
 function average(arr, map) {
     return arr.map(map).reduce(function (a, b) {
         return a + b;
     }, 0) / arr.length;
 }
-
-
 
 function setData(data, suppress) {
     if (data) {
@@ -44,6 +41,7 @@ function setData(data, suppress) {
         checks[data.key].push(data);
     }
     if (!suppress) {
+        var cutoff = Date.now() - graphPeriod * 1000;
         Object.keys(checks).forEach(function (key) {
             var rows = checks[key].filter(function (r) {
                     return r.checkedAt >= cutoff;
