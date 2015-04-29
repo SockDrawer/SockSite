@@ -71,6 +71,9 @@ io.on('connection', function (socket) {
         }
         render.formatHTML(cache.summary, template, callback);
     });
+    socket.on('gettemplates', function(callback){
+        callback(null, cache.templates);
+    });
 });
 
 

@@ -113,11 +113,8 @@
             $('#collapse' + data.checkId + ':visible').find('tbody').prepend(Mustache.render(window.TemplateCache['history_table_row'], data));
         });
         
-        socket.emit('render', 'graph', function (err, data) {
-            if (err) {
-                // console.warn(err);
-            }
-            // console.log(data);
+        socket.emit('gettemplates', 'graph', function (err, templates) {
+            //Do whatever you want with the templates. ;-)
         });
         
     </script>
