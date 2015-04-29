@@ -49,19 +49,14 @@
             timings: {{&getTimeChart}},
             scores: {{&getScoreChart}}
         };
-        
-        var headerbarTemplate;
-        var statusTableTemplate;
-        var flavorTemplate;
-        var historyRowTemplate;
-        
+
         var socket = io.connect('//');
         window.socket = socket;
         window.TemplateCache = {};
         window.History = {};
         
         socket.on('connected', function (time) {
-            console.log('Connected at: ' + time);
+            // console.log('Connected at: ' + time);
             
             socket.emit('getdata', function (err, data) {
                 data.summary.forEach(function(summaryItem) {
@@ -85,7 +80,6 @@
                         if (err) {
                             console.warn(err);
                         }
-                        console.log('Updating history for ' + data.checkId);
                         
                         window.History[data.checkId].values.unshift(data);
                         if(window.History[data.checkId].values.length > 10)
@@ -99,7 +93,7 @@
         });
         
         socket.on('heartbeat', function (time) {
-            console.log('Heartbeat at: ' + time);
+            // console.log('Heartbeat at: ' + time);
         });
         
     </script>
