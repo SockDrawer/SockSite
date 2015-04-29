@@ -77,11 +77,12 @@ exports.getTimeChart = function getTimeChart() {
     return JSON.stringify(keys.map(function (key) {
         var name = key.replace('what.thedailywtf.com', '');
         return {
-            type: 'spline',
+            type: 'line',
             xValueType: 'dateTime',
             showInLegend: true,
             legendText: name,
             name: key,
+            graphPeriod: graphPeriod * 1000,
             dataPoints: checks[key].map(function (r) {
                 return {
                     y: r.responseTime,
@@ -98,11 +99,12 @@ exports.getScoreChart = function getTimeChart() {
     return JSON.stringify(keys.map(function (key) {
         var name = key.replace('what.thedailywtf.com', '');
         return {
-            type: 'spline',
+            type: 'line',
             xValueType: 'dateTime',
             showInLegend: true,
             legendText: name,
             name: key,
+            graphPeriod: graphPeriod * 1000,
             dataPoints: checks[key].map(function (r) {
                 return {
                     y: r.score,

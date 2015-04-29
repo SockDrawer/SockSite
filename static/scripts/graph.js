@@ -19,7 +19,17 @@ jQuery(function () {
         });
     }
 
-    function rerender(graphdata, selector, chart, data) {
+    function rerender(chart){
+        setInterval(function(){
+        var visible = $('#timeChartContainer:visible').length > 0;
+        if (chart._shouldRender && visible) {
+            chart.render();
+            chart._shouldRender = false;
+        }},
+        5000);
+    }
+    
+    function redata(graphdata, selector, chart, data) {
         graphdata.forEach(function (time) {
             if (time.name !== data.key) {
                 return;
@@ -28,12 +38,19 @@ jQuery(function () {
                 y: selector(data),
                 x: data.checkedAt
             });
-            time.dataPoints.shift();
             time.dataPoints.sort(function (a, b) {
                 return a.x - b.x;
             });
+            var cutoff = Date.now() - graphdata.dataPeriod,
+            points = time.dataPoints.filter(function(point){
+                return point.x >= cutoff;
+            });
+            if (points.length < 30){
+                points = time.dataPoints.slice(time.dataPoints.length - 30);
+            }
+            time.dataPoints = points;
         });
-        chart.render();
+        chart._shouldRender = true;
     }
 
     var chart = makechart("timeChartContainer", "Latest Response Times",
@@ -41,15 +58,15 @@ jQuery(function () {
         chart2 = makechart("scoreChartContainer", "Latest Discoappdex Scores",
             window.graphs.scores, '%');
     chart.render();
+    rerender(chart);
     chart2.render();
+    rerender(chart2);
     window.socket.on('graphData', function (data) {
-        if($('#timeChartContainer:visible').length > 0) {
-            rerender(window.graphs.timings, function (data) {
-                return data.responseTime;
-            }, chart, data);
-            rerender(window.graphs.scores, function (data) {
-                return data.score;
-            }, chart2, data);
-        }
+        redata(window.graphs.timings, function (data) {
+            return data.responseTime;
+        }, chart, data);
+        redata(window.graphs.scores, function (data) {
+            return data.score;
+        }, chart2, data);
     });
 });
