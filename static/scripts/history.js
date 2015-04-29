@@ -9,16 +9,20 @@ function showTab() {
 }
 
 $(function(){
-  showTab();
+    showTab();
 
-  $('.nav-tabs a').click(function (e) {
-    $(this).tab('show');
-    window.location.hash = this.hash;
-  });
+    $('.nav-tabs a').click(function (e) {
+        e.preventDefault();
+        
+        $(this).tab('show');
+        var scrollmem = $('body').scrollTop();
+        window.location.hash = this.hash;
+        $('html,body').scrollTop(scrollmem);
+    });
   
-  $('.panel-collapse:first').addClass('in');
-  
-  window.onpopstate = function(evt) {
-      showTab();
-  }
+    $('.panel-collapse:first').addClass('in');
+
+    window.onpopstate = function(evt) {
+        showTab();
+    }
 });
