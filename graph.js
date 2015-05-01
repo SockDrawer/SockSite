@@ -77,7 +77,7 @@ exports.getTimeChart = function getTimeChart() {
     return JSON.stringify(keys.map(function (key) {
         var name = key.replace('what.thedailywtf.com', '');
         return {
-            type: 'spline',
+            type: 'line',
             xValueType: 'dateTime',
             showInLegend: true,
             legendText: name,
@@ -98,7 +98,7 @@ exports.getScoreChart = function getTimeChart() {
     return JSON.stringify(keys.map(function (key) {
         var name = key.replace('what.thedailywtf.com', '');
         return {
-            type: 'spline',
+            type: 'line',
             xValueType: 'dateTime',
             showInLegend: true,
             legendText: name,

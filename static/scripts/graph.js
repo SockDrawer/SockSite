@@ -40,7 +40,7 @@ jQuery(function () {
 
     var chart = makechart("timeChartContainer", "Latest Response Times",
             window.graphs.timings, ' s'),
-        chart2 = makechart("scoreChartContainer", "Latest Discoappdex Scores",
+        chart2 = makechart("scoreChartContainer", "Latest DiscoApdex Scores",
             window.graphs.scores, '%');
     chart.render();
     chart2.render();
