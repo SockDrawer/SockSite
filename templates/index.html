@@ -49,72 +49,51 @@
             timings: {{&getTimeChart}},
             scores: {{&getScoreChart}}
         };
-        
-        var headerbarTemplate;
-        var statusTableTemplate;
-        var flavorTemplate;
-        var historyRowTemplate;
-        
+
         var socket = io.connect('//');
         window.socket = socket;
-        
         window.TemplateCache = {};
-        
-        function getChildTemplates(tokens) {
-            tokens.forEach(function(token) {                                        // loop through all the tokens
-                if(token[0] === '>') {                                              // partial detected
-                    $.get('/templates/' + token[1] + '.html', {}, function(data) {  // get the template from server
-                        window.TemplateCache[token[1]] = data;                      // save the template to cache
-                        t = Mustache.parse(window.TemplateCache[token[1]]);         // precompile the template for faster rendering
-                        getChildTemplates(Mustache.parse(data));                    // get any child templates
-                    });
-                } else if(token[4]) {
-                    if(token[4] instanceof Array) {                                 // Mustache loops store their child tokens in an array
-                        getChildTemplates(token[4]);
-                    }
-                }
-            });
-        }
-        
-        // Get all partials we might need to re-render the page segments
-        $.get('/templates/index.html', {}, function(index) {
-            window.TemplateCache['index'] = index;
-            Mustache.parse(window.TemplateCache['index']);
-            getChildTemplates(Mustache.parse(index));
-        });
+        window.History = {};
         
         socket.on('connected', function (time) {
             // console.log('Connected at: ' + time);
+            
+            socket.emit('getdata', function (err, data) {
+                data.summary.forEach(function(summaryItem) {
+                    window.History[summaryItem.checkIndex] = {};
+                    window.History[summaryItem.checkIndex].values = [];
+                    window.History[summaryItem.checkIndex].values = summaryItem.values;
+                });
+                
+                socket.emit('gettemplates', function (err, templates) {
+                    window.TemplateCache = templates;
+                    
+                    // Automatically re-render any parts of the page when we get the summary object
+                    socket.on('summary', function (summary) {
+                        $('*[data-template]:visible').each(function() {    // find any elements with data-template attribute
+                            $(this).html(Mustache.render(window.TemplateCache[$(this).data('template')], summary));
+                        });
+                    });
+                    
+                    // History is a special snowflake so we have to update it manually
+                    socket.on('data', function (err, data) {
+                        if (err) {
+                            console.warn(err);
+                        }
+                        
+                        window.History[data.checkId].values.unshift(data);
+                        if(window.History[data.checkId].values.length > 10)
+                            window.History[data.checkId].values.pop();
+                        
+                        if($('a[href="#collapse' + data.checkId + '"]:visible').length > 0)
+                            $('#collapse' + data.checkId).html(Mustache.render(window.TemplateCache['history_panel'], window.History[data.checkId]));
+                    });
+                });
+            });
         });
+        
         socket.on('heartbeat', function (time) {
             // console.log('Heartbeat at: ' + time);
-        });
-        
-        // Automatically re-render any parts of the page when we get the summary object
-        // TODO: refresh only visible tabs
-        socket.on('summary', function (data) {
-            $('*[data-template]:visible').each(function() {    // find any elements with data-template attribute
-                $(this).html(Mustache.render(window.TemplateCache[$(this).data('template')], data));
-            });
-            
-            // console.log(window.TemplateCache);
-        });
-        
-        // History is a special snowflake so we have to update it manually
-        socket.on('data', function (err, data) {
-            if (err) {
-                console.warn(err);
-            }
-            
-            if($('#collapse' + data.checkId + ':visible').find('tbody').find('tr').length > 9) {    // We want a maximum of 10 entries
-                $('#collapse' + data.checkId + ':visible').find('tbody').find('tr').last().remove();
-            }
-            
-            $('#collapse' + data.checkId + ':visible').find('tbody').prepend(Mustache.render(window.TemplateCache['history_table_row'], data));
-        });
-        
-        socket.emit('gettemplates', 'graph', function (err, templates) {
-            //Do whatever you want with the templates. ;-)
         });
         
     </script>
