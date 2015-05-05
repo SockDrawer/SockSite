@@ -1,7 +1,9 @@
 {
     "database": "servercooties.sql",
+    "chunkSize": 200,
     "pollDelay": 6,
     "dataPeriod": 60,
+    "historyEntries": 10,
     "minimumEntries": 10,
     "version": "0.2.0",
     "message-bus": false,
