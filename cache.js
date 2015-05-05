@@ -8,7 +8,10 @@ var config = require('./config.json'),
     database = require('./database'),
     graph = require('./graph'),
     server = require('./server');
-var cache;
+var cache,
+    history = {
+        overall: []
+    };
 
 function readall(dir, filter, callback) {
     fs.readdir(dir, function (err, files) {
@@ -109,6 +112,13 @@ exports.templates = {};
 exports.scripts = {};
 exports.styles = {};
 
+function summarize(data){
+    data.dataPeriod = config.dataPeriod;
+    exports.summary = database.summarizeData(data);
+    exports.summary.getTimeChart = graph.getTimeChart;
+    exports.summary.getScoreChart = graph.getScoreChart;
+}
+
 function setData(data) {
     cache.push(data);
     var limit = Date.now() - (config.dataPeriod * 1000),
@@ -120,10 +130,7 @@ function setData(data) {
     if (cache.length < minimum) {
         cache = old.slice(Math.max(old.length - minimum, 0));
     }
-    cache.dataPeriod = config.dataPeriod;
-    exports.summary = database.summarizeData(cache);
-    exports.summary.getTimeChart = graph.getTimeChart;
-    exports.summary.getScoreChart = graph.getScoreChart;
+    summarize(cache);
     updateClient();
 }
 database.registerListener(setData);
@@ -135,9 +142,7 @@ database.getRecentChecks(config.dataPeriod, function (err, data) {
         /*eslint-enable no-console */
     }
     cache = data;
-    exports.summary = database.summarizeData(cache);
-    exports.summary.getTimeChart = graph.getTimeChart;
-    exports.summary.getScoreChart = graph.getScoreChart;
+    summarize(cache);
     updateClient();
 });
 
