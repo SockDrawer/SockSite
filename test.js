@@ -1,43 +1,63 @@
 var db = require('./database'),
-    config = require('./config.json'),
-    util = require('./utility');
-var checks = {
-        overall: []
-    },
-    numChecks = config.checks.length,
-    protocol=/^https?:\/\//;
-config.checks.forEach(function (key) {
-    checks[key.replace(protocol, '')] = [];
-});
-db.getChecks(10 * 60, function (_, data) {
-    var avg = [],
-        parts = [];
-    data.forEach(function (row) {
-        row.score = util.getScore(row);
-        row.response = util.getFlavor(row.score, config.scoreCode);
-        row.polledAt = new Date(row.checkedAt).toUTCString();
-        parts.push(row);
-        avg.unshift(row);
-        checks[row.checkName.replace(protocol,'')].unshift(row);
-        if (avg.length === numChecks) {
-            var overall = {
-                checkName: 'overall',
-                checkId: -1,
-                responseCode: util.round(util.average(avg, function (n) {
-                    return n.responseCode;
-                })),
-                responseTime: util.round(util.average(avg, function (n) {
-                    return n.responseTime;
-                }), 3),
-                checkedAt: avg[0].checkedAt,
-                polledAt: avg[0].polledAt
-            };
-            overall.score = util.getScore(overall);
-            overall.response = util.getFlavor(overall.score, config.scoreCode);
-            parts.push(overall);
-            avg.pop();
-            checks.overall.unshift(overall);
-        }
+    util = require('./utility'),
+    config = require('./config.json');
+var formatRow = util.formattedRowGenerator();
+
+function truncateData(data, filter, minimum) {
+    var res = data.filter(filter);
+    if (res.length < minimum) {
+        res = data.slice(0, minimum);
+    }
+    return res;
+}
+
+function summarize(data, extra, callback) {
+    var cutoff = Date.now() - config.scorePeriod,
+        result = {
+            version: config.version,
+            time: new Date().toISOString(),
+            up: false,
+            score: -1, //TODO: fill this
+            code: null,
+            status: null,
+            flavor: null,
+        },
+        keys = Object.keys(data);
+    Object.keys(extra).forEach(function (key) {
+        result[key] = extra[key];
     });
-    console.log(checks);
+    keys.sort();
+    result.summary = keys.map(function (key) {
+        var counts = truncateData(data[key], function (d) {
+                return d.checkedAt > cutoff;
+            }, config.scoreEntries),
+            score = util.round(util.average(counts, function (a) {
+                return a.score;
+            }));
+            return {
+            name: key,
+            response: util.getFlavor(score, config.scoreCode),
+            responseCode: util.round(util.average(data[key], function (a) {
+                return a.responseCode;
+            }), 2),
+            responseTime: util.round(util.average(data[key], function (a) {
+                return a.responseTime;
+            }), 2),
+            responseScore: score,
+            polledAt: data[key][0].polledAt,
+            checkIndex: data[key][0].checkId,
+            values: data[key]
+        };
+    });
+    result.up = result.score >= 50;
+    result.code = util.getFlavor(result.score, config.scoreCode);
+    result.status = util.getFlavor(result.score, config.status);
+    result.flavor = util.getFlavor(result.score, config.flavor);
+    callback(null, result);
+}
+
+db.getChecks(10 * 60, function (_, data) {
+    util.parseData(data, formatRow, function (__, result) {
+        summarize(result, {}, console.log);
+    });
 });

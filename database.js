@@ -74,6 +74,16 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
     });
 };
 
+exports.getChecks = function getChecks(offset, callback) {
+    if (!offset) {
+        offset = 10 * 60;
+    }
+    var date = new Date() - (offset * 1000);
+    db.all('SELECT p.key AS checkName, c.page AS checkId, ' +
+        'c.status AS responseCode, c.responseTime/1000.0 AS responseTime, ' +
+        'c.checkedAt FROM checks2 c JOIN pages p ON c.page = p.OID ' +
+        'WHERE checkedAt > ? ORDER BY checkedAt ASC', [date], callback);
+};
 exports.getRecentChecks = function getRecentChecks(offset, callback) {
     if (!offset) {
         offset = 10 * 60;

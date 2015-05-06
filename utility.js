@@ -1,4 +1,6 @@
 'use strict';
+var async = require('async');
+var config = require('./config.json');
 
 exports.getFlavor = function getFlavor(value, arr) {
     var key = Object.keys(arr).filter(function (a) {
@@ -52,4 +54,56 @@ exports.average = function average(arr, mapper) {
         };
     }
     return exports.sum(arr, mapper) / arr.length;
+};
+
+exports.formattedRowGenerator = function formattedRowGenerator() {
+    function format(row) {
+        row.score = exports.getScore(row);
+        row.response = exports.getFlavor(row.score, config.scoreCode);
+        row.polledAt = new Date(row.checkedAt).toISOString();
+    }
+    var avg = [];
+    return function (row, callback) {
+        var res = [row];
+        avg.unshift(row);
+        format(row);
+        if (avg.length === config.checks.length) {
+            var overall = {
+                checkName: 'overall',
+                checkId: -1,
+                responseCode: exports.round(exports.average(avg, function (n) {
+                    return n.responseCode;
+                })),
+                responseTime: exports.round(exports.average(avg, function (n) {
+                    return n.responseTime;
+                }), 3),
+                checkedAt: avg[0].checkedAt
+            };
+            format(overall);
+            res.push(overall);
+            avg.pop();
+        }
+        process.nextTick(function () {
+            callback(null, res);
+        });
+    };
+};
+
+exports.parseData = function parseData(data, formatter, callback) {
+    var result = {
+        'overall': []
+    };
+    config.checks.forEach(function (key) {
+        result[key.replace(/^https?:\/\//, '')] = [];
+    });
+    async.eachSeries(data, function (row, next) {
+        formatter(row, function (_, rows) {
+            rows.forEach(function (row) {
+                result[row.checkName].unshift(row);
+            });
+            next();
+        });
+    }, function () {
+        callback(null, result);
+    });
 };
