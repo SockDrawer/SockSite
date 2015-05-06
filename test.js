@@ -1,3 +1,4 @@
+'use strict';
 var db = require('./database'),
     util = require('./utility'),
     config = require('./config.json');
@@ -11,30 +12,40 @@ function truncateData(data, filter, minimum) {
     return res;
 }
 
+function roundAverage(data, reduce, places) {
+    return util.round(util.average(data, reduce), places);
+}
+
+function getScore(data, cutoff, minimum) {
+    var counts = truncateData(data, function (d) {
+        return d.checkedAt > cutoff;
+    }, minimum);
+    return roundAverage(counts, function (a) {
+        return a.score;
+    });
+}
+
 function summarize(data, extra, callback) {
     var cutoff = Date.now() - config.scorePeriod,
+        score = getScore(data.overall, cutoff, config.scoreEntries),
         result = {
             version: config.version,
             time: new Date().toISOString(),
-            up: false,
-            score: -1, //TODO: fill this
-            code: null,
-            status: null,
-            flavor: null,
+            up: score >= 50,
+            score: score,
+            code: util.getFlavor(score, config.scoreCode),
+            status: util.getFlavor(score, config.status),
+            flavor: util.getFlavor(score, config.flavor)
         },
         keys = Object.keys(data);
     Object.keys(extra).forEach(function (key) {
         result[key] = extra[key];
     });
+    cutoff = Date.now() - config.dataPeriod;
     keys.sort();
     result.summary = keys.map(function (key) {
-        var counts = truncateData(data[key], function (d) {
-                return d.checkedAt > cutoff;
-            }, config.scoreEntries),
-            score = util.round(util.average(counts, function (a) {
-                return a.score;
-            }));
-            return {
+        score = getScore(data[key], cutoff, config.historyEntries);
+        return {
             name: key,
             response: util.getFlavor(score, config.scoreCode),
             responseCode: util.round(util.average(data[key], function (a) {
@@ -49,10 +60,6 @@ function summarize(data, extra, callback) {
             values: data[key]
         };
     });
-    result.up = result.score >= 50;
-    result.code = util.getFlavor(result.score, config.scoreCode);
-    result.status = util.getFlavor(result.score, config.status);
-    result.flavor = util.getFlavor(result.score, config.flavor);
     callback(null, result);
 }
 

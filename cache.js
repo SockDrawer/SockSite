@@ -8,10 +8,7 @@ var config = require('./config.json'),
     database = require('./database'),
     graph = require('./graph'),
     server = require('./server');
-var cache,
-    history = {
-        overall: []
-    };
+var cache;
 
 function readall(dir, filter, callback) {
     fs.readdir(dir, function (err, files) {

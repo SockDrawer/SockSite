@@ -4,10 +4,15 @@ var config = require('./config.json');
 
 exports.getFlavor = function getFlavor(value, arr) {
     var key = Object.keys(arr).filter(function (a) {
-        return a <= value;
-    });
+            return a <= value;
+        }),
+        res;
     key = key[key.length - 1];
-    return arr[key];
+    res = arr[key];
+    if (typeof res !== 'string') {
+        res = res[Math.floor(Math.random() * res.length)];
+    }
+    return res;
 };
 
 
@@ -98,8 +103,8 @@ exports.parseData = function parseData(data, formatter, callback) {
     });
     async.eachSeries(data, function (row, next) {
         formatter(row, function (_, rows) {
-            rows.forEach(function (row) {
-                result[row.checkName].unshift(row);
+            rows.forEach(function (r) {
+                result[r.checkName].unshift(row);
             });
             next();
         });

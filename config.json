@@ -28,9 +28,9 @@
         "75": "The site seems to be working fine."
     },
     "flavor": {
-        "0": "Well, It's buggered. Looks like it's time to be productive or something",
-        "25": "Well, Looks like you're gonna have to fill out that TPS report after all.",
-        "50": "We've seen some blips recently. Nothing to get too alarmed at yet.",
-        "75": "The forums work, so if you can't post then TRWTF is user cooties."
+        "0": ["Well, It's buggered. Looks like it's time to be productive or something"],
+        "25": ["Well, Looks like you're gonna have to fill out that TPS report after all."],
+        "50": ["We've seen some blips recently. Nothing to get too alarmed at yet."],
+        "75": ["The forums work, so if you can't post then TRWTF is user cooties."]
     }
 }
