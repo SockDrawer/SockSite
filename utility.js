@@ -65,7 +65,7 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
     function format(row) {
         row.score = exports.getScore(row);
         row.response = exports.getFlavor(row.score, config.scoreCode);
-        row.polledAt = new Date(row.checkedAt).toISOString();
+        row.polledAt = new Date(row.checkedAt).toGMTString();
     }
     var avg = [];
     return function (row, callback) {
