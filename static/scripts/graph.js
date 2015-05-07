@@ -19,13 +19,17 @@ jQuery(function () {
         });
     }
 
+    function renderChart(chart) {
+        var visible = $('#timeChartContainer:visible').length > 0;
+        if (chart.shouldRender && visible) {
+            chart.render();
+            chart.shouldRender = false;
+        }
+    }
+
     function rerender(chart) {
         setInterval(function () {
-                var visible = $('#timeChartContainer:visible').length > 0;
-                if (chart.shouldRender && visible) {
-                    chart.render();
-                    chart.shouldRender = false;
-                }
+                renderChart(chart);
             },
             5000);
     }
@@ -67,5 +71,14 @@ jQuery(function () {
         redata(window.graphs.scores, function (d) {
             return d.score;
         }, scoreChart, data);
+    });
+    window.socket.on('reconnect', function () {
+        window.socket.emit('getgraphs', function (_, graphs) {
+            for (var key in graphs) {
+                window.graphs[key].dataPoints = graphs[key].dataPoints;
+                renderChart(timeChart);
+                renderChart(scoreChart);
+            }
+        });
     });
 });
