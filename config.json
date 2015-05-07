@@ -9,7 +9,7 @@
     "scoreEntries": 3,
     "scorePeriod": 60,
     "minimumEntries": 10,
-    "version": "0.2.0",
+    "version": "0.5.0",
     "message-bus": false,
     "checks": [
         "http://what.thedailywtf.com/",
