@@ -54,27 +54,27 @@
         window.socket = socket;
         window.TemplateCache = {};
         window.History = {};
-        
+
         socket.on('connected', function (time) {
             // console.log('Connected at: ' + time);
-            
+
             socket.emit('getdata', function (err, data) {
                 data.summary.forEach(function(summaryItem) {
                     window.History[summaryItem.checkIndex] = {};
                     window.History[summaryItem.checkIndex].values = [];
                     window.History[summaryItem.checkIndex].values = summaryItem.values;
                 });
-                
+
                 socket.emit('gettemplates', function (err, templates) {
                     window.TemplateCache = templates;
-                    
+
                     // Automatically re-render any parts of the page when we get the summary object
                     socket.on('summary', function (summary) {
                         $('*[data-template]:visible').each(function() {    // find any elements with data-template attribute
                             $(this).html(Mustache.render(window.TemplateCache[$(this).data('template')], summary));
                         });
                     });
-                    
+
                     // History is a special snowflake so we have to update it manually
                     socket.on('data', function (err, data) {
                         if (err) {
@@ -83,18 +83,18 @@
                         window.History[data.checkId].values.unshift(data);
                         if(window.History[data.checkId].values.length > 10)
                             window.History[data.checkId].values.pop();
-                        
+
                         if($('a[href="#collapse' + data.checkId + '"]:visible').length > 0)
                             $('#collapse' + data.checkId).html(Mustache.render(window.TemplateCache['history_panel'], window.History[data.checkId]));
                     });
                 });
             });
         });
-        
+
         socket.on('heartbeat', function (time) {
             // console.log('Heartbeat at: ' + time);
         });
-        
+
     </script>
 </head>
 
@@ -160,7 +160,7 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="status">
-                                <div id="status-table-wrapper" data-template="status_tablye">
+                                <div id="status-table-wrapper" data-template="status_table">
                                     {{>status_table}}
                                 </div>
                                 {{>discodefinition}}
@@ -177,19 +177,19 @@
                 </nav>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText" data-template="flavor_text">
                 {{>flavor_text}}
             </div>
         </div>
-        
+
         <div class="row" id="buttons">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
                 <button class="btn btn-primary" id="spin-button">You spin me right round baby, right round...</button>
             </div>
         </div>
     </div>
-    
+
 </body>
 </html>
