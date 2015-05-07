@@ -1,4 +1,5 @@
 'use strict';
+/*global jQuery */
 jQuery(function () {
     function makechart(id, title, data, suffix) {
         return new window.CanvasJS.Chart(id, {
@@ -9,7 +10,7 @@ jQuery(function () {
             },
             height: 300,
             axisX: {
-                valueFormatString: HH:mm"
+                valueFormatString: 'HH:mm'
             },
             axisY: {
                 suffix: suffix
@@ -21,9 +22,9 @@ jQuery(function () {
     function rerender(chart) {
         setInterval(function () {
                 var visible = $('#timeChartContainer:visible').length > 0;
-                if (chart._shouldRender && visible) {
+                if (chart.shouldRender && visible) {
                     chart.render();
-                    chart._shouldRender = false;
+                    chart.shouldRender = false;
                 }
             },
             5000);
@@ -48,23 +49,23 @@ jQuery(function () {
             time.dataPoints = points;
 
         });
-        chart._shouldRender = true;
+        chart.shouldRender = true;
     }
 
-    var chart = makechart("timeChartContainer", "Latest Response Times",
-            window.graphs.timings, ' s'),
-        chart2 = makechart("scoreChartContainer", "Latest DiscoApdex Scores",
-            window.graphs.scores, '%');
-    chart.render();
-    rerender(chart);
-    chart2.render();
-    rerender(chart2);
+    var timeChart = makechart('timeChartContainer',
+            'Latest Response Times', window.graphs.timings, ' s'),
+        scoreChart = makechart('scoreChartContainer',
+            'Latest DiscoApdex Scores', window.graphs.scores, '%');
+    timeChart.render();
+    rerender(timeChart);
+    scoreChart.render();
+    rerender(scoreChart);
     window.socket.on('data', function (_, data) {
-        redata(window.graphs.timings, function (data) {
-            return data.responseTime;
-        }, chart, data);
-        redata(window.graphs.scores, function (data) {
-            return data.score;
-        }, chart2, data);
+        redata(window.graphs.timings, function (d) {
+            return d.responseTime;
+        }, timeChart, data);
+        redata(window.graphs.scores, function (d) {
+            return d.score;
+        }, scoreChart, data);
     });
 });
