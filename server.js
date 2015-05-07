@@ -13,7 +13,6 @@ var http = require('http'),
     async = require('async'),
     socketio = require('socket.io');
 var cache = require('./cache'),
-    database = require('./database'),
     checks = require('./check'),
     render = require('./render'),
     router = require('./router');
@@ -75,14 +74,6 @@ io.on('connection', function (socket) {
         callback(null, cache.templates);
     });
 });
-
-
-database.registerListener(function (data) {
-    database.formatData(data, function (err, payload) {
-        io.emit('data', err, payload);
-    });
-});
-
 
 async.forever(function (next) {
     io.emit('heartbeat', Date.now());

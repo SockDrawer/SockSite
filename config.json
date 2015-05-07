@@ -4,7 +4,7 @@
     "pollDelay": 6,
     "dataPeriod": 600,
     "historyEntries": 10,
-    "scoreEntries": 3,
+    "historyPeriod": 300,    "scoreEntries": 3,
     "scorePeriod": 60,
     "minimumEntries": 10,
     "version": "0.2.0",

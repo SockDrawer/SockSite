@@ -7,8 +7,11 @@ var async = require('async'),
 var config = require('./config.json'),
     database = require('./database'),
     graph = require('./graph'),
+    util = require('./utility'),
     server = require('./server');
-var cache;
+
+var formatRow = util.formattedRowGenerator(),
+    checks = {};
 
 function readall(dir, filter, callback) {
     fs.readdir(dir, function (err, files) {
@@ -59,6 +62,9 @@ function readScripts(callback) {
             return callback(err);
         }
         files.forEach(function (file) {
+            if (/[.]min[.]js$/.test(file.name)) {
+                return;
+            }
             try {
                 file.data = jsmin(file.data);
             } catch (e) {
@@ -77,6 +83,9 @@ function readStyles(callback) {
             return callback(err);
         }
         files.forEach(function (file) {
+            if (/[.]min[.]css$/.test(file.name)) {
+                return;
+            }
             try {
                 file.data = cssmin(file.data);
             } catch (e) {
@@ -109,38 +118,107 @@ exports.templates = {};
 exports.scripts = {};
 exports.styles = {};
 
-function summarize(data){
-    data.dataPeriod = config.dataPeriod;
-    exports.summary = database.summarizeData(data);
+function setSummary(summary) {
+    exports.summary = summary;
     exports.summary.getTimeChart = graph.getTimeChart;
     exports.summary.getScoreChart = graph.getScoreChart;
+    updateClient();
 }
 
-function setData(data) {
-    cache.push(data);
-    var limit = Date.now() - (config.dataPeriod * 1000),
-        minimum = config.minimumEntries || 10,
-        old = cache;
-    cache = cache.filter(function (d) {
-        return d.checkedAt > limit;
+
+function getScore(data, cutoff, minimum) {
+    var counts = util.truncateData(data, function (d) {
+        return d.checkedAt > cutoff;
+    }, minimum);
+    return util.roundAverage(counts, function (a) {
+        return a.score;
     });
-    if (cache.length < minimum) {
-        cache = old.slice(Math.max(old.length - minimum, 0));
-    }
-    summarize(cache);
-    updateClient();
 }
-database.registerListener(setData);
 
-database.getRecentChecks(config.dataPeriod, function (err, data) {
-    if (err) {
-        /*eslint-disable no-console */
-        return console.warn(err);
-        /*eslint-enable no-console */
+function summarizeEndpoint(key, data, cutoff) {
+    var score = getScore(data, cutoff, config.scoreEntries);
+    return {
+        name: key,
+        response: util.getFlavor(score, config.scoreCode),
+        responseCode: util.roundAverage(data, function (a) {
+            return a.responseCode;
+        }, 2),
+        responseTime: util.roundAverage(data, function (a) {
+            return a.responseTime;
+        }, 2),
+        responseScore: score,
+        polledAt: data[0].polledAt,
+        checkIndex: data[0].checkId,
+        values: data
+    };
+}
+
+function getOverallScores(data) {
+    var res = [];
+    for (var key in data) {
+        if (key === 'overall') {
+            continue;
+        }
+        res = res.concat(data[key].slice(0, 3));
     }
-    cache = data;
-    summarize(cache);
-    updateClient();
+    return getScore(res, 0, 0);
+}
+
+function summarize(data, extra, callback) {
+    var cutoff = Date.now() - (config.scorePeriod * 1000),
+        overall = summarizeEndpoint('overall', data.overall, cutoff),
+        score = getOverallScores(data),
+        result = {
+            version: config.version,
+            time: new Date().toISOString(),
+            up: score >= 50,
+            score: score,
+            code: util.getFlavor(score, config.scoreCode),
+            status: util.getFlavor(score, config.status),
+            flavor: util.getFlavor(score, config.flavor)
+        },
+        keys = Object.keys(data);
+    Object.keys(extra).forEach(function (key) {
+        result[key] = extra[key];
+    });
+    keys.sort();
+    result.summary = keys.map(function (key) {
+        if (key === 'overall') {
+            return null;
+        }
+        return summarizeEndpoint(key, data[key], cutoff);
+    }).filter(function (d) {
+        return d;
+    });
+    result.summary.unshift(overall);
+    callback(null, result);
+}
+
+database.getChecks(config.historyPeriod, function (_, data) {
+    util.parseData(data, formatRow, function (__, result) {
+        checks = result;
+        summarize(checks, {}, function (___, summary) {
+            setSummary(summary);
+        });
+    });
+});
+
+database.registerListener(function (data) {
+    formatRow(data, function (_, rows) {
+        var cutoff = Date.now() - (config.historyPeriod * 1000);
+        rows.forEach(function (r) {
+            var check = checks[r.checkName] || [];
+            check.unshift(r);
+            check = util.truncateData(check, function (d) {
+                return d.checkedAt > cutoff;
+            }, config.historyEntries);
+            checks[r.checkName] = check;
+            server.io.emit('data', null, r);
+        });
+        summarize(checks, {}, function (__, summary) {
+            setSummary(summary);
+        });
+    });
 });
 
 exports.summary = {};

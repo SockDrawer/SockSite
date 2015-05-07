@@ -64,9 +64,10 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
             });
         async.each(notify, function (n, next) {
             n({
-                key: key,
-                status: status,
-                responseTime: time,
+                checkName: key,
+                checkId: id,
+                responseCode: status,
+                responseTime: time / 1000,
                 checkedAt: now.getTime()
             });
             next();

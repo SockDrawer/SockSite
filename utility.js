@@ -9,7 +9,7 @@ exports.getFlavor = function getFlavor(value, arr) {
         res;
     key = key[key.length - 1];
     res = arr[key];
-    if (typeof res !== 'string') {
+    if (typeof res !== 'string' && res !== undefined) {
         res = res[Math.floor(Math.random() * res.length)];
     }
     return res;
@@ -104,11 +104,24 @@ exports.parseData = function parseData(data, formatter, callback) {
     async.eachSeries(data, function (row, next) {
         formatter(row, function (_, rows) {
             rows.forEach(function (r) {
-                result[r.checkName].unshift(row);
+                result[r.checkName].unshift(r);
             });
             next();
         });
     }, function () {
         callback(null, result);
     });
+};
+
+
+exports.truncateData = function truncateData(data, filter, minimum) {
+    var res = data.filter(filter);
+    if (res.length < minimum) {
+        res = data.slice(0, minimum);
+    }
+    return res;
+};
+
+exports.roundAverage = function roundAverage(data, reduce, places) {
+    return exports.round(exports.average(data, reduce), places);
 };
