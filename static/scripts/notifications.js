@@ -57,7 +57,7 @@ $(function () {
                     'Cooties have infected the server; recommend to keep a ' +
                     'safe distance and don\'t obstruct the Hazmat team');
             } else {
-                notify('Site Online', 'ver cootie infection neutralised; ' +
+                notify('Site Online', 'Server cootie infection neutralised; ' +
                     'normal service will now resume');
             }
         }
