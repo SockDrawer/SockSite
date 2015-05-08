@@ -126,29 +126,25 @@ function setSummary(summary) {
 }
 
 
-function getScore(data, cutoff, minimum) {
-    var counts = util.truncateData(data, function (d) {
-        return d.checkedAt > cutoff;
-    }, minimum);
-    return util.roundAverage(counts, function (a) {
-        return a.score;
-    });
-}
-
 function summarizeEndpoint(key, data, cutoff) {
-    var score = getScore(data, cutoff, config.scoreEntries);
+    var counts = util.truncateData(data, function (d) {
+            return d.checkedAt > cutoff;
+        }, config.scoreEntries),
+        score = util.roundAverage(counts, function (a) {
+            return a.score;
+        });
     return {
         name: key,
         response: util.getFlavor(score, config.scoreCode),
-        responseCode: util.roundAverage(data, function (a) {
+        responseCode: util.roundAverage(counts, function (a) {
             return a.responseCode;
         }, 2),
-        responseTime: util.roundAverage(data, function (a) {
+        responseTime: util.roundAverage(counts, function (a) {
             return a.responseTime;
         }, 2),
         responseScore: score,
-        polledAt: data[0].polledAt,
-        checkIndex: data[0].checkId,
+        polledAt: counts[0].polledAt,
+        checkIndex: counts[0].checkId,
         values: data
     };
 }
@@ -161,7 +157,9 @@ function getOverallScores(data) {
         }
         res = res.concat(data[key].slice(0, 3));
     }
-    return getScore(res, 0, 0);
+    return util.roundAverage(res, function (a) {
+        return a.score;
+    });
 }
 
 function summarize(data, extra, callback) {
