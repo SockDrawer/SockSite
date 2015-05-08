@@ -21,6 +21,14 @@ $(function () {
         }
     }
 
+    function registerListeners() {
+        if (Notification.permission === 'granted') {
+            window.socket.on('summary', onSummary);
+            window.socket.on('disconnect', onDisconnect);
+            window.socket.on('reconnect', onReconnect);
+        }
+    }
+
     function setupNotifications() {
         if (!window.socket) {
             return false;
@@ -30,12 +38,10 @@ $(function () {
                 if (Notification.permission !== status) {
                     Notification.permission = status;
                 }
-                if (Notification.permission === 'granted') {
-                    window.socket.on('summary', onSummary);
-                    window.socket.on('disconnect', onDisconnect);
-                    window.socket.on('reconnect', onReconnect);
-                }
+                registerListeners();
             });
+        } else {
+            registerListeners();
         }
         return true;
     }
