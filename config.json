@@ -4,7 +4,7 @@
     "pollDelay": 6,
     "dataPeriod": 600,
     "graphPeriod": 3600,
-    "historyEntries": 10,
+    "historyEntries": 11,
     "historyPeriod": 300,
     "scoreEntries": 3,
     "scorePeriod": 60,

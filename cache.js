@@ -145,7 +145,7 @@ function summarizeEndpoint(key, data, cutoff) {
         responseScore: score,
         polledAt: counts[0].polledAt,
         checkIndex: counts[0].checkId,
-        values: data
+        values: util.truncateData(data, config.historyEntries)
     };
 }
 
@@ -203,13 +203,10 @@ database.getChecks(config.historyPeriod, function (_, data) {
 
 database.registerListener(function (data) {
     formatRow(data, function (_, rows) {
-        var cutoff = Date.now() - (config.historyPeriod * 1000);
         rows.forEach(function (r) {
             var check = checks[r.checkName] || [];
             check.unshift(r);
-            check = util.truncateData(check, function (d) {
-                return d.checkedAt > cutoff;
-            }, config.historyEntries);
+            check = util.truncateData(check, config.historyEntries);
             checks[r.checkName] = check;
             server.io.emit('data', null, r);
         });

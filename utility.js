@@ -115,6 +115,12 @@ exports.parseData = function parseData(data, formatter, callback) {
 
 
 exports.truncateData = function truncateData(data, filter, minimum) {
+    if (typeof filter === 'number') {
+        minimum = filter;
+        filter = function () {
+            return true;
+        };
+    }
     var res = data.filter(filter);
     if (res.length < minimum) {
         res = data.slice(0, minimum);
