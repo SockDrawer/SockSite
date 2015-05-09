@@ -133,6 +133,9 @@ function summarizeEndpoint(key, data, cutoff) {
         score = util.roundAverage(counts, function (a) {
             return a.score;
         });
+    if (!counts) {
+        return undefined;
+    }
     return {
         name: key,
         response: util.getFlavor(score, config.scoreCode),
