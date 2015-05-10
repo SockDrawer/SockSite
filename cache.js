@@ -146,8 +146,8 @@ function summarizeEndpoint(key, data, cutoff) {
             return a.responseTime;
         }, 2),
         responseScore: score,
-        polledAt: counts[0].polledAt,
-        checkIndex: counts[0].checkId,
+        polledAt: (counts[0] || {}).polledAt,
+        checkIndex: (counts[0] || {}).checkId,
         values: util.truncateData(data, config.historyEntries)
     };
 }
@@ -195,7 +195,10 @@ function summarize(data, extra, callback) {
     callback(null, result);
 }
 
-database.getChecks(config.historyPeriod, function (_, data) {
+database.getChecks(config.historyPeriod, function (err, data) {
+    if (err || !data || data.length < 1) {
+        return;
+    }
     util.parseData(data, formatRow, function (__, result) {
         checks = result;
         summarize(checks, {}, function (___, summary) {
