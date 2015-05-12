@@ -61,6 +61,15 @@ exports.average = function average(arr, mapper) {
     return exports.sum(arr, mapper) / arr.length;
 };
 
+exports.max = function max(arr, mapper) {
+    if (!mapper || !mapper.call) {
+        mapper = function mapper(data) {
+            return data;
+        };
+    }
+    return Math.max(arr.map(mapper));
+};
+
 exports.formattedRowGenerator = function formattedRowGenerator() {
     function format(row) {
         row.score = exports.getScore(row);
@@ -76,7 +85,7 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
             var overall = {
                 checkName: 'overall',
                 checkId: -1,
-                responseCode: exports.round(exports.average(avg, function (n) {
+                responseCode: exports.round(exports.max(avg, function (n) {
                     return n.responseCode;
                 })),
                 responseTime: exports.round(exports.average(avg, function (n) {
