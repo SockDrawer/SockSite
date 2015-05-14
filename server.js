@@ -8,7 +8,7 @@
  */
 
 
-// Make sure we get a stack trace on uncaught exception. 
+// Make sure we get a stack trace on uncaught exception.
 // we're not supposed to get those but just in case
 process.on('uncaughtException', function (err) {
     /*eslint-disable no-process-exit, no-console*/
@@ -44,7 +44,7 @@ function handler(request, response) {
     /* eslint-disable no-console */
     console.log(uri);
     /* eslint-enable no-console */
-    
+
     // Check the paths known to router to render response.
     // Response is handled by the renderer. we only care about is it handled
     var rendered = router.paths.some(function (point) {
@@ -63,7 +63,7 @@ function handler(request, response) {
 }
 
 // Kick off the initial cache build.
-// Start the HTTP server in the callback to this so initial cache is 
+// Start the HTTP server in the callback to this so initial cache is
 // loaded first
 cache.buildCache(function (err) {
     /*eslint-disable no-console */
