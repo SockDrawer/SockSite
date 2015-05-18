@@ -6,7 +6,8 @@ $(function () {
 
     function notify(title, text) {
         if (Notification.permission === 'granted') {
-            new Notification(title, {
+            var now = new Date().toTimeString().replace(/ .*$/, '');
+            new Notification(title + ' @' + now, {
                 body: text,
                 tag: tag,
                 icon: '/static/images/wtf.png'
