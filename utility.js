@@ -72,22 +72,8 @@ exports.range = function range(num) {
  * @returns {number} num rounded to places decimal places
  */
 exports.round = function round(num, places) {
-    // If the exp is undefined or zero...
-    if (typeof places === 'undefined' || +places === 0) {
-        return Math.round(num);
-    }
-    num = +num;
-    places = +places;
-    // If the value is not a number or the exp is not an integer...
-    if (isNaN(num) || !(typeof places === 'number' && places % 1 === 0)) {
-        return NaN;
-    }
-    // Shift
-    num = num.toString().split('e');
-    num = Math.round(+(num[0] + 'e' + (num[1] ? (+num[1] - places) : -places)));
-    // Shift back
-    num = num.toString().split('e');
-    return +(num[0] + 'e' + (num[1] ? (+num[1] + places) : places));
+    places = places||2;
+    return Number(num.toFixed(places));
 };
 
 /**
@@ -137,7 +123,7 @@ exports.max = function max(arr, mapper) {
             return data;
         };
     }
-    return Math.max(arr.map(mapper));
+    return Math.max.apply(Math, arr.map(mapper));
 };
 
 /**
@@ -169,10 +155,10 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
             checkId: -1,
             responseCode: exports.round(exports.max(avg, function (n) {
                 return n.responseCode;
-            })),
+            }),2),
             responseTime: exports.round(exports.average(avg, function (n) {
                 return n.responseTime;
-            }), 3),
+            }),3),
             checkedAt: avg[0].checkedAt
         };
         format(overall);
