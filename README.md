@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/sockdrawer/socksite.png?label=ready&title=Ready)](https://waffle.io/sockdrawer/socksite)
 # SockSite
 Website that runs: http://isitjusmeorservercooties.com/
 
