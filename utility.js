@@ -72,7 +72,7 @@ exports.range = function range(num) {
  * @returns {number} num rounded to places decimal places
  */
 exports.round = function round(num, places) {
-    places = places||2;
+    places = places || 2;
     return Number(num.toFixed(places));
 };
 
@@ -144,10 +144,14 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
         var res = [row];
         avg.unshift(row);
         // Truncate average according to the rules for overall scores
-        avg = exports.truncateData(avg, function (r) {
-            return r.checkedAt >= (row.checkedAt - config.scorePeriod * 1000);
-        }, config.scoreEntries);
+        avg = avg.slice(0, config.scoreEntries * config.checks.length);
         format(row);
+        if (avg.length < 1) {
+            return process.nextTick(function () {
+                callback(null, []);
+            });
+        }
+
         // Generate the overall score. This will be jittery for the first few entries formatted but should settle
         // quickly
         var overall = {
@@ -155,10 +159,10 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
             checkId: -1,
             responseCode: exports.round(exports.max(avg, function (n) {
                 return n.responseCode;
-            }),2),
+            }), 2),
             responseTime: exports.round(exports.average(avg, function (n) {
                 return n.responseTime;
-            }),3),
+            }), 3),
             checkedAt: avg[0].checkedAt
         };
         format(overall);

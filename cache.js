@@ -148,27 +148,14 @@ function summarizeEndpoint(key, data, cutoff) {
         responseScore: score,
         polledAt: (counts[0] || {}).polledAt,
         checkIndex: (counts[0] || {}).checkId,
-        values: util.truncateData(data, config.historyEntries)
+        values: data.slice(0, config.historyEntries)
     };
-}
-
-function getOverallScores(data) {
-    var res = [];
-    for (var key in data) {
-        if (key === 'overall') {
-            continue;
-        }
-        res = res.concat(data[key].slice(0, 3));
-    }
-    return util.roundAverage(res, function (a) {
-        return a.score;
-    });
 }
 
 function summarize(data, extra, callback) {
     var cutoff = Date.now() - (config.scorePeriod * 1000),
         overall = summarizeEndpoint('overall', data.overall, cutoff),
-        score = getOverallScores(data),
+        score = data.overall[0].score,
         result = {
             version: config.version,
             time: new Date().toISOString(),

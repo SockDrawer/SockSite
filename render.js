@@ -68,7 +68,9 @@ function render404Error(response) {
             data = '404 Not Found';
             mime = 'text/plain';
         }
-        return respond(data, 404, {'Content-Type' : mime}, response);
+        return respond(data, 404, {
+            'Content-Type': mime
+        }, response);
     });
 }
 exports.render404Error = render404Error;
@@ -83,7 +85,9 @@ function render500Error(err, response) {
             data = err;
             mime = 'text/plain';
         }
-        return respond(data, 500, {'Content-Type' : mime}, response);
+        return respond(data, 500, {
+            'Content-Type': mime
+        }, response);
     });
 }
 exports.render500Error = render500Error;
@@ -160,7 +164,9 @@ exports.renderIndex = function renderIndex(uri, request, response) {
         if (err2) {
             return render500Error(err2, response);
         }
-        respond(data2, 200, {'Content-Type' : formatter.contentType}, response);
+        respond(data2, 200, {
+            'Content-Type': formatter.contentType
+        }, response);
     });
 };
 
@@ -181,7 +187,9 @@ exports.renderScripts = function renderScripts(_, __, response) {
     text = text.concat(cache.scripts.map(function (d) {
         return d.data;
     }));
-    respond(text.join('\n'), 200, {'Content-Type' : 'application/javascript'}, response);
+    respond(text.join('\n'), 200, {
+        'Content-Type': 'application/javascript'
+    }, response);
 };
 
 /**
@@ -198,7 +206,9 @@ exports.renderStyles = function renderStyles(_, __, response) {
     text = text.concat(cache.styles.map(function (d) {
         return d.data;
     }));
-    respond(text.join('\n'), 200, {'Content-Type' : 'text/css'}, response);
+    respond(text.join('\n'), 200, {
+        'Content-Type': 'text/css'
+    }, response);
 };
 
 /**
@@ -214,6 +224,8 @@ exports.renderSample = function renderSample(time, response) {
         if (err2) {
             return render500Error(err2, response);
         }
-        respond(data2, 200, {'Content-Type' : 'text/html'}, response);
+        respond(data2, 200, {
+            'Content-Type': 'text/html'
+        }, response);
     });
 };
