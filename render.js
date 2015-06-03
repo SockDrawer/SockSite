@@ -171,7 +171,7 @@ exports.renderIndex = function renderIndex(uri, request, response) {
 };
 
 /**
- * Rrender all loaded and minified scripts to client
+ * Render all loaded and minified scripts to client
  *
  * NOTA BENE: Order of scripts is not guaranteed and may change from
  * load to load
