@@ -34,5 +34,10 @@
         "25": ["Well, Looks like you're gonna have to fill out that TPS report after all."],
         "50": ["We've seen some blips recently. Nothing to get too alarmed at yet."],
         "75": ["The forums work, so if you can't post then TRWTF is user cooties."]
+    },
+    "readonly":{
+        "status": "The site seems to be readonly.",
+        "score": "READONLY",
+        "flavor": "Read-only mode is enabled. You can continue to browse the site but interactions may not work."
     }
 }

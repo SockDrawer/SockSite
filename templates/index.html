@@ -64,7 +64,7 @@
                     window.History[summaryItem.checkIndex].values = [];
                     window.History[summaryItem.checkIndex].values = summaryItem.values;
                 });
-
+                
                 socket.emit('gettemplates', function (err, templates) {
                     window.TemplateCache = templates;
 

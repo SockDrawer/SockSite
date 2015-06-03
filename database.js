@@ -47,7 +47,7 @@ function getPageId(page, callback) {
     });
 }
 
-exports.addCheck = function addCheck(key, status, _, time, callback) {
+exports.addCheck = function addCheck(key, status, readonly, time, callback) {
     key = key.replace(/^https?:\/\//i, '');
     getPageId(key, function (err, id) {
         if (err) {
@@ -68,7 +68,8 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
                 checkId: id,
                 responseCode: status,
                 responseTime: time / 1000,
-                checkedAt: now.getTime()
+                checkedAt: now.getTime(),
+                readonly: readonly
             });
             next();
         });
@@ -105,7 +106,8 @@ exports.formatData = function formatData(data, callback) {
             responseTime: data.responseTime,
             responseScore: score,
             response: getFlavor(score, config.scoreCode),
-            polledAt: new Date(data.checkedAt).toUTCString()
+            polledAt: new Date(data.checkedAt).toUTCString(),
+            readonly: false
         });
     });
 };

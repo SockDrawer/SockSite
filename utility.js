@@ -85,7 +85,7 @@ exports.round = function round(num, places) {
  */
 exports.sum = function sum(arr, mapper) {
     if (!mapper || !mapper.call) {
-        mapper = function mapper(data) {
+        mapper = function (data) {
             return data;
         };
     }
@@ -103,7 +103,7 @@ exports.sum = function sum(arr, mapper) {
  */
 exports.average = function average(arr, mapper) {
     if (!mapper || !mapper.call) {
-        mapper = function mapper(data) {
+        mapper = function (data) {
             return data;
         };
     }
@@ -119,7 +119,7 @@ exports.average = function average(arr, mapper) {
  */
 exports.max = function max(arr, mapper) {
     if (!mapper || !mapper.call) {
-        mapper = function mapper(data) {
+        mapper = function (data) {
             return data;
         };
     }
@@ -146,6 +146,7 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
         // Truncate average according to the rules for overall scores
         avg = avg.slice(0, config.scoreEntries * config.checks.length);
         format(row);
+        row.readonly = !!row.readonly;
         if (avg.length < 1) {
             return process.nextTick(function () {
                 callback(null, []);
@@ -163,9 +164,13 @@ exports.formattedRowGenerator = function formattedRowGenerator() {
             responseTime: exports.round(exports.average(avg, function (n) {
                 return n.responseTime;
             }), 3),
-            checkedAt: avg[0].checkedAt
+            checkedAt: avg[0].checkedAt,
+            readonly: row.readonly
         };
         format(overall);
+        overall.score = exports.round(exports.average(avg, function (n) {
+            return n.score;
+        }), 2);
         res.push(overall);
         // Make sure we don't block the server. schedule the callback for the next tick
         process.nextTick(function () {

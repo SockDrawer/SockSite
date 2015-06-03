@@ -18,7 +18,8 @@ function createCheck(url) {
                     next();
                 });
             }
-            db.addCheck(url, resp.statusCode, (resp.body || '').length,
+            var readonly = !!resp.headers['Discourse-Readonly'];
+            db.addCheck(url, resp.statusCode, readonly,
                 complete,
                 function () {
                     next();
@@ -33,7 +34,7 @@ exports.start = function () {
         async.eachSeries(checkers, function (check, callback) {
                 exports.updated = true;
                 check(function () {
-                setTimeout(callback, delay);
+                    setTimeout(callback, delay);
                 });
             },
             next);

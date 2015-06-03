@@ -163,9 +163,15 @@ function summarize(data, extra, callback) {
             score: score,
             code: util.getFlavor(score, config.scoreCode),
             status: util.getFlavor(score, config.status),
-            flavor: util.getFlavor(score, config.flavor)
+            flavor: util.getFlavor(score, config.flavor),
+            readonly: true//data.overall[0].readonly
         },
         keys = Object.keys(data);
+    if (result.readonly){
+        result.code = config.readonly.code;
+        result.status = config.readonly.status;
+        result.flavor = config.readonly.flavor;
+    }
     Object.keys(extra).forEach(function (key) {
         result[key] = extra[key];
     });
@@ -218,6 +224,7 @@ function updateClient() {
         code: exports.summary.code,
         status: exports.summary.status,
         flavor: exports.summary.flavor,
+        readonly: exports.summary.readonly,
         summary: exports.summary.summary.map(function (summary) {
             return {
                 name: summary.name,
