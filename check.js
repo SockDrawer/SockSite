@@ -1,6 +1,7 @@
 'use strict';
 var db = require('./database'),
     config = require('./config.json'),
+    cache = require('./cache'),
     async = require('async'),
     request = require('request');
 var checkers = config.checks.map(function (url) {
@@ -29,6 +30,19 @@ function createCheck(url) {
 }
 exports.updated = false;
 
+function getNotice(callback) {
+    request(config.siteSettings, function (err, _, body) {
+        if (err) {
+            return callback();
+        }
+        try {
+            var settings = JSON.parse(body);
+            cache.global_notice = settings.global_notice;
+        } catch (ignore) {} //eslint-disable-line no-empty
+        callback();
+    });
+}
+
 exports.start = function () {
     async.forever(function (next) {
         async.eachSeries(checkers, function (check, callback) {
@@ -37,6 +51,8 @@ exports.start = function () {
                     setTimeout(callback, delay);
                 });
             },
-            next);
+            function () {
+                getNotice(next);
+            });
     });
 };

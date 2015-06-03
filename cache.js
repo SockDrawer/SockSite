@@ -114,6 +114,7 @@ exports.buildCache = function buildCache(callback) {
     });
 };
 
+exports.global_notice = '';
 exports.templates = {};
 exports.scripts = {};
 exports.styles = {};
@@ -164,7 +165,8 @@ function summarize(data, extra, callback) {
             code: util.getFlavor(score, config.scoreCode),
             status: util.getFlavor(score, config.status),
             flavor: util.getFlavor(score, config.flavor),
-            readonly: true//data.overall[0].readonly
+            global_notice:exports.global_notice,
+            readonly: data.overall[0].readonly
         },
         keys = Object.keys(data);
     if (result.readonly){
@@ -225,6 +227,7 @@ function updateClient() {
         status: exports.summary.status,
         flavor: exports.summary.flavor,
         readonly: exports.summary.readonly,
+        global_notice: exports.summary.global_notice,
         summary: exports.summary.summary.map(function (summary) {
             return {
                 name: summary.name,

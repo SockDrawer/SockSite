@@ -16,6 +16,7 @@
         "http://what.thedailywtf.com/latest.json",
         "http://what.thedailywtf.com/t/2/last"
     ],
+    "siteSettings":"http://what.thedailywtf.com/site/settings.json",
     "scoreCode": {
         "0": "OFFLINE",
         "25": "BAD",
