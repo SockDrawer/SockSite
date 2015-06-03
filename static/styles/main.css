@@ -265,3 +265,7 @@ h4.panel-title a:before {
 	color: #222;
 	width: 100%;
 }
+
+cite {
+	word-wrap: break-word;
+}
