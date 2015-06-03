@@ -78,6 +78,10 @@ cache.buildCache(function (err) {
 //Export websockets socket for other modules
 exports.io = io;
 
+io.on('error', function (e) {
+    console.warn(e); //eslint-disable-line no-console
+});
+
 // Set up per connection socket events
 io.on('connection', function (socket) {
     // Send the date on connection
@@ -106,6 +110,9 @@ io.on('connection', function (socket) {
             'timings': cache.summary.getTimeChart(),
             'scores': cache.summary.getScoreChart()
         });
+    });
+    socket.on('error', function () {
+        return;
     });
 });
 //Emit heartbeat event regularly
