@@ -1,7 +1,7 @@
 {
     "database": "servercooties.sql",
     "chunkSize": 200,
-    "pollDelay": 6,
+    "pollDelay": 5,
     "dataPeriod": 600,
     "graphPeriod": 3600,
     "historyEntries": 11,

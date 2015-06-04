@@ -165,11 +165,11 @@ function summarize(data, extra, callback) {
             code: util.getFlavor(score, config.scoreCode),
             status: util.getFlavor(score, config.status),
             flavor: util.getFlavor(score, config.flavor),
-            global_notice:exports.global_notice,
+            global_notice: exports.global_notice,
             readonly: data.overall[0].readonly
         },
         keys = Object.keys(data);
-    if (result.readonly){
+    if (result.readonly) {
         result.code = config.readonly.code;
         result.status = config.readonly.status;
         result.flavor = config.readonly.flavor;
