@@ -47,12 +47,21 @@ $(function () {
         return true;
     }
 
+    var connected = true;
+
     function onDisconnect() {
-        notify('Connection to servercooties.com lost.',
-            'Visual down! Radar down! What\'s happening‽');
+        connected = false;
+        setTimeout(function () {
+            if (connected) {
+                return;
+            }
+            notify('Connection to servercooties.com lost.',
+                'Visual down! Radar down! What\'s happening‽');
+        }, 400);
     }
 
     function onReconnect() {
+        connected = true;
         notify('Connection to servercooties.com restored.',
             'I\'m baaack! Did you miss me?');
     }
