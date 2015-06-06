@@ -7,12 +7,16 @@ var db = require('./database'),
 var checkers = config.checks.map(function (url) {
         return createCheck(url);
     }),
-    delay = (config.pollDelay || 15) * 1000;
+    delay = config.pollDelay * 1000,
+    timeout = Math.max(12 + 3, config.pollDelay * config.checks.length) * 1000;
 
 function createCheck(url) {
     return function sitehome(next) {
         var now = Date.now();
-        request(url, function (err, resp) {
+        request({
+            url: url,
+            timeout: timeout
+        }, function (err, resp) {
             var complete = Date.now() - now;
             if (err) {
                 return db.addCheck(url, 599, 0, complete, function () {
