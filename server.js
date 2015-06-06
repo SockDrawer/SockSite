@@ -7,6 +7,13 @@
  * @license MIT
  */
 
+if (process.env.SOCKDEV && !process.env.SOCKPERM) {
+    // Terminate devmode server after 60 minutes
+    setTimeout(function () {
+        console.error('Terminating dev mode server on schedule'); //eslint-disable-line no-console
+        process.exit(); //eslint-disable-line no-process-exit
+    }, 60 * 60 * 1000);
+}
 
 // Make sure we get a stack trace on uncaught exception.
 // we're not supposed to get those but just in case
