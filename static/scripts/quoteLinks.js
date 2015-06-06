@@ -7,4 +7,8 @@ $(function() {
         $(this).parent('a').data('featherlight', 'image');
         $(this).parent('a').featherlight();
     });
+    
+    $('.quote a').each(function() {
+       $(this).prop('target', '_blank'); 
+    });
 });
