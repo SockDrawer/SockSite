@@ -66,7 +66,9 @@ $(function () {
             'I\'m baaack! Did you miss me?');
     }
 
+    var notice, readonly= false;
     function onSummary(summary) {
+    
         if (status !== undefined && status !== summary.up) {
             if (status) {
                 notify('Site Offline',
@@ -76,6 +78,17 @@ $(function () {
                 notify('Site Online', 'Server cootie infection neutralised; ' +
                     'normal service will now resume');
             }
+        }
+        if (summary.global_notice && summary.global_notice !== notice){
+            notice = summary.global_notice;
+            notify('Global Notice Posted', summary.global_notice);
+        } else {
+            if (readonly && ! summary.readonly){
+                notify('chmod +w','Site is no longer read-only');
+            } else if (!readonly && summary.readonly){
+                notify('Admin Abuse!', 'Site has been marked Readonly');
+            }
+            readonly = summary.readonly;
         }
         status = summary.up;
     }
