@@ -127,7 +127,7 @@ function getPosts(id, complete) {
                             authorTitle: post.user_title
                         };
                     }));
-                    next();
+                    setTimeout(next, 1000);
                 });
         }, function () {
             complete(results);
@@ -179,7 +179,7 @@ if (process.env.SOCKDEV && !process.env.SOCKQUOTES) {
                         if (!err) {
                             avatars[user] = avatar;
                         }
-                        innerNext();
+                        setTimeout(innerNext, 3*1000);
                     });
                 }
                 innerNext();
