@@ -14,7 +14,7 @@ var error = {
     avatars = {},
     definitions = [error],
     users = {},
-    host = 'http://what.thedailywtf.com';
+    host = 'https://what.thedailywtf.com';
 
 function getAvatarPath(username, callback) {
     request(host + '/users/' + username + '.json', function (err, _, body) {
@@ -155,7 +155,7 @@ exports.getQuote = function getQuote() {
     def.body = def.body.replace(/(src|href)="([^"]+)"/g,
         function (_, prefix, value) {
             if (value.substr(0, 2) === '//') {
-                value = 'http:' + value;
+                value = 'https:' + value;
             }
             if (value[0] === '/') {
                 value = host + value;
