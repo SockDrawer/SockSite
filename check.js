@@ -14,10 +14,12 @@ function createCheck(url) {
     return function sitehome(next) {
         var now = Date.now();
         request({
+            rejectUnauthorized: false,
             url: url,
             timeout: timeout
         }, function (err, resp) {
             var complete = Date.now() - now;
+            console.log(err);
             if (err) {
                 return db.addCheck(url, 599, 0, complete, function () {
                     next();

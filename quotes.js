@@ -15,6 +15,9 @@ var error = {
     definitions = [error],
     users = {},
     host = 'https://what.thedailywtf.com';
+request = request.defaults({
+    rejectUnauthorized: false
+});
 
 function getAvatarPath(username, callback) {
     request(host + '/users/' + username + '.json', function (err, _, body) {
@@ -179,7 +182,7 @@ if (process.env.SOCKDEV && !process.env.SOCKQUOTES) {
                         if (!err) {
                             avatars[user] = avatar;
                         }
-                        setTimeout(innerNext, 3*1000);
+                        setTimeout(innerNext, 3 * 1000);
                     });
                 }
                 innerNext();
