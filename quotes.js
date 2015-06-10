@@ -170,7 +170,7 @@ exports.getQuote = function getQuote() {
 
 
 
-if (process.env.SOCKDEV && !process.env.SOCKQUOTES) {
+if (!process.env.SOCKDEV || process.env.SOCKQUOTES) {
     async.forever(function (next) {
         var refresh = 5 * 60 * 60 * 1000;
         loadDefinitions(function () {
