@@ -61,18 +61,20 @@ function readScripts(callback) {
         if (err) {
             return callback(err);
         }
-        files.forEach(function (file) {
-            if (/[.]min[.]js$/.test(file.name)) {
-                return;
-            }
-            try {
-                file.data = jsmin(file.data);
-            } catch (e) {
-                /*eslint-disable no-console */
-                console.warn('Error minifying ' + file.name + ': ' + e);
-                /*eslint-enable no-console */
-            }
-        });
+        if (!process.env.SOCKDEV) {
+            files.forEach(function (file) {
+                if (/[.]min[.]js$/.test(file.name)) {
+                    return;
+                }
+                try {
+                    file.data = jsmin(file.data);
+                } catch (e) {
+                    /*eslint-disable no-console */
+                    console.warn('Error minifying ' + file.name + ': ' + e);
+                    /*eslint-enable no-console */
+                }
+            });
+        }
         callback(null, files);
     });
 }
@@ -82,18 +84,20 @@ function readStyles(callback) {
         if (err) {
             return callback(err);
         }
-        files.forEach(function (file) {
-            if (/[.]min[.]css$/.test(file.name)) {
-                return;
-            }
-            try {
-                file.data = cssmin(file.data);
-            } catch (e) {
-                /*eslint-disable no-console */
-                console.warn('Error minifying ' + file.name + ': ' + e);
-                /*eslint-enable no-console */
-            }
-        });
+        if (!process.env.SOCKDEV) {
+            files.forEach(function (file) {
+                if (/[.]min[.]css$/.test(file.name)) {
+                    return;
+                }
+                try {
+                    file.data = cssmin(file.data);
+                } catch (e) {
+                    /*eslint-disable no-console */
+                    console.warn('Error minifying ' + file.name + ': ' + e);
+                    /*eslint-enable no-console */
+                }
+            });
+        }
         callback(null, files);
     });
 }
@@ -115,6 +119,7 @@ exports.buildCache = function buildCache(callback) {
 };
 
 exports.global_notice = '';
+exports.global_notice_text = '';
 exports.templates = {};
 exports.scripts = {};
 exports.styles = {};
@@ -166,6 +171,7 @@ function summarize(data, extra, callback) {
             status: util.getFlavor(score, config.status),
             flavor: util.getFlavor(score, config.flavor),
             global_notice: exports.global_notice,
+            global_notice_text: exports.global_notice_text,
             readonly: data.overall[0].readonly
         },
         keys = Object.keys(data);
@@ -228,6 +234,7 @@ function updateClient() {
         flavor: exports.summary.flavor,
         readonly: exports.summary.readonly,
         global_notice: exports.summary.global_notice,
+        global_notice_text: exports.summary.global_notice_text,
         summary: exports.summary.summary.map(function (summary) {
             return {
                 name: summary.name,
