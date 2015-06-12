@@ -57,7 +57,7 @@ $(function () {
             }
             notify('Connection to servercooties.com lost.',
                 'Visual down! Radar down! What\'s happening‽');
-        }, 400);
+        }, 1000);
     }
 
     function onReconnect() {
@@ -79,9 +79,9 @@ $(function () {
                     'normal service will now resume');
             }
         }
-        if (summary.global_notice && summary.global_notice !== notice){
-            notice = summary.global_notice;
-            notify('Global Notice Posted', summary.global_notice);
+        if (summary.global_notice_text && summary.global_notice_text !== notice){
+            notice = summary.global_notice_text;
+            notify('Global Notice Posted', summary.global_notice_text);
         } else {
             if (readonly && ! summary.readonly){
                 notify('chmod +w','Site is no longer read-only');
