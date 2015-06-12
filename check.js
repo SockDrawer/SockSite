@@ -3,7 +3,8 @@ var db = require('./database'),
     config = require('./config.json'),
     cache = require('./cache'),
     async = require('async'),
-    request = require('request');
+    request = require('request'),
+    sanitize = require('sanitize-html');
 var checkers = config.checks.map(function (url) {
         return createCheck(url);
     }),
@@ -36,13 +37,36 @@ function createCheck(url) {
 exports.updated = false;
 
 function getNotice(callback) {
-    request(config.siteSettings, function (err, _, body) {
+    request({
+        rejectUnauthorized: false,
+        url: config.siteSettings,
+        timeout: 3 * 1000
+    }, function (err, _, body) {
         if (err) {
             return callback();
         }
         try {
             var settings = JSON.parse(body);
-            cache.global_notice = settings.global_notice;
+            if (settings.global_notice) {
+                cache.global_notice = sanitize(settings.global_notice, {
+                    allowedTags: ['a', 'abbr', 'b', 'i', 'em', 'strong'],
+                    allowedAttributes: {
+                        a: ['href', 'target'],
+                        abbr: ['title']
+                    },
+                    transformTags: {
+                        'a': sanitize.simpleTransform('a', {
+                            target: '_blank'
+                        })
+                    }
+                });
+                cache.global_notice_text = sanitize(settings.global_notice, {
+                    allowedTags: []
+                });
+            } else {
+                cache.global_notice = '';
+                cache.global_notice_text = '';
+            }
         } catch (ignore) {} //eslint-disable-line no-empty
         callback();
     });
