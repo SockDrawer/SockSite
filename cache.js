@@ -165,7 +165,7 @@ function summarize(data, extra, callback) {
         result = {
             version: config.version,
             time: new Date().toISOString(),
-            up: score >= 50,
+            up: score > 50,
             score: score,
             code: util.getFlavor(score, config.scoreCode),
             status: util.getFlavor(score, config.status),
