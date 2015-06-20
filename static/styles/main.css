@@ -7,7 +7,7 @@ body {
 	padding-bottom: 20px;
 }
 
-button {
+.btn {
 	border-radius: 0;
 	width: 100%;
 }
@@ -89,9 +89,10 @@ code {
 }
 
 .headerbar {
-	background: #d9e6f0; 
+	background: #d9e6f0;
 	margin-top: 5px;
 	text-align: center;
+	border-radius: 0px;
 }
 
 .hamburger {
@@ -115,7 +116,7 @@ code {
 .navbar-right > .dropdown > a {
 	color: #666;
 	padding: 5px 15px;
-	
+
 	width: 48px;
 	float: right;
 }
@@ -134,19 +135,19 @@ code {
 }
 
 @media screen and (max-width: 768px) {
-	
+
 	.header-image {
     	text-align: left;
     }
-    
+
     .headerbar {
     	text-align: left;
     }
-    
+
     .headerbar .container-fluid {
 		padding-right: 0;
 	}
-	
+
 	#header-image-wrapper {
 		text-align: left;
 		padding-left: 15px;
@@ -158,7 +159,7 @@ code {
   .header-image img {
   	width: 300px;
   }
-    
+
     #header-image-wrapper img {
       width: 300px;
     }
@@ -257,4 +258,18 @@ h4.panel-title a.collapsed:before {
 h4.panel-title a:before {
   content: "▼";
   transform: rotate(-90deg);
+}
+
+.global_notice {
+	background-color: #d1f0ff;
+	color: #222;
+	width: 100%;
+}
+
+cite {
+	word-wrap: break-word;
+}
+
+.emoji {
+	max-height: 20px;
 }

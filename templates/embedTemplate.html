@@ -1,0 +1,89 @@
+<iframe width={{width}} height={{height}}>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Is it just me or server cooties?</title>
+	<!-- Bootstrap CSS-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+	<!-- Custom styles -->
+	<link type="text/css" rel="stylesheet" media="screen" href="/styles.css">
+
+	<!-- jQuery 1.11.2 (for compatibility with IE < 9) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+	<!-- Bootstrap JS-->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<!-- Mustache template engine -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+
+	<!-- socket.io -->
+	<script src="/socket.io/socket.io.js"></script>
+
+	<!-- Custom scripts -->
+	<script type="text/javascript" src="/scripts.js"></script>
+</head>
+
+<body>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header-image">
+				<img id="trwtfimg" src="/static/images/trwtf.png">
+			</div>
+		</div>
+
+	</div>
+
+	<nav class="navbar headerbar" id="main-title">
+		<div id="header-image-wrapper">
+			{{>headerbar}}
+		</div>
+
+		<div class="container-fluid">
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="glyphicon glyphicon glyphicon-menu-hamburger dropdown-toggle hamburger"></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a>
+						</li>
+						<li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a>
+						</li>
+					</ul>
+				</li>
+
+			</ul>
+
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="status">
+						{{>status_table}}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top" id="flavorText">
+				{{flavor}}
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+</iframe>

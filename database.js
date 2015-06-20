@@ -47,7 +47,7 @@ function getPageId(page, callback) {
     });
 }
 
-exports.addCheck = function addCheck(key, status, _, time, callback) {
+exports.addCheck = function addCheck(key, status, readonly, time, callback) {
     key = key.replace(/^https?:\/\//i, '');
     getPageId(key, function (err, id) {
         if (err) {
@@ -64,16 +64,28 @@ exports.addCheck = function addCheck(key, status, _, time, callback) {
             });
         async.each(notify, function (n, next) {
             n({
-                key: key,
-                status: status,
-                responseTime: time,
-                checkedAt: now.getTime()
+                checkName: key,
+                checkId: id,
+                responseCode: status,
+                responseTime: time / 1000,
+                checkedAt: now.getTime(),
+                readonly: readonly
             });
             next();
         });
     });
 };
 
+exports.getChecks = function getChecks(offset, callback) {
+    if (!offset) {
+        offset = 10 * 60;
+    }
+    var date = new Date() - (offset * 1000);
+    db.all('SELECT p.key AS checkName, c.page AS checkId, ' +
+        'c.status AS responseCode, c.responseTime/1000.0 AS responseTime, ' +
+        'c.checkedAt FROM checks2 c JOIN pages p ON c.page = p.OID ' +
+        'WHERE checkedAt > ? ORDER BY checkedAt ASC', [date], callback);
+};
 exports.getRecentChecks = function getRecentChecks(offset, callback) {
     if (!offset) {
         offset = 10 * 60;
@@ -84,6 +96,22 @@ exports.getRecentChecks = function getRecentChecks(offset, callback) {
         ' ORDER BY checkedAt DESC', [date], callback);
 };
 
+exports.formatData = function formatData(data, callback) {
+    setImmediate(function () {
+        var score = getScore(data.status, data.responseTime);
+        callback(null, {
+            checkName: data.key,
+            checkId: pages[data.key],
+            responseCode: data.status,
+            responseTime: data.responseTime,
+            responseScore: score,
+            response: getFlavor(score, config.scoreCode),
+            polledAt: new Date(data.checkedAt).toUTCString(),
+            readonly: false
+        });
+    });
+};
+
 function getScore(code, time) {
     if ((code !== 200 && code !== 204) || time > 12000) {
         return 0;
@@ -92,6 +120,7 @@ function getScore(code, time) {
     }
     return 100;
 }
+exports.getScore = getScore;
 
 function range(num) {
     return Array.apply(null, Array(num)).map(function (_, i) {
@@ -177,7 +206,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
     });
     keys = Object.keys(checks);
     keys.sort();
-    result.summary = keys.map(function (key, index) {
+    result.summary = keys.map(function (key) {
         var checkScore = round(average(checks[key], function (a) {
             return a.responseScore;
         }), 2);
@@ -192,7 +221,7 @@ exports.summarizeData = function summarizeData(data, cfg) {
             }), 2),
             responseScore: checkScore,
             polledAt: checks[key][0].polledAt,
-            checkIndex: index,
+            checkIndex: pages[key],
             values: checks[key]
         };
     });

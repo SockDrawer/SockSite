@@ -1,0 +1,24 @@
+<table class="table table-condensed history">
+    <thead>
+        <tr>
+            <th>
+                Polled at
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Code
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--{{#values}}-->
+        <tr class="{{response}}">
+          <td class="historyDate"><code>{{polledAt}}</code></td>
+          <td class="historyTime"><code>{{responseTime}}&nbsp;s</code></td>
+          <td class="historyCode"><span class="label label-default {{response}}">{{responseCode}}</label></td>
+        </tr>
+        <!--{{/values}}-->
+    </tbody>
+</table>

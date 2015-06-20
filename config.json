@@ -1,15 +1,22 @@
 {
     "database": "servercooties.sql",
-    "pollDelay": 3,
-    "dataPeriod": 60,
+    "chunkSize": 200,
+    "pollDelay": 5,
+    "dataPeriod": 600,
+    "graphPeriod": 3600,
+    "historyEntries": 11,
+    "historyPeriod": 300,
+    "scoreEntries": 3,
+    "scorePeriod": 60,
     "minimumEntries": 10,
-    "version": "0.2.0",
+    "version": "0.5.2",
     "message-bus": false,
     "checks": [
-        "http://what.thedailywtf.com/",
-        "http://what.thedailywtf.com/latest.json",
-        "http://what.thedailywtf.com/t/2/last"
+        "https://what.thedailywtf.com/",
+        "https://what.thedailywtf.com/latest.json",
+        "https://what.thedailywtf.com/t/2/last"
     ],
+    "siteSettings":"https://what.thedailywtf.com/site/settings.json",
     "scoreCode": {
         "0": "OFFLINE",
         "25": "BAD",
@@ -24,9 +31,14 @@
         "75": "The site seems to be working fine."
     },
     "flavor": {
-        "0": "Well, It's buggered. Looks like it's time to be productive or something",
-        "25": "Well, Looks like you're gonna have to fill out that TPS report after all.",
-        "50": "We've seen some blips recently. Nothing to get too alarmed at yet.",
-        "75": "The forums work, so if you can't post then TRWTF is user cooties."
+        "0": ["Well, It's buggered. Looks like it's time to be productive or something"],
+        "25": ["Well, Looks like you're gonna have to fill out that TPS report after all."],
+        "50": ["We've seen some blips recently. Nothing to get too alarmed at yet."],
+        "75": ["The forums work, so if you can't post then TRWTF is user cooties."]
+    },
+    "readonly":{
+        "status": "The site seems to be readonly.",
+        "score": "READONLY",
+        "flavor": "Read-only mode is enabled. You can continue to browse the site but interactions may not work."
     }
 }

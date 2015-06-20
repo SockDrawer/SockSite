@@ -8,31 +8,8 @@
         </a>
       </h4>
     </div>
-    <div id="collapse{{checkIndex}}" class="panel-collapse collapse {{^checkIndex}}in{{/checkIndex}}" role="tabpanel" aria-labelledby="heading{{checkIndex}}">
-      <table class="table table-condensed history">
-        <thead>
-          <tr>
-            <th>
-              Polled at
-            </th>
-            <th>
-              Time
-            </th>
-            <th>
-              Code
-            </th>
-          </tr>
-        </thead>
-          <tbody>
-            {{#values}}
-            <tr class="{{response}}">
-              <td class="historyDate"><code>{{polledAt}}</code></td>
-              <td class="historyTime"><code>{{responseTime}}&nbsp;ms</code></td>
-              <td class="historyCode"><span class="label label-default {{response}}">{{responseCode}}</label></td>
-            </tr>
-            {{/values}}
-          </tbody>
-      </table>
+    <div id="collapse{{checkIndex}}" data-checkindex="{{checkIndex}}" class="panel-collapse collapse {{^checkIndex}}in{{/checkIndex}}" role="tabpanel" aria-labelledby="heading{{checkIndex}}">
+      {{>history_panel}}
     </div>
   </div>
   {{/summary}}
