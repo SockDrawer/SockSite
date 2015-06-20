@@ -37,7 +37,7 @@ var port = parseInt(process.env.PORT || 8888, 10),
     server = http.createServer(handler),
     io = socketio(server);
 
-
+exports.log = console.log; //eslint-disable-line no-console
 
 /**
  * Handler for HTTP requests. All HTTP requests start here
@@ -47,7 +47,7 @@ function handler(request, response) {
 
     // Log request
     /* eslint-disable no-console */
-    console.log(uri);
+    exports.log(uri);
     /* eslint-enable no-console */
 
     // Check the paths known to router to render response.
@@ -84,7 +84,7 @@ exports.start = function (m_port, m_ip, callback) {
             console.error(err); //eslint-disable-line no-console
             return callback(err);
         }
-        console.log('server started'); //eslint-disable-line no-console
+        exports.log('server started');
         server.listen(m_port, m_ip);
         callback();
     });
