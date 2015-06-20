@@ -17,9 +17,11 @@ describe('Socksite', function(){
 	 this.timeout(500000);
 
     before('init browser session', function(done){
-		
-        browser = webdriverio.remote(webdriveroptions); 
-        browser.init(done); 
+		server.start(8888, 'localhost', function() {
+			browser = webdriverio.remote(webdriveroptions); 
+			browser.init(done); 
+		})
+
     }); 
 
     it('should be running', function(done) {
