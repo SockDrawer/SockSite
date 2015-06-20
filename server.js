@@ -74,29 +74,32 @@ exports.io = io;
 io.on('error', function (e) {
     console.warn(e); //eslint-disable-line no-console
 });
+
+exports.start = function (m_port, m_ip, callback) {
+    // Kick off the initial cache build.
+    // Start the HTTP server in the callback to this so initial cache is
+    // loaded first
+    cache.buildCache(function (err) {
+        if (err) {
+            console.error(err); //eslint-disable-line no-console
+            return callback(err);
+        }
+        console.log('server started'); //eslint-disable-line no-console
+        server.listen(m_port, m_ip);
+        callback();
+    });
+};
 if (require.main === module) {
     require('./graph');
 
     checks.start();
 
-    // Kick off the initial cache build.
-    // Start the HTTP server in the callback to this so initial cache is
-    // loaded first
-    cache.buildCache(function (err) {
-        /*eslint-disable no-console */
-        if (err) {
-            return console.error(err);
-        }
-        console.log('server started');
-        server.listen(port, ip);
-        /*eslint-neable no-console */
-    });
-
-
-    //Emit heartbeat event regularly
-    async.forever(function (next) {
-        io.emit('heartbeat', Date.now());
-        setTimeout(next, 30 * 1000);
+    exports.start(port, ip, function () {
+        //Emit heartbeat event regularly
+        async.forever(function (next) {
+            io.emit('heartbeat', Date.now());
+            setTimeout(next, 30 * 1000);
+        });
     });
 }
 
