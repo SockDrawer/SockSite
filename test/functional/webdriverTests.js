@@ -39,42 +39,20 @@ describe('Socksite', function(){
     before('init browser session', function(done){
 		
 		process.env.SOCKDEV = true;
-		
-		selenium.install({
-			  // check for more recent versions of selenium here:
-			  // http://selenium-release.storage.googleapis.com/index.html
-			  version: '2.45.0',
-			  baseURL: 'http://selenium-release.storage.googleapis.com',
-			  drivers: {
-				chrome: {
-				  // check for more recent versions of chrome driver here:
-				  // http://chromedriver.storage.googleapis.com/index.html
-				  version: '2.15',
-				  arch: process.arch,
-				  baseURL: 'http://chromedriver.storage.googleapis.com'
-				},
-				ie: {
-					version: '2.45.0',
-					arch: process.arch,
-					baseURL: 'http://selenium-release.storage.googleapis.com'
-				}
-			  }
-			}, function() {
-				socksite.start(8888, 'localhost', function() {
-					selenium.start(function(err, child) {
-					  if (err) throw err;
-					  
-					  driver = new webdriver.Builder().
-							usingServer('http://localhost:4444/wd/hub').
-							withCapabilities(webdriver.Capabilities.firefox()).
-							build();
-						driver.get("localhost:8888").then(function() {
-								console.log("Done with startuip");
-								done();		
-							});
+		socksite.start(8888, 'localhost', function() {
+			selenium.start(function(err, child) {
+			  if (err) throw err;
+			  
+			  driver = new webdriver.Builder().
+					usingServer('http://localhost:4444/wd/hub').
+					withCapabilities(webdriver.Capabilities.firefox()).
+					build();
+				driver.get("localhost:8888").then(function() {
+						console.log("Done with startuip");
+						done();		
 					});
-				})
 			});
+		});
 		
     }); 
 

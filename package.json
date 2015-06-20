@@ -29,5 +29,8 @@
     "selenium-standalone": "^4.4.2",
     "selenium-webdriver": "^2.46.1",
     "webdriverio": "^2.4.5"
-  }
+  },
+  "scripts": {
+		"test": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\webdriverTests.js"
+	}
 }
