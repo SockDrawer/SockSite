@@ -37,9 +37,7 @@ var port = parseInt(process.env.PORT || 8888, 10),
     server = http.createServer(handler),
     io = socketio(server);
 
-require('./graph');
 
-checks.start();
 
 /**
  * Handler for HTTP requests. All HTTP requests start here
@@ -68,19 +66,7 @@ function handler(request, response) {
     return;
 
 }
-
-// Kick off the initial cache build.
-// Start the HTTP server in the callback to this so initial cache is
-// loaded first
-cache.buildCache(function (err) {
-    /*eslint-disable no-console */
-    if (err) {
-        return console.error(err);
-    }
-    console.log('server started');
-    server.listen(port, ip);
-    /*eslint-neable no-console */
-});
+exports.handler = handler;
 
 //Export websockets socket for other modules
 exports.io = io;
@@ -88,6 +74,32 @@ exports.io = io;
 io.on('error', function (e) {
     console.warn(e); //eslint-disable-line no-console
 });
+if (require.main === module) {
+    require('./graph');
+
+    checks.start();
+
+    // Kick off the initial cache build.
+    // Start the HTTP server in the callback to this so initial cache is
+    // loaded first
+    cache.buildCache(function (err) {
+        /*eslint-disable no-console */
+        if (err) {
+            return console.error(err);
+        }
+        console.log('server started');
+        server.listen(port, ip);
+        /*eslint-neable no-console */
+    });
+
+
+    //Emit heartbeat event regularly
+    async.forever(function (next) {
+        io.emit('heartbeat', Date.now());
+        setTimeout(next, 30 * 1000);
+    });
+}
+
 
 // Set up per connection socket events
 io.on('connection', function (socket) {
@@ -121,9 +133,4 @@ io.on('connection', function (socket) {
     socket.on('error', function () {
         return;
     });
-});
-//Emit heartbeat event regularly
-async.forever(function (next) {
-    io.emit('heartbeat', Date.now());
-    setTimeout(next, 30 * 1000);
 });
