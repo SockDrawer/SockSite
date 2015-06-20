@@ -75,7 +75,7 @@ io.on('error', function (e) {
     console.warn(e); //eslint-disable-line no-console
 });
 
-exports.start = function (callback) {
+exports.start = function (m_port, m_ip, callback) {
     // Kick off the initial cache build.
     // Start the HTTP server in the callback to this so initial cache is
     // loaded first
@@ -85,7 +85,7 @@ exports.start = function (callback) {
             return callback(err);
         }
         console.log('server started'); //eslint-disable-line no-console
-        server.listen(port, ip);
+        server.listen(m_port, m_ip);
         callback();
     });
 };
@@ -94,7 +94,7 @@ if (require.main === module) {
 
     checks.start();
 
-    exports.start(function () {
+    exports.start(port, ip, function () {
         //Emit heartbeat event regularly
         async.forever(function (next) {
             io.emit('heartbeat', Date.now());
