@@ -13,20 +13,22 @@ var webdriveroptions = {
 }; 
 
 describe('Socksite', function(){ 
-    //this.timeout(99999999); 
     var browser = {}; 
+	 this.timeout(500000);
 
     before('init browser session', function(done){
+		
         browser = webdriverio.remote(webdriveroptions); 
         browser.init(done); 
     }); 
 
-    it('should be running', function() {
+    it('should be running', function(done) {
 		browser 
             .url(siteURL)
-			 .title(function(err, title) {
+			 .title(function(err, res) {
 				assert.equal(undefined, err);
-                assert.strictEqual(title,'Is it just me or server cooties?');
+                assert.strictEqual(res.value,'Is it just me or server cooties?');
+				done();
 			  })
 	});
 
