@@ -1,3 +1,5 @@
+process.env.SOCKDEV = true;
+
 var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var socksite = require('../../server.js');
@@ -38,8 +40,8 @@ describe('Socksite', function(){
 	 var driver;
 
     before('init browser session', function(done){
-		
-		process.env.SOCKDEV = true;
+	
+		socksite.log = function() {} //no-op log function == quiet mode
 		socksite.start(8888, 'localhost', function() {
 			selenium.start(function(err, child) {
 			  if (err) throw err;
@@ -48,10 +50,7 @@ describe('Socksite', function(){
 					usingServer('http://localhost:4444/wd/hub').
 					withCapabilities(webdriver.Capabilities.firefox()).
 					build();
-				driver.get("localhost:8888").then(function() {
-						console.log("Done with startuip");
-						done();		
-					});
+				driver.get("localhost:8888").then(done);
 			});
 		});
 		
@@ -75,9 +74,32 @@ describe('Socksite', function(){
 		});
 		
 	});
+	
+	it('should report the correct flavor text', function(done) {
+		cache.summary = goodData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElement(webdriver.By.id("flavorText")).getText().then(function(value) {
+				assert.equal( value,goodData.flavor, "Flavor text should be output");
+				done();
+			})
+		});
+		
+	});
+	
+	it('should report the correct status text', function(done) {
+		cache.summary = goodData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElement(webdriver.By.id("statusText")).getText().then(function(value) {
+				assert.equal( value,goodData.status, "Status text should be output");
+				done();
+			})
+		});
+		
+	});
 
-    after('end browser session', function(){ 
-        driver.close();
-		driver.quit();
+    after('end browser session', function(done){ 
+        driver.close().then(done);
     }); 
 });
