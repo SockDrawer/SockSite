@@ -40,7 +40,7 @@ describe('Socksite', function(){
 		 });
 	});
 
-	it('should report the correct flavor text', function(done) {
+	it('should report the correct flavor text when Good', function(done) {
 		cache.summary = testData.goodData;
 		
 		driver.get("localhost:8888").then(function() {
@@ -49,15 +49,36 @@ describe('Socksite', function(){
 				done();
 			})
 		});
-		
 	});
 	
-	it('should report the correct status text', function(done) {
+	it('should report the correct flavor text when Bad', function(done) {
+		cache.summary = testData.badData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElement(webdriver.By.id("flavorText")).getText().then(function(value) {
+				assert.equal( value,testData.badData.flavor, "Flavor text should be output");
+				done();
+			})
+		});
+	});
+	
+	it('should report the correct status text when Good', function(done) {
 		cache.summary = testData.goodData;
 		
 		driver.get("localhost:8888").then(function() {
 			driver.findElement(webdriver.By.id("statusText")).getText().then(function(value) {
 				assert.equal( value,testData.goodData.status, "Status text should be output");
+				done();
+			})
+		});
+	});
+	
+	it('should report the correct status text when Bad', function(done) {
+		cache.summary = testData.badData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElement(webdriver.By.id("statusText")).getText().then(function(value) {
+				assert.equal( value,testData.badData.status, "Status text should be output");
 				done();
 			})
 		});
