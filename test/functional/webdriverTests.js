@@ -1,6 +1,7 @@
 var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var socksite = require('../../server.js');
+var cache = require('../../cache');
 var selenium = require('selenium-standalone');
 var siteURL = 'http://localhost:8888';
 
@@ -63,11 +64,14 @@ describe('Socksite', function(){
 		 });
 	});
 	
-	it('should report good status', function(done) {
-		socksite.io.emit('summary', goodData);
-		driver.findElement(webdriver.By.css("#header-image-wrapper img")).getAttribute("src").then(function(value) {
-			assert.equal("/static/images/isyou.png", value,"Image should say 'Is you'");
-			done();
+	it('should report good status with the Is You image', function(done) {
+		cache.summary = goodData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElement(webdriver.By.css("#header-image-wrapper img")).getAttribute("src").then(function(value) {
+				assert.match( value,/isyou\.png/, "Image should say 'Is you'");
+				done();
+			})
 		});
 		
 	});

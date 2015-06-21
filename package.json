@@ -20,7 +20,7 @@
   },
   "optionalDependencies": {},
   "scripts": {
-    "lint": "eslint ."
+    "test": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\webdriverTests.js"
   },
   "devDependencies": {
     "chai": "^3.0.0",
@@ -29,8 +29,5 @@
     "selenium-standalone": "^4.4.2",
     "selenium-webdriver": "^2.46.1",
     "webdriverio": "^2.4.5"
-  },
-  "scripts": {
-		"test": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\webdriverTests.js"
-	}
+  }
 }
