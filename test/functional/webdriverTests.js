@@ -2,7 +2,7 @@ var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var socksite = require('../../server.js');
 var selenium = require('selenium-standalone');
-var siteURL = 'http://localhost:8888'; 
+var siteURL = 'http://localhost:8888';
 
 var chai        = require('chai'),
     assert      = chai.assert;
@@ -64,10 +64,16 @@ describe('Socksite', function(){
 	});
 	
 	it('should report good status', function(done) {
-		done();
+		socksite.io.emit('summary', goodData);
+		driver.findElement(webdriver.By.css("#header-image-wrapper img")).getAttribute("src").then(function(value) {
+			assert.equal("/static/images/isyou.png", value,"Image should say 'Is you'");
+			done();
+		});
+		
 	});
 
     after('end browser session', function(){ 
         driver.close();
+		driver.quit();
     }); 
 });
