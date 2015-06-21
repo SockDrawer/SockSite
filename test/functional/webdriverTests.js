@@ -6,55 +6,10 @@ var socksite = require('../../server.js');
 var cache = require('../../cache');
 var selenium = require('selenium-standalone');
 var siteURL = 'http://localhost:8888';
+var testData = require('./testData');
 
 var chai        = require('chai'),
     assert      = chai.assert;
-
-
-/*Test data*/
- var goodData = {
-	up: true,
-	score: 100,
-	code: "GREAT",
-	status: "This is a good status",
-	flavor: "Flavor is delicious!",
-	readonly: false,
-	global_notice: "",
-	global_notice_text: "",
-	summary: [
-		{
-			name: "overall",
-			response: "GREAT",
-			responseCode: 200,
-			responseScore: 100,
-			responseTime: 0.11,
-			polledAt: "Sat, 20 Jun 2015 21:37:36 GMT",
-			checkIndex: -1
-		}
-	]
-};
-
-var badData = {
-	up: false,
-	score: 25,
-	code: "BAD",
-	status: "This is a bad status",
-	flavor: "Flavor is muy mal!",
-	readonly: false,
-	global_notice: "",
-	global_notice_text: "",
-	summary: [
-		{
-			name: "overall",
-			response: "BAD",
-			responseCode: 504,
-			responseScore: 25,
-			responseTime: 15,
-			polledAt: "Sat, 20 Jun 2015 21:37:36 GMT",
-			checkIndex: -1
-		}
-	]
-};
 
 describe('Socksite', function(){ 
     var browser = {}; 
@@ -86,7 +41,7 @@ describe('Socksite', function(){
 	});
 	
 	it('should report good status with the Is You image', function(done) {
-		cache.summary = goodData;
+		cache.summary = testData.goodData;
 		
 		driver.get("localhost:8888").then(function() {
 			driver.findElement(webdriver.By.css("#header-image-wrapper img")).getAttribute("src").then(function(value) {
@@ -98,11 +53,11 @@ describe('Socksite', function(){
 	});
 	
 	it('should report the correct flavor text', function(done) {
-		cache.summary = goodData;
+		cache.summary = testData.goodData;
 		
 		driver.get("localhost:8888").then(function() {
 			driver.findElement(webdriver.By.id("flavorText")).getText().then(function(value) {
-				assert.equal( value,goodData.flavor, "Flavor text should be output");
+				assert.equal( value,testData.goodData.flavor, "Flavor text should be output");
 				done();
 			})
 		});
@@ -110,18 +65,18 @@ describe('Socksite', function(){
 	});
 	
 	it('should report the correct status text', function(done) {
-		cache.summary = goodData;
+		cache.summary = testData.goodData;
 		
 		driver.get("localhost:8888").then(function() {
 			driver.findElement(webdriver.By.id("statusText")).getText().then(function(value) {
-				assert.equal( value,goodData.status, "Status text should be output");
+				assert.equal( value,testData.goodData.status, "Status text should be output");
 				done();
 			})
 		});
 	});
 	
 	it('should report bad status with the Is Discourse image', function(done) {
-		cache.summary = badData;
+		cache.summary = testData.badData;
 		
 		driver.get("localhost:8888").then(function() {
 			driver.findElement(webdriver.By.css("#header-image-wrapper img")).getAttribute("src").then(function(value) {

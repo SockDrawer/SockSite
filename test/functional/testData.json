@@ -1,0 +1,44 @@
+{
+	"goodData" : {
+		"up": true,
+		"score": 100,
+		"code": "GREAT",
+		"status": "This is a good status",
+		"flavor": "Flavor is delicious!",
+		"readonly": false,
+		"global_notice": "",
+		"global_notice_text": "",
+		"summary": [
+			{
+				"name": "overall",
+				"response": "GREAT",
+				"responseCode": 200,
+				"responseScore": 100,
+				"responseTime": 0.11,
+				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
+				"checkIndex": -1
+			}
+		]
+	},
+	"badData" : {
+		"up": false,
+		"score": 25,
+		"code": "BAD",
+		"status": "This is a bad status",
+		"flavor": "Flavor is muy mal!",
+		"readonly": false,
+		"global_notice": "",
+		"global_notice_text": "",
+		"summary": [
+			{
+				"name": "overall",
+				"response": "BAD",
+				"responseCode": 504,
+				"responseScore": 25,
+				"responseTime": 15,
+				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
+				"checkIndex": -1
+			}
+		]
+	}
+}
