@@ -1,10 +1,10 @@
 {
-	"goodData" : {
+	"greatData" : {
 		"up": true,
 		"score": 100,
 		"code": "GREAT",
-		"status": "This is a good status",
-		"flavor": "Flavor is delicious!",
+		"status": "This is a great status!",
+		"flavor": "Flavor is delicious! Way to go!",
 		"readonly": false,
 		"global_notice": "",
 		"global_notice_text": "",
@@ -14,6 +14,48 @@
 				"response": "GREAT",
 				"responseCode": 200,
 				"responseScore": 100,
+				"responseTime": 0.11,
+				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
+				"checkIndex": -1
+			}
+		]
+	},
+	"goodData" : {
+		"up": true,
+		"score": 76,
+		"code": "GOOD",
+		"status": "This is a good status",
+		"flavor": "Flavor is delicious!",
+		"readonly": false,
+		"global_notice": "",
+		"global_notice_text": "",
+		"summary": [
+			{
+				"name": "overall",
+				"response": "GOOD",
+				"responseCode": 200,
+				"responseScore": 76,
+				"responseTime": 0.11,
+				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
+				"checkIndex": -1
+			}
+		]
+	},
+	"okData" : {
+		"up": false,
+		"score": 51,
+		"code": "OK",
+		"status": "This is an ok status",
+		"flavor": "Flavor is meh",
+		"readonly": false,
+		"global_notice": "",
+		"global_notice_text": "",
+		"summary": [
+			{
+				"name": "overall",
+				"response": "OK",
+				"responseCode": 200,
+				"responseScore": 51,
 				"responseTime": 0.11,
 				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
 				"checkIndex": -1
@@ -35,6 +77,27 @@
 				"response": "BAD",
 				"responseCode": 504,
 				"responseScore": 25,
+				"responseTime": 15,
+				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
+				"checkIndex": -1
+			}
+		]
+	},
+	"offlineData" : {
+		"up": false,
+		"score": 0,
+		"code": "OFFLINE",
+		"status": "This is an offline status",
+		"flavor": "Flavor is muy muy mal!",
+		"readonly": false,
+		"global_notice": "",
+		"global_notice_text": "",
+		"summary": [
+			{
+				"name": "overall",
+				"response": "OFFLINE",
+				"responseCode": 404,
+				"responseScore": 0,
 				"responseTime": 15,
 				"polledAt": "Sat, 20 Jun 2015 21:37:36 GMT",
 				"checkIndex": -1
