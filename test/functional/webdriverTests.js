@@ -1,5 +1,6 @@
 process.env.SOCKDEV = true;
 
+var async = require('async');
 var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var socksite = require('../../server.js');
@@ -83,6 +84,112 @@ describe('Socksite', function(){
 			})
 		});
 	});
+	
+	it('should report the correct status when Great', function(done) {
+		cache.summary = testData.greatData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				var numchecked = 0;
+				var total = arr.length;
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function (classes) {
+						assert.match(classes, /GREAT/, "Status should be great");
+					});
+				}, function(err){
+					done(err);
+				});
+			})
+		});
+	});
+	
+	/*it('should report the correct status when Good', function(done) {
+		cache.summary = testData.goodData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				var numchecked = 0;
+				var total = arr.length;
+				for (var i = 0; i < total; i++) {
+					arr[i].getAttribute('class').then(function(classes){
+						assert.match(classes, /GOOD/, "Status should be good");
+						numchecked++;
+					 });
+				}
+				
+				new webdriver.promise.Promise(function(cb, rejectcb) {
+					//Resolve when all have been checked
+					if (numchecked == total) cb();
+				}).then(done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Ok', function(done) {
+		cache.summary = testData.okData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				var numchecked = 0;
+				var total = arr.length;
+				for (var i = 0; i < total; i++) {
+					arr[i].getAttribute('class').then(function(classes){
+						assert.match(classes, /OK/, "Status should be ok");
+						numchecked++;
+					 });
+				}
+				
+				new webdriver.promise.Promise(function(cb, rejectcb) {
+					//Resolve when all have been checked
+					if (numchecked == total) cb();
+				}).then(done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Bad', function(done) {
+		cache.summary = testData.badData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				var numchecked = 0;
+				var total = arr.length;
+				for (var i = 0; i < total; i++) {
+					arr[i].getAttribute('class').then(function(classes){
+						assert.match(classes, /BAD/, "Status should be bad");
+						numchecked++;
+					 });
+				}
+				
+				new webdriver.promise.Promise(function(cb, rejectcb) {
+					//Resolve when all have been checked
+					if (numchecked == total) cb();
+				}).then(done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Offline', function(done) {
+		cache.summary = testData.offlineData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				var numchecked = 0;
+				var total = arr.length;
+				for (var i = 0; i < total; i++) {
+					arr[i].getAttribute('class').then(function(classes){
+						assert.match(classes, /OFFLINE/, "Status should be offline");
+						numchecked++;
+					 });
+				}
+				
+				new webdriver.promise.Promise(function(cb, rejectcb) {
+					//Resolve when all have been checked
+					if (numchecked == total) cb();
+				}).then(done);
+			})
+		});
+	});*/
 	
 	describe('TRWTF', function() {
 		it('is You when status is "Great"', function(done) {
