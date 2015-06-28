@@ -1,5 +1,6 @@
 process.env.SOCKDEV = true;
 
+var async = require('async');
 var webdriver = require('selenium-webdriver');
 var SeleniumServer = require('selenium-webdriver/remote').SeleniumServer;
 var socksite = require('../../server.js');
@@ -80,6 +81,81 @@ describe('Socksite', function(){
 			driver.findElement(webdriver.By.id("statusText")).getText().then(function(value) {
 				assert.equal( value,testData.badData.status, "Status text should be output");
 				done();
+			})
+		});
+	});
+	
+	it('should report the correct status when Great', function(done) {
+		cache.summary = testData.greatData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function (classes) {
+						assert.match(classes, /GREAT/, "Status should be great");
+						next();
+					});
+				},done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Good', function(done) {
+		cache.summary = testData.goodData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function(classes){
+						assert.match(classes, /GOOD/, "Status should be good");
+						next();
+					 });
+				}, done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Ok', function(done) {
+		cache.summary = testData.okData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function(classes){
+						assert.match(classes, /OK/, "Status should be ok");
+						next();
+					 });
+				}, done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Bad', function(done) {
+		cache.summary = testData.badData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function(classes){
+						assert.match(classes, /BAD/, "Status should be bad");
+						next();
+					 });
+				}, done);
+			})
+		});
+	});
+	
+	it('should report the correct status when Offline', function(done) {
+		cache.summary = testData.offlineData;
+		
+		driver.get("localhost:8888").then(function() {
+			driver.findElements(webdriver.By.css("table.statustable tbody tr")).then(function(arr) {
+				async.each(arr, function(item, next){
+					item.getAttribute('class').then(function(classes){
+						assert.match(classes, /OFFLINE/, "Status should be offline");
+						next();
+					 });
+				}, done);
 			})
 		});
 	});
