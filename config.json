@@ -1,7 +1,7 @@
 {
     "database": "servercooties.sql",
     "chunkSize": 200,
-    "pollDelay": 6,
+    "pollDelay": 5,
     "dataPeriod": 600,
     "graphPeriod": 3600,
     "historyEntries": 11,
@@ -9,14 +9,14 @@
     "scoreEntries": 3,
     "scorePeriod": 60,
     "minimumEntries": 10,
-    "version": "0.5.0",
+    "version": "0.5.2",
     "message-bus": false,
     "checks": [
-        "http://what.thedailywtf.com/",
-        "http://what.thedailywtf.com/latest.json",
-        "http://what.thedailywtf.com/t/2/last"
+        "https://what.thedailywtf.com/",
+        "https://what.thedailywtf.com/latest.json",
+        "https://what.thedailywtf.com/t/2/last"
     ],
-    "siteSettings":"http://what.thedailywtf.com/site/settings.json",
+    "siteSettings":"https://what.thedailywtf.com/site/settings.json",
     "scoreCode": {
         "0": "OFFLINE",
         "25": "BAD",

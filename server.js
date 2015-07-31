@@ -7,6 +7,13 @@
  * @license MIT
  */
 
+if (process.env.SOCKDEV && !process.env.SOCKPERM) {
+    // Terminate devmode server after 60 minutes
+    setTimeout(function () {
+        console.error('Terminating dev mode server on schedule'); //eslint-disable-line no-console
+        process.exit(); //eslint-disable-line no-process-exit
+    }, 60 * 60 * 1000);
+}
 
 // Make sure we get a stack trace on uncaught exception.
 // we're not supposed to get those but just in case
@@ -30,9 +37,7 @@ var port = parseInt(process.env.PORT || 8888, 10),
     server = http.createServer(handler),
     io = socketio(server);
 
-require('./graph');
-
-checks.start();
+exports.log = console.log; //eslint-disable-line no-console
 
 /**
  * Handler for HTTP requests. All HTTP requests start here
@@ -42,7 +47,7 @@ function handler(request, response) {
 
     // Log request
     /* eslint-disable no-console */
-    console.log(uri);
+    exports.log(uri);
     /* eslint-enable no-console */
 
     // Check the paths known to router to render response.
@@ -61,19 +66,7 @@ function handler(request, response) {
     return;
 
 }
-
-// Kick off the initial cache build.
-// Start the HTTP server in the callback to this so initial cache is
-// loaded first
-cache.buildCache(function (err) {
-    /*eslint-disable no-console */
-    if (err) {
-        return console.error(err);
-    }
-    console.log('server started');
-    server.listen(port, ip);
-    /*eslint-neable no-console */
-});
+exports.handler = handler;
 
 //Export websockets socket for other modules
 exports.io = io;
@@ -81,6 +74,35 @@ exports.io = io;
 io.on('error', function (e) {
     console.warn(e); //eslint-disable-line no-console
 });
+
+exports.start = function (m_port, m_ip, callback) {
+    // Kick off the initial cache build.
+    // Start the HTTP server in the callback to this so initial cache is
+    // loaded first
+    cache.buildCache(function (err) {
+        if (err) {
+            console.error(err); //eslint-disable-line no-console
+            return callback(err);
+        }
+        exports.log('server started');
+        server.listen(m_port, m_ip);
+        callback();
+    });
+};
+if (require.main === module) {
+    require('./graph');
+
+    checks.start();
+
+    exports.start(port, ip, function () {
+        //Emit heartbeat event regularly
+        async.forever(function (next) {
+            io.emit('heartbeat', Date.now());
+            setTimeout(next, 30 * 1000);
+        });
+    });
+}
+
 
 // Set up per connection socket events
 io.on('connection', function (socket) {
@@ -114,9 +136,4 @@ io.on('connection', function (socket) {
     socket.on('error', function () {
         return;
     });
-});
-//Emit heartbeat event regularly
-async.forever(function (next) {
-    io.emit('heartbeat', Date.now());
-    setTimeout(next, 30 * 1000);
 });

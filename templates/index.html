@@ -11,6 +11,8 @@
           title="OEmbed for ServerCooties.com" />
 
     <title>Is it just me or server cooties?</title>
+	<link rel="icon" href="/static/images/favicon.ico">
+
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
@@ -31,11 +33,18 @@
 
     <!-- socket.io -->
     <script src="/socket.io/socket.io.js"></script>
+	
+	<!-- Sinon.js for testing -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/sinon.js/1.7.3/sinon-min.js"></script>
+
+	<!-- Moment.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
 
     <!-- Custom scripts -->
     <script type="text/javascript" src="/scripts.js"></script>
     <script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
     <script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
+    <script type="text/javascript" src="/static/plugins/Cake/cake.js"></script>
 
     <!-- Cornify -->
     <script type="text/javascript" src="/static/plugins/Cornify/cornify.js"></script>
@@ -132,7 +141,7 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 pad-top">
-                {{#global_notice}}<div class="global-notice">{{global_notice}}</div>{{/global_notice}}
+                {{#global_notice}}<div class="global-notice">{{&global_notice}}</div>{{/global_notice}}
                 <nav>
                     <div role="tabpanel">
 
@@ -188,6 +197,7 @@
             </div>
         </div>
     </div>
-
+    <div id="cakediv">
+    </div>
 </body>
 </html>

@@ -1,20 +1,25 @@
 'use strict';
 /*global Notification */
+
 $(function () {
     var status,
         tag = (Math.random() * 10e15).toString(16);
 
-    function notify(title, text) {
+    function notify(title, text, icon) {
         if (Notification.permission === 'granted') {
+            icon = icon || '/static/images/wtf.png';
+
             var now = new Date().toTimeString().replace(/ .*$/, '');
             new Notification(title + ' @' + now, {
                 body: text,
                 tag: tag,
-                icon: '/static/images/wtf.png'
+                icon: icon
             });
         }
     }
 
+    window.Notify = notify;
+    
     function init() {
         var res = setupNotifications();
         if (!res) {
@@ -47,17 +52,28 @@ $(function () {
         return true;
     }
 
+    var connected = true;
+
     function onDisconnect() {
-        notify('Connection to servercooties.com lost.',
-            'Visual down! Radar down! What\'s happening‽');
+        connected = false;
+        setTimeout(function () {
+            if (connected) {
+                return;
+            }
+            notify('Connection to servercooties.com lost.',
+                'Visual down! Radar down! What\'s happening‽');
+        }, 1000);
     }
 
     function onReconnect() {
+        connected = true;
         notify('Connection to servercooties.com restored.',
             'I\'m baaack! Did you miss me?');
     }
 
+    var notice, readonly= false;
     function onSummary(summary) {
+    
         if (status !== undefined && status !== summary.up) {
             if (status) {
                 notify('Site Offline',
@@ -67,6 +83,17 @@ $(function () {
                 notify('Site Online', 'Server cootie infection neutralised; ' +
                     'normal service will now resume');
             }
+        }
+        if (summary.global_notice_text && summary.global_notice_text !== notice){
+            notice = summary.global_notice_text;
+            notify('Global Notice Posted', summary.global_notice_text);
+        } else {
+            if (readonly && ! summary.readonly){
+                notify('chmod +w','Site is no longer read-only');
+            } else if (!readonly && summary.readonly){
+                notify('Admin Abuse!', 'Site has been marked Readonly');
+            }
+            readonly = summary.readonly;
         }
         status = summary.up;
     }

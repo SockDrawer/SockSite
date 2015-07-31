@@ -269,3 +269,7 @@ h4.panel-title a:before {
 cite {
 	word-wrap: break-word;
 }
+
+.emoji {
+	max-height: 20px;
+}

@@ -14,7 +14,10 @@ var error = {
     avatars = {},
     definitions = [error],
     users = {},
-    host = 'http://what.thedailywtf.com';
+    host = 'https://what.thedailywtf.com';
+request = request.defaults({
+    rejectUnauthorized: false
+});
 
 function getAvatarPath(username, callback) {
     request(host + '/users/' + username + '.json', function (err, _, body) {
@@ -127,7 +130,7 @@ function getPosts(id, complete) {
                             authorTitle: post.user_title
                         };
                     }));
-                    next();
+                    setTimeout(next, 1000);
                 });
         }, function () {
             complete(results);
@@ -155,7 +158,7 @@ exports.getQuote = function getQuote() {
     def.body = def.body.replace(/(src|href)="([^"]+)"/g,
         function (_, prefix, value) {
             if (value.substr(0, 2) === '//') {
-                value = 'http:' + value;
+                value = 'https:' + value;
             }
             if (value[0] === '/') {
                 value = host + value;
@@ -166,25 +169,28 @@ exports.getQuote = function getQuote() {
 };
 
 
-async.forever(function (next) {
-    var refresh = 5 * 60 * 60 * 1000;
-    loadDefinitions(function () {
-        console.log('quotes loaded'); //eslint-disable-line no-console
-        var now = Date.now() - refresh;
-        async.each(Object.keys(users), function (user, innerNext) {
-            if (!avatars[user] || avatars[user].retrievedAt < now) {
-                return getAvatar(user, function (err, avatar) {
-                    if (!err) {
-                        avatars[user] = avatar;
-                    }
-                    innerNext();
-                });
-            }
-            innerNext();
+
+if (!process.env.SOCKDEV || process.env.SOCKQUOTES) {
+    async.forever(function (next) {
+        var refresh = 5 * 60 * 60 * 1000;
+        loadDefinitions(function () {
+            console.log('quotes loaded'); //eslint-disable-line no-console
+            var now = Date.now() - refresh;
+            async.each(Object.keys(users), function (user, innerNext) {
+                if (!avatars[user] || avatars[user].retrievedAt < now) {
+                    return getAvatar(user, function (err, avatar) {
+                        if (!err) {
+                            avatars[user] = avatar;
+                        }
+                        setTimeout(innerNext, 3 * 1000);
+                    });
+                }
+                innerNext();
+            });
+            setTimeout(next, refresh);
         });
-        setTimeout(next, refresh);
     });
-});
+}
 
 async.forever(function (next) {
     var cutoff = Date.now() - 10 * 60 * 1000;
