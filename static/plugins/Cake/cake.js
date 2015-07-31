@@ -8,7 +8,7 @@ var cake = {
 				var bday = moment(config.cupcakes[i].date, "MM-DD");
 
 				if (today.isSame(bday, "day")) {
-					$('head').append('<link id="cake_css" type="text/css" rel="stylesheet" media="screen" href="/static/styles/bday.css">');
+					$('head').append('<link id="cake_css" type="text/css" rel="stylesheet" media="screen" href="/static/plugins/Cake/bday.css">');
 					var $cakeDiv = $('#cakediv');
 
 					$cakeDiv.append('<p class="bdayFont">Happy Birthday</p>');
