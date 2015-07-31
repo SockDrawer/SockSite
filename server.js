@@ -50,6 +50,11 @@ function handler(request, response) {
     exports.log(uri);
     /* eslint-enable no-console */
 
+    //Some browsers request ./favicon.ico without the user's consent/knowledge/both
+    if (uri === '/favicon.ico') {
+        uri = '/static/images/favicon.ico';
+    }
+
     // Check the paths known to router to render response.
     // Response is handled by the renderer. we only care about is it handled
     var rendered = router.paths.some(function (point) {
