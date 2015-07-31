@@ -1,20 +1,25 @@
 'use strict';
 /*global Notification */
+
 $(function () {
     var status,
         tag = (Math.random() * 10e15).toString(16);
 
-    function notify(title, text) {
+    function notify(title, text, icon) {
         if (Notification.permission === 'granted') {
+            icon = icon || '/static/images/wtf.png';
+
             var now = new Date().toTimeString().replace(/ .*$/, '');
             new Notification(title + ' @' + now, {
                 body: text,
                 tag: tag,
-                icon: '/static/images/wtf.png'
+                icon: icon
             });
         }
     }
 
+    window.Notify = notify;
+    
     function init() {
         var res = setupNotifications();
         if (!res) {

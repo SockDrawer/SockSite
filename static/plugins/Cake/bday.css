@@ -1,5 +1,9 @@
 #cakediv {
 	text-align: center;
+	position: fixed; 
+	top: 200px; 
+	left: 15px; 
+	z-index: -1000;
 }
 
 #cakediv img {
