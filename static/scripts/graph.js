@@ -76,9 +76,11 @@ jQuery(function () {
         window.socket.emit('getgraphs', function (_, graphs) {
             for (var key in graphs) {
                 window.graphs[key].dataPoints = graphs[key].dataPoints;
-                renderChart(timeChart);
-                renderChart(scoreChart);
             }
+            timeChart.shouldRender = true;
+            scoreChart.shouldRender = true;
+            renderChart(timeChart);
+            renderChart(scoreChart);
         });
     });
 });
