@@ -33,17 +33,21 @@
 
     <!-- socket.io -->
     <script src="/socket.io/socket.io.js"></script>
+	
+	<!-- Sinon.js for testing -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/sinon.js/1.7.3/sinon-min.js"></script>
+
+	<!-- Moment.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
 
     <!-- Custom scripts -->
     <script type="text/javascript" src="/scripts.js"></script>
     <script type="text/javascript" src="/static/plugins/DiscoRound/round.js"></script>
     <script type="text/javascript" src="/static/plugins/Clownify/clownify.js"></script>
+    <script type="text/javascript" src="/static/plugins/Cake/cake.js"></script>
 
     <!-- Cornify -->
-    <script type="text/javascript">
-        //Must remain before the Cornify script include!
-        document.cookie = 'cornify=0;expires=' + new Date().toUTCString();
-    </script>
+    <script type="text/javascript" src="/static/plugins/Cornify/cornify.js"></script>
     <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
 
     <script type="text/javascript">
@@ -125,7 +129,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" id="roundingbutton"><span class="glyphicon glyphicon-random"></span>&nbsp;DiscoRound</a></li>
                         <li><a href="#" id="vomitbutton"><span class="glyphicon glyphicon-tint"></span>&nbsp;Clown Vomit Mode</a></li>
-                        <li><a href="#" id="cornifybutton"><span class="glyphicon glyphicon-magic"></span>&nbsp;Cornify</a></li>
+                        <li><a href="#" id="cornifybutton"><span class="glyphicon glyphicon-star"></span>&nbsp;Cornify</a></li>
                     </ul>
                 </li>
             </ul>
@@ -192,6 +196,8 @@
                 <button class="btn btn-primary" id="spin-button">You spin me right round baby, right round...</button>
             </div>
         </div>
+    </div>
+    <div id="cakediv">
     </div>
 </body>
 </html>

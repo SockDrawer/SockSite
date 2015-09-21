@@ -29,3 +29,4 @@ node_modules
 servercooties.sql
 .vagrant/*
 graph.json
+test/functional/screenshots/*.png

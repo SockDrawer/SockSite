@@ -1,0 +1,24 @@
+#cakediv {
+	text-align: center;
+	position: fixed; 
+	top: 200px; 
+	left: 15px; 
+	z-index: -1000;
+}
+
+#cakediv img {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bdayFont {
+	font-family:KR_Birthday;
+	color: red;
+	font-size: 40px;
+}
+
+@font-face{
+    font-family: "KR_Birthday";
+    src: url('/static/plugins/Cake/KR_Birthday_Letters.ttf')
+}

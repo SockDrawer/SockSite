@@ -1,41 +1,49 @@
 /*jslint indent: 4 */
 /* eslint-disable no-console */
 'use strict';
-$(function(){
-	$('.dropdown-toggle').dropdown();
+
+var discoRound = {
+	init: function() {
+		$('.dropdown-toggle').dropdown();
+		
+		$('#roundingbutton').on('click', function(evt) {
+			evt.preventDefault();
+			this.doRound();
+		});
+	},
 	
-	var roundCSS = {
+	roundCSS: {
 		"border-radius":"100px",
 		"border":"1px solid black"
-	}
+	},
 	
-	var rounded = false;
+	rounded: false,
 	
-	function roundMs(time) {
+	roundMs: function(time) {
 		time = time.slice(0, -3);
 		time = Math.round(time);
 		if (time >= 1000) {
 			time = Math.floor(time / 1000) + "k";
 		}
 		return time;
-	}
+	},
 	
-    $('#roundingbutton').on('click', function(evt) {
-        evt.preventDefault();
+	doRound: function() {
+		var self = this;
 		
 		$("code.responseTime").each(function() {
-			if (rounded) {
+			if (self.rounded) {
 				$(this).text($(this).data("orig_value"));
 			} else {
 				var time = $(this).text();
 				$(this).data("orig_value", time);
-				$(this).text(roundMs(time));
+				$(this).text(self.roundMs(time));
 			}
 			
 		});
 		
 		$("td.historyDate code").each(function() {
-			if (rounded) {
+			if (self.rounded) {
 				$(this).text($(this).data("orig_value"));
 			} else {
 				var timestamp = $(this).text();
@@ -45,17 +53,17 @@ $(function(){
 		});
 		
 		$("td.historyTime code").each(function() {
-			if (rounded) {
+			if (self.rounded) {
 				$(this).text($(this).data("orig_value"));
 			} else {
 				var time = $(this).text();
 				$(this).data("orig_value", time);
-				$(this).text(roundMs(time));
+				$(this).text(self.roundMs(time));
 			}
 		});
 		
 		$("td.historyCode code").each(function() {
-			if (rounded) {
+			if (self.rounded) {
 				$(this).text($(this).data("orig_value"));
 			} else {
 				var code = $(this).text();
@@ -65,20 +73,22 @@ $(function(){
 			}
 		});
 		
-		if (rounded) {
+		if (self.rounded) {
 			$('img').removeAttr("style");
 			$('#flavorText').removeAttr("style");
 			$('.btn').removeAttr("style");
 			$('code').removeAttr("style");
 			$('div.panel-heading').removeAttr("style");
 		} else {
-			$('img').css(roundCSS);
-			$('#flavorText').css(roundCSS);
-			$('.btn').css(roundCSS);
-			$('code').css(roundCSS);
-			$('div.panel-heading').css(roundCSS);
+			$('img').css(self.roundCSS);
+			$('#flavorText').css(self.roundCSS);
+			$('.btn').css(self.roundCSS);
+			$('code').css(self.roundCSS);
+			$('div.panel-heading').css(self.roundCSS);
 		}
 		
-		rounded = !rounded;
-    });
-});
+		self.rounded = !self.rounded;
+	}
+};
+
+$.ready(discoRound.init()); //Run automatically.
