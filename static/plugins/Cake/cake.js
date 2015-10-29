@@ -6,7 +6,6 @@ var cake = {
 		$.getJSON("/static/plugins/Cake/config.json", function(config) {
 			cake.config = config;
 			cake.checkCake();
-			setInterval(function(){ alert("Hello"); }, 3600000);
 		});
 	},
 	checkCake: function() {
