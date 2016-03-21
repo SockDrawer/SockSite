@@ -189,7 +189,9 @@ exports.parseData = function parseData(data, formatter, callback) {
     async.eachSeries(data, function (row, next) {
         formatter(row, function (_, rows) {
             rows.forEach(function (r) {
-                result[r.checkName].unshift(r);
+                if (result[r.checkName]) {
+                    result[r.checkName].unshift(r);
+                }
             });
             next();
         });

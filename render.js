@@ -157,7 +157,7 @@ exports.renderIndex = function renderIndex(uri, request, response) {
 
     // Site is served under multiple hosts so put that in the data to render
     cache.summary.host = request.headers.host;
-    cache.summary.discodefinition = quotes.getQuote;
+    //cache.summary.discodefinition = quotes.getQuote;
 
     // Run the data through the formatter and respond with the results
     formatter(cache.summary, function (err2, data2) {

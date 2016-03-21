@@ -13,8 +13,8 @@
     "message-bus": false,
     "checks": [
         "https://what.thedailywtf.com/",
-        "https://what.thedailywtf.com/latest.json",
-        "https://what.thedailywtf.com/t/2/last"
+        "https://what.thedailywtf.com/recent",
+        "https://what.thedailywtf.com/topic/2"
     ],
     "siteSettings":"https://what.thedailywtf.com/site/settings.json",
     "scoreCode": {
