@@ -17,7 +17,11 @@ function createCheck(url) {
         request({
             rejectUnauthorized: false,
             url: url,
-            timeout: timeout
+            timeout: timeout,
+            headers: {
+                'User-Agent': 'servercooties.io',
+                'accept': 'text/html'
+            }
         }, function (err, resp) {
             var complete = Date.now() - now;
             if (err) {
@@ -37,10 +41,15 @@ function createCheck(url) {
 exports.updated = false;
 
 function getNotice(callback) {
+    return callback(); // disable notice for now as it's not on nodebb
     request({
         rejectUnauthorized: false,
         url: config.siteSettings,
-        timeout: 3 * 1000
+        timeout: 3 * 1000,
+        headers: {
+            'User-Agent': 'servercooties.io',
+            'accept': 'text/html'
+        }
     }, function (err, _, body) {
         if (err) {
             return callback();

@@ -79,7 +79,7 @@ exports.serveAvatar = function serveAvatar(uri, _, response) {
     getAvatar(username, function (err, avatar) {
         if (err) {
             response.writeHead(500);
-            response.write(err, 'binary');
+            response.write("Avatar Not Loaded!", 'binary');
             return response.end();
         }
         avatars[username] = avatar;
