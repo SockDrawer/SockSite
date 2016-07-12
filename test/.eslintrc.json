@@ -1,0 +1,15 @@
+{
+    "rules": {
+        "max-nested-callbacks": [1, 8],
+        "no-unused-expressions": 0,
+        "max-statements": [2, 25]
+    },
+    "globals": {
+        "it": false,
+        "describe": false,
+        "before": false,
+        "beforeEach": false,
+        "after": false,
+        "afterEach": false
+    }
+}
