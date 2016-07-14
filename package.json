@@ -14,7 +14,7 @@
     "eslint": "eslint .",
     "mocha": "mocha --recursive -R dot test/unit",
     "integrationtests": "mocha --recursive -R dot test/integration",
-    "istanbul": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive -R dot test/unit",
+    "istanbul": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive -R spec test/unit",
     "test":"npm run istanbul"
   },
   "devDependencies": {

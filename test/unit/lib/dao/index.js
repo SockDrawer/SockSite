@@ -13,6 +13,19 @@ chai.should();
 
 const Dao = require('../../../../lib/dao');
 
+const getSQLParams = (sql) => {
+    let match = null;
+    const params = [];
+    do {
+        match = /(\$\w+)/g.exec(sql);
+        if (match) {
+            params.push(match[1]);
+            sql = sql.substr(match.index + match[1].length);
+        }
+    } while (match);
+    return params;
+};
+
 describe('Dao', () => {
     describe('constructor', () => {
         let sandbox = null;
@@ -50,17 +63,17 @@ describe('Dao', () => {
         it('should resolve to self on recompletion', () => {
             return dao.activate().then(() => dao.activate()).should.become(dao);
         });
-        it('should create `pages` table', () => {
+        it('should create tables', () => {
             return dao.activate().then(() => {
                 const args = dao.db.exec.firstCall.args;
-                args[0].should.startWith('CREATE TABLE IF NOT EXISTS pages');
+                args[0].should.equal(Dao.sqlCreateTables);
             });
         });
-        it('should create `checks` table', () => {
-            return dao.activate().then(() => {
-                const args = dao.db.exec.firstCall.args;
-                args[0].should.contain('CREATE TABLE IF NOT EXISTS checks');
-            });
+        it('should specify to create `pages` table', () => {
+            Dao.sqlCreateTables.should.contain('CREATE TABLE IF NOT EXISTS pages');
+        });
+        it('should specify to create `checks` table', () => {
+            Dao.sqlCreateTables.should.contain('CREATE TABLE IF NOT EXISTS checks');
         });
         it('should not exec sql on reactivate', () => {
             return dao.activate().then(() => {
@@ -112,7 +125,9 @@ describe('Dao', () => {
                 id: id
             });
             return dao.getPageId(page).then(() => {
-                dao.db.get.should.be.calledWith('SELECT id FROM pages WHERE key = ?', [page]);
+                dao.db.get.should.be.calledWith(Dao.sqlGetPage, {
+                    $key: page
+                });
                 dao.db.run.called.should.be.false;
             });
         });
@@ -141,7 +156,9 @@ describe('Dao', () => {
                 lastID: 4
             });
             return dao.getPageId(page).then(() => {
-                dao.db.run.should.be.calledWith('INSERT INTO pages (key) VALUES (?)', [page]);
+                dao.db.run.should.be.calledWith(Dao.sqlInsertPage, {
+                    $key: page
+                });
             });
         });
         it('should resolve from to inserted id when not saved', () => {
@@ -185,6 +202,31 @@ describe('Dao', () => {
             const expected = 'E_NO_PARTY';
             dao.db.run.rejects(expected);
             return dao.getPageId('http://example.com').should.be.rejectedWith(expected);
+        });
+        it('should pass proper params for `sqlGetPage`', () => {
+
+            dao.db.get.resolves({
+                id: 42
+            });
+            return dao.getPageId('some page').then(() => {
+                const args = dao.db.get.firstCall.args,
+                    queryParams = getSQLParams(args[0]),
+                    argParams = Object.keys(args[1]);
+                queryParams.should.eql(argParams);
+            });
+
+        });
+        it('should pass proper params for `sqlInsertPage`', () => {
+            dao.db.get.resolves(undefined);
+            dao.db.run.resolves({
+                lastID: 42
+            });
+            return dao.getPageId('some page').then(() => {
+                const args = dao.db.run.firstCall.args,
+                    queryParams = getSQLParams(args[0]),
+                    argParams = Object.keys(args[1]);
+                queryParams.should.eql(argParams);
+            });
         });
     });
 });
