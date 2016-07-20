@@ -92,7 +92,7 @@ describe('Dao', () => {
             sandbox.clock.tick(60 * 1000);
             return dao.getChecks().should.become([expected]);
         });
-        it(`should returm maximum of ${6 * 60 * 60} records`, () => {
+        it(`should returm maximum of ${6 * 60 * 60} records`, function() {
             this.timeout(5000); // this test takes a couple of seconds to add all those records
             let count = 0;
             const sixHours = 6 * 60 * 60,
