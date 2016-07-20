@@ -204,7 +204,6 @@ describe('Dao', () => {
             return dao.getPageId('http://example.com').should.be.rejectedWith(expected);
         });
         it('should pass proper params for `sqlGetPage`', () => {
-
             dao.db.get.resolves({
                 id: 42
             });
@@ -212,7 +211,7 @@ describe('Dao', () => {
                 const args = dao.db.get.firstCall.args,
                     queryParams = getSQLParams(args[0]),
                     argParams = Object.keys(args[1]);
-                queryParams.should.eql(argParams);
+                argParams.should.eql(queryParams);
             });
 
         });
@@ -225,8 +224,131 @@ describe('Dao', () => {
                 const args = dao.db.run.firstCall.args,
                     queryParams = getSQLParams(args[0]),
                     argParams = Object.keys(args[1]);
-                queryParams.should.eql(argParams);
+                argParams.should.eql(queryParams);
             });
+        });
+    });
+    describe('addCheck()', () => {
+        let sandbox = null,
+            dao = null,
+            pageId = null,
+            now = null;
+        beforeEach(() => {
+            pageId = Math.random();
+            sandbox = sinon.sandbox.create();
+            dao = new Dao('foo');
+            sandbox.stub(dao, 'getPageId').resolves(pageId);
+            sandbox.stub(dao.db, 'run').resolves();
+            now = Math.ceil(Math.random() * 1.57e10) + 9.46e11;
+            sandbox.useFakeTimers(now);
+        });
+        it('should retrieve pageId via `getPageId()`', () => {
+            return dao.addCheck('').then(() => {
+                dao.getPageId.should.be.called.once;
+            });
+        });
+        ['http', 'https', 'HTTP', 'HTTPS', 'hTtP', 'HtTpS'].forEach((prefix) => {
+            it(`'should strip \`${prefix}\` prefix from page`, () => {
+                const expected = `some url ${Math.random()}`,
+                    page = `${prefix}://${expected}`;
+                return dao.addCheck(page).then(() => {
+                    dao.getPageId.should.be.calledWith(expected).once;
+                });
+            });
+        });
+        it('should insert check into db', () => {
+            return dao.addCheck('some page').then(() => {
+                dao.db.run.should.be.calledWith(Dao.sqlInsertCheck).once;
+            });
+        });
+        it('should insert check into db with params', () => {
+            const page = `page${Math.random()}`,
+                status = Math.random(),
+                responseTime = Math.random();
+            return dao.addCheck(page, status, responseTime).then(() => {
+                const params = dao.db.run.firstCall.args[1];
+                params.should.eql({
+                    $page: pageId,
+                    $status: status,
+                    $responseTime: responseTime,
+                    $checkedAt: new Date(now)
+                });
+            });
+        });
+        it('should pass proper params for `sqlInsertCheck`', () => {
+            return dao.addCheck('some page').then(() => {
+                const args = dao.db.run.firstCall.args,
+                    queryParams = getSQLParams(args[0]),
+                    argParams = Object.keys(args[1]);
+                argParams.should.eql(queryParams);
+            });
+        });
+    });
+    describe('getChecks()', () => {
+        let sandbox = null,
+            dao = null;
+        beforeEach(() => {
+            sandbox = sinon.sandbox.create();
+            sandbox.useFakeTimers(1e12 + Math.ceil(Math.random() * 1e11));
+            dao = new Dao('bar');
+            sandbox.stub(dao, 'activate').resolves();
+            sandbox.stub(dao.db, 'all').resolves();
+        });
+        it('should default `from` to ten minutes ago when not provided', () => {
+            const expected = Date.now() - 600000;
+            return dao.getChecks(undefined, undefined).then(() => {
+                const params = dao.db.all.firstCall.args[1];
+                params.$after.should.eql(expected);
+            });
+        });
+        it('should default `until` to now when not provided', () => {
+            const expected = new Date();
+            return dao.getChecks(undefined, undefined).then(() => {
+                const params = dao.db.all.firstCall.args[1];
+                params.$until.should.eql(expected);
+            });
+        });
+        it('should default `from` to ten minutes ago when value is future', () => {
+            const expected = Date.now() - 600000;
+            return dao.getChecks(Date.now() + 60, undefined).then(() => {
+                const params = dao.db.all.firstCall.args[1];
+                params.$after.should.eql(expected);
+            });
+        });
+        it('should default `until` to now when value is before `after`', () => {
+            const expected = new Date();
+            return dao.getChecks(Date.now() - 60, Date.now() - 80).then(() => {
+                const params = dao.db.all.firstCall.args[1];
+                params.$until.should.eql(expected);
+            });
+        });
+        it('should pass provided values to sql', () => {
+            const min = Math.random() * 100,
+                max = min + Math.random() * 100 + 1;
+            return dao.getChecks(min, max).then(() => {
+                dao.db.all.should.be.calledWith(Dao.sqlGetChecks, {
+                    $after: min,
+                    $until: max
+                }).once;
+            });
+        });
+        it('should pass proper params for `sqlInsertCheck`', () => {
+            return dao.getChecks().then(() => {
+                const args = dao.db.all.firstCall.args,
+                    queryParams = getSQLParams(args[0]),
+                    argParams = Object.keys(args[1]);
+                argParams.should.eql(queryParams);
+            });
+        });
+        it('should activate dao', () => {
+            return dao.getChecks().then(() => {
+                dao.activate.should.be.called.once;
+            });
+        });
+        it('should resolve to results of db query', () => {
+            const expected = [Math.random()];
+            dao.db.all.resolves(expected);
+            return dao.getChecks().should.become(expected);
         });
     });
 });
