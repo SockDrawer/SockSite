@@ -42,7 +42,7 @@ exports.updated = false;
 
 function getNotice(callback) {
     return callback(); // disable notice for now as it's not on nodebb
-    request({
+    /*request({
         rejectUnauthorized: false,
         url: config.siteSettings,
         timeout: 3 * 1000,
@@ -78,7 +78,7 @@ function getNotice(callback) {
             }
         } catch (ignore) {} //eslint-disable-line no-empty
         callback();
-    });
+    });*/
 }
 
 exports.start = function () {

@@ -20,7 +20,8 @@
   },
   "optionalDependencies": {},
   "scripts": {
-    "test": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\webdriverTests.js",
+    "test": "eslint *.js && mocha test/unit/*.js",
+    "functionalTest": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\webdriverTests.js",
     "screenshot": "npm install selenium-standalone -g && selenium-standalone install && mocha test\\functional\\generateScreenshots.js"
   },
   "devDependencies": {
