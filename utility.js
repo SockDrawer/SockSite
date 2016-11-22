@@ -43,12 +43,22 @@ exports.getFlavor = function getFlavor(value, arr) {
 exports.getScore = function getScore(check) {
     var code = check.responseCode,
         time = check.responseTime;
-    if ((code !== 200 && code !== 204) || time > 12) {
+    if ((code !== 200 && code !== 204)) {
         return 0;
-    } else if (time > 3) {
-        return 50;
     }
-    return 100;
+
+    //Exponential regression: y = 150/x^3, capped at 0 and 100
+    var score = 150 / Math.pow(time, 3);
+
+    if (score > 100) {
+        score = 100;
+    }
+
+    if (score < 0) {
+        score = 0;
+    }
+
+    return Math.round(score);
 };
 
 /**
